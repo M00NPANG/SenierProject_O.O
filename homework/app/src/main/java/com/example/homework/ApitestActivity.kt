@@ -21,8 +21,7 @@ interface ApiService {
     fun getHello(): Call<ServerResponse1>
 }
 
-fun test() {
-    // Retrofit 빌더 생성
+fun test() { // retorfit 씀
     val retrofit = Retrofit.Builder()
         .baseUrl("url")
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
