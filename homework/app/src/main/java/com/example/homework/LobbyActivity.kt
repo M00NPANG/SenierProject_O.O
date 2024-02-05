@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -46,12 +47,11 @@ class LobbyActivity : AppCompatActivity() {
     lateinit var tvHumidity : TextView      // 습도
     lateinit var tvSky: TextView           // 하늘 상태
     lateinit var tvTemp: TextView          // 온도
-
-
-    var base_date = "20240110"  // 발표 일자
-    var base_time = "0500"      // 발표 시각
-    var nx = "55"               // 예보지점 X 좌표
-    var ny = "125"              // 예보지점 Y 좌표
+    lateinit var skyImg : ImageView // 하늘 이미지
+    var base_date = "20240123"  // 발표 일자
+    var base_time = "0100"      // 발표 시각
+    var nx = "144"               // 예보지점 X 좌표 55 144
+    var ny = "123"              // 예보지점 Y 좌표 125 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +61,7 @@ class LobbyActivity : AppCompatActivity() {
         tvRainRatio = findViewById(R.id.tvSky)
         tvRainType = findViewById(R.id.tvSky)
         tvHumidity = findViewById(R.id.tvSky)
+        skyImg = findViewById(R.id.skyImg)
         // nx, ny지점의 날씨 가져와서 설정하기
         setWeather(nx, ny)
     }
@@ -128,7 +129,6 @@ class LobbyActivity : AppCompatActivity() {
                             Toast.makeText(applicationContext, items[0].fcstDate + ", " + items[0].fcstTime + "의 날씨 정보입니다.", Toast.LENGTH_SHORT).show()
                         } else {
                             // items가 null이거나 크기가 10보다 작을 때의 처리
-
                         }
                     } else {
                         // response body가 null일 때의 처리
@@ -145,34 +145,34 @@ class LobbyActivity : AppCompatActivity() {
             }
         })
     }
-    // 텍스트 뷰에 날씨 정보 보여주기
+    // 뷰에 날씨 정보 보여주기
     fun setWeather(rainRatio : String, rainType : String, humidity : String, sky : String, temp : String) {
-        // 강수 확률
 
         // 강수 형태
         var result = ""
         when(rainType) {
 
-            "0" -> result = "없음"
-            "1" -> result = "비"
-            "2" -> result = "비/눈"
-            "3" -> result = "눈"
-            "4" -> result = "소나기"
-            "5" -> result = "빗방울"
-            "6" -> result = "빗방울/눈날림"
-            "7" -> result = "눈날림"
+            "0" -> setSky(sky)
+            "1" -> skyImg.setImageResource(R.drawable.rain) // 비
+            "2" -> skyImg.setImageResource(R.drawable.rain) // 비/눈 인데 그냥 비로 함
+            "3" -> skyImg.setImageResource(R.drawable.snow) // 눈
+            "4" -> skyImg.setImageResource(R.drawable.rain) // 비
+            "5" -> skyImg.setImageResource(R.drawable.rain) // 비
+            "6" -> skyImg.setImageResource(R.drawable.rain) // 비
+            "7" -> skyImg.setImageResource(R.drawable.snow) // 눈
             else -> "오류"
         }
 
 
-        // 하능 상태
+        // 하늘 상태
         result = ""
         when(sky) {
             "1" -> result = "맑음"
-            "3" -> result = "구름 많음"
+            "3" -> result = "구름 많음" // 약간 흐림
             "4" -> result = "흐림"
             else -> "오류"
         }
+        //하늘
         tvSky.text = result
         // 온도
         tvTemp.text = temp + "°"
@@ -194,5 +194,14 @@ class LobbyActivity : AppCompatActivity() {
             else -> result = "1700"             // 21~23
         }
         return result
+    }
+
+    fun setSky(sky : String){ // 하늘상태임
+        when(sky) {
+            "1" -> skyImg.setImageResource(R.drawable.sun) // 맑음
+            "3" -> skyImg.setImageResource(R.drawable.little_cloud) // 약간 흐림
+            "4" -> skyImg.setImageResource(R.drawable.cloud) // 흐림
+            else -> "오류"
+        }
     }
 }

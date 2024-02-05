@@ -1,32 +1,45 @@
 package com.example.homework
 
 import android.content.Intent
-import android.net.http.HttpResponseCache.install
-import android.os.AsyncTask
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.BufferedOutputStream
-import java.io.OutputStream
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLEncoder
+
+//request로 올려
+data class User( // 유저 DB 대충 구성
+    var userSeq : Int?,
+    var userId : String,
+    var userPwd : String,
+    var userName : String,
+    var userPercol : String?,
+    var userAuth : String,
+    var userType : String
+)
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var btnRegister : Button          // 회원가입 버튼
+    lateinit var btnRegister : TextView          // 회원가입 버튼
     lateinit var btnLogin : Button          // 로그인 버튼
-    lateinit var btnKakao : Button          // 카카오 로그인 버튼
-    lateinit var btnGoogle : Button          // 구글 로그인
+    lateinit var btnKakao : ImageView          // 카카오 로그인 버튼
+    lateinit var btnGoogle : ImageView          // 구글 로그인
     lateinit var checkID : EditText          // id
     lateinit var checkPW : EditText          // password
-
+    var resultLogin : Int = -1 // 로그인 결과값
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -43,14 +56,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent2) //
         }
         btnLogin.setOnClickListener { // 로그인 버튼
-            // 로그인이 되었다면 로비화면으로 이동하며 현 날씨를 맨 위에 작게 보여줌. o
-            // 저장된 정보와 같은지 확인을 위해 서버와 통신 필요.
-
-
-            // 로그인 후 로비로 이동..
-            val intent3 = Intent(this@LoginActivity,LobbyActivity::class.java)
-            startActivity(intent3)
-
+            sendDataToServer()
         }
         btnKakao.setOnClickListener {// 카카오로그인 버튼
             Log.d("kakaoLogin","clicked")
@@ -60,5 +66,48 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun sendDataToServer() = lifecycleScope.launch(Dispatchers.IO) { // 이미지를
+        try {
+            val user = User(null,checkID.text.toString(), checkPW.text.toString(),"ChunSamKim", "cool_winter","NORMAL","REGULAR")
 
+            // Gson을 사용하여 객체를 JSON 문자열로 변환
+            val gson = Gson()
+            val jsonData = gson.toJson(user)
+
+            val url = URL("http://10.0.2.2:8080/login")
+
+            (url.openConnection() as? HttpURLConnection)?.run {
+                requestMethod = "POST"
+                doOutput = true
+
+                // Content-Type 설정
+                setRequestProperty("Content-Type", "application/json;charset=UTF-8")
+
+                // 전송할 데이터 생성
+                val postDataBytes = jsonData.toByteArray(Charsets.UTF_8)
+
+                // 데이터 전송
+                outputStream.use { it.write(postDataBytes) }
+
+                // 서버 응답 읽기
+                BufferedReader(InputStreamReader(inputStream)).use {
+                    val response = StringBuilder()
+                    var inputLine = it.readLine()
+                    while (inputLine != null) {
+                        response.append(inputLine)
+                        inputLine = it.readLine()
+                    }
+                    Log.d("Server Response", response.toString())
+                    resultLogin = response.toString().toInt() // 접속 결과
+                    if(resultLogin == 1){ // 성공적
+                        intent = Intent(this@LoginActivity, LobbyActivity::class.java)
+                        startActivity(intent)
+                    }
+
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("Error", "Failed to connect to the server", e)
+        }
+    }
 }

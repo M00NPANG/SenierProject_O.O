@@ -4,6 +4,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+
 // 결과 xml 파일에 접근해서 정보 가져오기
 interface WeatherInterface {
     // getVilageFcst : 동네 예보 조회
