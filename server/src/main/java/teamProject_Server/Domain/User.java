@@ -14,18 +14,23 @@ public class User {
     private String email;
     private String name;
     private String user_percol;
-    private String imgPath;
+    private String user_color;
+    private String user_style;
+
 
     // 생성자
 
-    public User() {}
+    public User() {
+    }
 
-    public User(String email, String password, String name, String user_percol, String imgPath) {
+    public User(String email, String password, String name, String user_percol, String user_color, String user_style) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.user_percol = user_percol;
-        this.imgPath = imgPath;
+        this.user_color = user_color;
+        this.user_style = user_style;
+
     }
 
     // Getter 및 Setter
@@ -62,11 +67,27 @@ public class User {
         this.name = name;
     }
 
-    public String getUser_percol() { return user_percol; }
+    public String getUser_percol() {
+        return user_percol;
+    }
 
-    public void setUser_percol(String user_percol) { this.user_percol = user_percol; }
+    public void setUser_percol(String user_percol) {
+        this.user_percol = user_percol;
+    }
 
-    public String getImgPath() { return imgPath; }
+    public String getUser_color() {
+        return user_color;
+    }
 
-    public void setImgPath(String imgPath) { this.imgPath = imgPath; }
+    public void setUser_color(String user_color) {
+        this.user_color = user_color;
+    }
+
+    public String getUser_style() {
+        return user_style;
+    }
+
+    public void setUser_style(String user_style) {
+        this.user_style = user_style;
+    }
 }

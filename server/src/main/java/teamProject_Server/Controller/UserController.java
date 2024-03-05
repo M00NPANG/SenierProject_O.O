@@ -1,6 +1,7 @@
 package teamProject_Server.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamProject_Server.Domain.User;
 import teamProject_Server.Service.UserService;
@@ -21,9 +22,14 @@ public class UserController {
 
     // 회원가입 1 -> 이메일, 비밀번호, 이름 전달해주면 됨!!!
     @PostMapping("/join")
-    public String join(@RequestBody User user) {
-        // 회원 정보를 저장하고 저장된 회원의 email 반환
-        return userService.join(user);
+    public ResponseEntity<String> join(@RequestBody User user) {
+        try {
+            // 회원 정보를 저장하고 저장된 회원의 email 반환
+            String userEmail = userService.join(user);
+            return ResponseEntity.ok(userEmail);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
    // 회원가입 2
