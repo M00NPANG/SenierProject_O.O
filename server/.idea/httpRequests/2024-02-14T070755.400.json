@@ -1,0 +1,6 @@
+{
+  "timestamp": "2024-02-13T22:07:55.459+00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "path": "/api/join"
+}
