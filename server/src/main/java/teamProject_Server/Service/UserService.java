@@ -11,8 +11,6 @@ import teamProject_Server.Repository.UserRepository;
 
 import java.util.Optional;
 
-import static teamProject_Server.Service.UserPasswordGenerator.generateRandomPassword;
-
 @Service
 public class UserService {
 
@@ -35,11 +33,6 @@ public class UserService {
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다. 다른 이메일을 입력해주세요.");
         }
 
-        // 닉네임 중복 검사
-        if(isNameAlreadyExists(user.getName())) {
-            throw new IllegalArgumentException("이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.");
-        }
-
         // 회원 정보를 데이터베이스에 저장하고 저장된 회원의 email 반환
         User savedUser = userRepository.save(user);
 
@@ -60,12 +53,6 @@ public class UserService {
         return existingUser.isPresent(); // 이메일이 이미 존재하는지 여부를 반환
     }
 
-    // 닉네임 중복 확인
-    public boolean isNameAlreadyExists(String name) {
-        Optional<User> existingUserName = userRepository.findByName(name);
-        return existingUserName.isPresent();
-    }
-
     // 로그인
     public boolean login(String email, String password) {
         Optional<User> userOptional = userRepository.findByEmail(email);
@@ -76,45 +63,6 @@ public class UserService {
         }
 
         return false;
-    }
-
-   /* // 이메일, 닉네임을 확인하고 랜덤 비밀번호를 생성하여 저장하기
-    public String findPassword(String email, String name) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            if (user.getName().equals(name)) {
-                String newPassword = generateRandomPassword();
-                user.setPassword(newPassword);
-                userRepository.save(user);
-                return newPassword;
-            } else {
-                throw new IllegalArgumentException("이메일과 이름이 일치하지 않습니다.");
-            }
-        } else {
-            throw new IllegalArgumentException("해당 이메일로 가입된 사용자가 없습니다.");
-        }
-    }*/
-
-    // 비밀번호 변경(1) - 유저 확인
-    public User verifyUser(String email, String name) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            if (user.getName().equals(name)) {
-                return user;
-            } else {
-                throw new IllegalArgumentException("이메일과 이름이 일치하지 않습니다.");
-            }
-        } else {
-            throw new IllegalArgumentException("해당 이메일로 가입된 사용자가 없습니다.");
-        }
-    }
-
-    // 비밀번호 변경(1) - 비밀번호 변경
-    public void editPassword(User user, String newUserPassword) {
-        user.setPassword(newUserPassword);
-        userRepository.save(user);
     }
 }
 
