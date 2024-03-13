@@ -54,7 +54,7 @@ class PercolActivity : AppCompatActivity() {
         userEmail = intent.getStringExtra("email").toString()
         userPassword = intent.getStringExtra("password").toString()
 
-        button.setOnClickListener {
+        button.setOnClickListener { // 나중에 한번 함수로 바꾸기
             if (ContextCompat.checkSelfPermission(
                     this,
                     android.Manifest.permission.CAMERA
