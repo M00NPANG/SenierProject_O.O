@@ -76,7 +76,7 @@ class PercolActivity : AppCompatActivity() {
             val endPoint = "/testUpload"
             val url = ipAddr + endPoint
             uploadBitmap(bitmapForPercol, url)
-            userPercol = "winter_cool"
+            userPercol = "winter_cool"  // 임의로 설정한 톤
             var user : User
             user = User(
                 name = userName,
