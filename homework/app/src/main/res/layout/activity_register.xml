@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity"
+    android:id="@+id/registerActivity"
     android:background="@color/white">
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +37,7 @@
             android:layout_marginTop="50dp"
             android:background="@drawable/box"
             android:padding="15dp"
-            android:textSize="15dp"
+            android:textSize="18dp"
             android:hint="이메일"
             android:textColor="#B3B3B3"
             android:fontFamily="@font/main_font"/>
@@ -62,7 +63,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/box"
             android:padding="15dp"
-            android:textSize="15dp"
+            android:textSize="18dp"
             android:hint="닉네임"
             android:textColor="#B3B3B3"
             android:fontFamily="@font/main_font"/>
@@ -70,6 +71,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+            <Button
+                android:id="@+id/nameCheckButton"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/box_btn"
+                android:text="중복검사"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="13dp"/>
             <TextView
                 android:id="@+id/nameView"
                 android:gravity="right"
@@ -88,7 +99,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/box"
             android:padding="15dp"
-            android:textSize="15dp"
+            android:textSize="18dp"
             android:hint="비밀번호"
             android:textColor="#B3B3B3"
             android:fontFamily="@font/main_font"/>
@@ -114,7 +125,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/box"
             android:padding="15dp"
-            android:textSize="15dp"
+            android:textSize="18dp"
             android:hint="비밀번호 확인"
             android:textColor="#B3B3B3"
             android:fontFamily="@font/main_font"/>
@@ -138,7 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="50dp"
             android:background="@drawable/box_btn"
             android:text="가입 하기"
             android:fontFamily="@font/main_font"

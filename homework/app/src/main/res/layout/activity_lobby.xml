@@ -13,6 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@drawable/gradient_bg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints">
 
         <ImageView
@@ -116,25 +119,33 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/relativeLayout"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="3dp"
         android:background="#B3B3B3"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:elevation="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/home"
@@ -143,7 +154,11 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
             android:src="@drawable/home" />
+
 
         <ImageView
             android:id="@+id/storage"
@@ -152,6 +167,9 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
             android:src="@drawable/storage" />
 
         <ImageView
@@ -161,7 +179,11 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
             android:src="@drawable/closet" />
+
 
         <ImageView
             android:id="@+id/bell"
@@ -170,7 +192,11 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
             android:src="@drawable/bell" />
+
 
         <ImageView
             android:id="@+id/user"
@@ -179,7 +205,11 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
             android:src="@drawable/user" />
+
 
     </LinearLayout>
 

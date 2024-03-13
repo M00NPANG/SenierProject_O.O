@@ -20,4 +20,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnLogin"
         android:text="로그인"/>
+    <Button
+        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnTest"
+        android:text="이미지"/>
+    <Button
+        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnTest2"
+        android:text="포스트"/>
 </LinearLayout>
