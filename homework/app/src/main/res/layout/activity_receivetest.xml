@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ReceivetestActivity"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/receiveImage"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"/>
+    <TextView
+        android:id="@+id/recieveName"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="aaaaa"/>
+    <TextView
+        android:id="@+id/receiveText"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="bbb"/>
+</LinearLayout>
