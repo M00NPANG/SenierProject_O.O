@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 뒤로가기 버튼 -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_undo"
+        android:padding="10dp"/>
+
+    <!-- 게시물 작성 완료 버튼 -->
+    <ImageView
+        android:id="@+id/completeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_complete"
+        android:padding="10dp"/> <!-- 완료 아이콘 리소스 설정 필요 -->
+
+    <!-- 코디 이미지 -->
+    <ImageView
+        android:id="@+id/codiImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/backButton"
+        android:layout_weight="1" />
+    <!-- android:src="@drawable/ic_codi" 코디 이미지 리소스 설정 필요 -->
+
+    <!-- 구분선 -->
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/codiImage"
+        android:background="#D3D3D3" />
+
+    <!-- 코디 이름 -->
+    <TextView
+        android:id="@+id/codiNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider1"
+        android:text="코디 이름" />
+
+    <!-- 코디 이름 입력 -->
+    <EditText
+        android:id="@+id/codiNameEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/codiNameLabel"
+        android:layout_alignBaseline="@id/codiNameLabel" />
+
+    <!-- 해시태그 입력 -->
+    <EditText
+        android:id="@+id/hashtagEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/codiNameEdit"
+        android:hint="#해시태그 #예시 #브랜드" />
+
+    <!-- 두 번째 구분선 -->
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/hashtagEdit"
+        android:background="#D3D3D3" />
+
+    <!-- 코디 설명 라벨 -->
+    <TextView
+        android:id="@+id/codiDescriptionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider2"
+        android:text="코디 설명" />
+
+    <!-- 코디 설명 입력 -->
+    <EditText
+        android:id="@+id/codiDescriptionEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/codiDescriptionLabel" />
+
+</RelativeLayout>
