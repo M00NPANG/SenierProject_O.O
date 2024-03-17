@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PercolActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="퍼스널 컬러 측정"
+            android:fontFamily="@font/main_font"
+            android:textColor="#FFC2AF"
+            android:textSize="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center_horizontal" />
+        <View
+            android:layout_width="200dp"
+            android:layout_height="3dp"
+            android:background="#808080"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"/>
+        <ImageView
+            android:id="@+id/imageForPercol"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_height="400dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/unknown"/>
+
+        <Button
+            android:id="@+id/percolButton"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/box_btn"
+            android:text="사진 찍기"
+            android:fontFamily="@font/main_font"
+            android:textSize="28dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:padding="10dp"
+            android:elevation="50dp"/>
+        <Button
+            android:id="@+id/sendImageButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/box_btn"
+            android:text="측정하기"
+            android:fontFamily="@font/main_font"
+            android:textSize="28dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:padding="10dp"
+            android:elevation="50dp"
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+</RelativeLayout>

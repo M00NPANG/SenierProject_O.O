@@ -1,0 +1,6 @@
+{
+  "timestamp": "2024-02-13T22:04:33.396+00:00",
+  "status": 500,
+  "error": "Internal Server Error",
+  "path": "/api/join"
+}

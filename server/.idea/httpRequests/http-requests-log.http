@@ -1,0 +1,880 @@
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 137
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1111",
+  "name": "test",
+  "user_percol": "winter",
+  "user_color": "red",
+  "user_style": "street"
+}
+
+<> 2024-03-06T054209.200.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 137
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1111",
+  "name": "test",
+  "user_percol": "winter",
+  "user_color": "red",
+  "user_style": "street"
+}
+
+<> 2024-03-06T045555.200.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 137
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "3333",
+  "name": "test",
+  "user_percol": "winter",
+  "user_color": "red",
+  "user_style": "street"
+}
+
+<> 2024-03-06T045544.400.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 137
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "3333",
+  "name": "test",
+  "user_percol": "winter",
+  "user_color": "red",
+  "user_style": "street"
+}
+
+<> 2024-03-06T043940.200.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 137
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "3333",
+  "name": "test",
+  "user_percol": "winter",
+  "user_color": "red",
+  "user_style": "street"
+}
+
+<> 2024-03-06T043559.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 93
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234",
+  "name": "하윤석",
+  "user_percol": "summer"
+}
+
+<> 2024-03-06T031519.400.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 93
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234",
+  "name": "하윤석",
+  "user_percol": "summer"
+}
+
+<> 2024-03-06T031001.500.json
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 51
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gkdbstjr",
+  "email": "gkdbstjr"
+}
+
+<> 2024-03-06T030958.200.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 88
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234",
+  "name": "1234",
+  "user_percol": "winter"
+}
+
+<> 2024-03-06T030924.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 88
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234",
+  "name": "1234",
+  "user_percol": "winter"
+}
+
+<> 2024-03-06T030609.500.json
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 51
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gkdbstjr",
+  "email": "gkdbstjr"
+}
+
+<> 2024-03-06T025935.200.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 93
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234",
+  "name": "하윤석",
+  "user_percol": "summer"
+}
+
+<> 2024-03-06T025928.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 93
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234",
+  "name": "하윤석",
+  "user_percol": "summer"
+}
+
+<> 2024-03-06T025528.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 93
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234",
+  "name": "하윤석",
+  "user_percol": "summer"
+}
+
+<> 2024-03-06T025450.500.json
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 51
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gkdbstjr",
+  "email": "gkdbstjr"
+}
+
+<> 2024-03-06T025434.200.txt
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 43
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234"
+}
+
+<> 2024-03-06T025403.200.txt
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 53
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gkdbstjr",
+  "email": "gkdbstjrb "
+}
+
+<> 2024-03-06T025346.200.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 117
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234",
+  "name": "하윤석",
+  "user_percol": "summer",
+  "imgPath": "123/dir"
+}
+
+<> 2024-03-06T025326.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 117
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234",
+  "name": "하윤석",
+  "user_percol": "summer",
+  "imgPath": "123/dir"
+}
+
+<> 2024-03-06T024522.500.json
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 53
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gkdbstjr",
+  "email": "gkdbstjrb "
+}
+
+<> 2024-03-06T024457.200.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 125
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gkdbstjr",
+  "email": "gkdbstjr",
+  "name": "하윤석",
+  "user_percol": "summer",
+  "imgPath": "123/dir"
+}
+
+<> 2024-03-06T024449.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 125
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gkdbstjr",
+  "email": "gkdbstjr",
+  "name": "하윤석",
+  "user_percol": "summer",
+  "imgPath": "123/dir"
+}
+
+<> 2024-03-06T024412.500.json
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 51
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gkdbstjr",
+  "email": "gkdbstjr"
+}
+
+<> 2024-03-05T005729.200.txt
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 51
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gkdbstjr",
+  "email": "gkdbstjr"
+}
+
+<> 2024-03-05T002818.200.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 125
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gkdbstjr",
+  "email": "gkdbstjr",
+  "name": "하윤석",
+  "user_percol": "summer",
+  "imgPath": "123/dir"
+}
+
+<> 2024-03-05T002759.200.txt
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 43
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "1234"
+}
+
+<> 2024-03-04T165850.200.txt
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 43
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1124",
+  "email": "1124"
+}
+
+<> 2024-03-04T165821.200.txt
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 44
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "12345"
+}
+
+<> 2024-03-04T162058.200.txt
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 60
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "gildong@TUkorea.ac.kr",
+  "email": "1234"
+}
+
+<> 2024-03-04T161959.200.txt
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 43
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1124",
+  "email": "1124"
+}
+
+<> 2024-03-04T161437.200.json
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 59
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 0,
+  "password": "1124",
+  "email": "1124"
+}
+
+<> 2024-03-04T161428.200.json
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 59
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 0,
+  "password": "1124",
+  "email": "1124"
+}
+
+<> 2024-03-04T161404.200.json
+
+###
+
+POST http://127.0.0.1:8080/api/join
+Content-Type: application/json
+Content-Length: 77
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 0,
+  "password": "1234",
+  "email": "1234",
+  "name": "1234"
+}
+
+<> 2024-03-04T161241.500.json
+
+###
+
+POST http://127.0.0.1:8080/api/join
+Content-Type: application/json
+Content-Length: 77
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 0,
+  "password": "1234",
+  "email": "1234",
+  "name": "1234"
+}
+
+<> 2024-02-14T071237.200.txt
+
+###
+
+# @no-cookie-jar
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 99
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 0,
+  "password": "1234",
+  "email": "gildong@TUkorea.ac.kr",
+  "name": "홍길동"
+}
+
+<> 2024-02-14T071155.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 99
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 0,
+  "password": "1234",
+  "email": "gildong@TUkorea.ac.kr",
+  "name": "홍길동"
+}
+
+<> 2024-02-14T071141.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 83
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "gildong@TUkorea.ac.kr",
+  "name": "홍길동"
+}
+
+<> 2024-02-14T071130.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 83
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "gildong@TUkorea.ac.kr",
+  "name": "홍길동"
+}
+
+<> 2024-02-14T071111.500.json
+
+###
+
+GET http://localhost:8080/api/test
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-02-14T070944.200.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 83
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "gildong@TUkorea.ac.kr",
+  "name": "홍길동"
+}
+
+<> 2024-02-14T070940.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-02-14T070903.400.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-02-14T070840.400.json
+
+###
+
+GET http://localhost:8080/api/test
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-02-14T070817.200.txt
+
+###
+
+POST http://localhost:8080/api/join
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-02-14T070808.400.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-02-14T070755.400.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 83
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "gildong@TUkorea.ac.kr",
+  "name": "홍길동"
+}
+
+<> 2024-02-14T070552.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 65
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 0,
+  "password": "",
+  "email": "",
+  "name": ""
+}
+
+<> 2024-02-14T070515.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 83
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "password": "1234",
+  "email": "gildong@TUkorea.ac.kr",
+  "name": "홍길동"
+}
+
+<> 2024-02-14T070433.500.json
+
+###
+
+POST http://localhost:8080/api/join
+Content-Type: application/json
+Content-Length: 77
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 0,
+  "password": "1234",
+  "email": "1234",
+  "name": "1234"
+}
+
+<> 2024-02-14T070203.500.json
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+Content-Length: 77
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Cookie: JSESSIONID=F2A0B1231A56D762AF0EC3CFAB42F3B3
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 0,
+  "password": "1234",
+  "email": "1234",
+  "name": "1234"
+}
+
+<> 2024-02-14T070151.200.json
+
+###
+
