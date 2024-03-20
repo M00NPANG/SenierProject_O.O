@@ -1,90 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topConstraintLayout"
+        android:layout_width="0dp"
         android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@drawable/gradient_top">
+        android:background="@drawable/gradient_top"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/userImageView"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/test_user"
-            android:layout_marginTop="7dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="5dp"/>
 
         <TextView
             android:id="@+id/userNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="사용자"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/main_font"
+            android:text="사용자"
+            android:textSize="18dp"
             android:textStyle="bold"
-            android:layout_marginTop="18dp"
-            android:layout_marginLeft="5dp"/>
+            app:layout_constraintStart_toEndOf="@id/userImageView"
+            app:layout_constraintTop_toTopOf="@id/userImageView" />
 
         <TextView
             android:id="@+id/subscribe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="구독"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="30dp"
             android:fontFamily="@font/main_font"
-            android:layout_marginTop="18dp"
-            android:layout_marginLeft="260dp"/>
+            android:text="구독"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/userImageView" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/uploadedImageView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        android:src="@drawable/test_cody" />
+        android:src="@drawable/test_cody"
+        app:layout_constraintTop_toBottomOf="@id/topConstraintLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomConstraintLayout"
+        android:layout_width="0dp"
         android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@drawable/gradient_bottom">
+        android:background="@drawable/gradient_bottom"
+        app:layout_constraintTop_toBottomOf="@id/uploadedImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="코디이름"
+            android:textSize="18dp"
             android:fontFamily="@font/main_font"
-            android:layout_marginLeft="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="25dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="#태그들"
+            android:layout_marginTop="25dp"
             android:fontFamily="@font/main_font"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="25dp"/>
+            android:text="#태그들"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="81dp"
+            tools:ignore="MissingConstraints" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
             android:src="@drawable/heart"
-            android:layout_marginLeft="240dp"
-            android:layout_marginTop="25dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="xx"
-            android:fontFamily="@font/main_font"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="25dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
-
-
-
-</LinearLayout>

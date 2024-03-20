@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/p_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/main_font"
+        android:text="당신의 퍼스널 컬러는!"
+        android:textAlignment="center"
+        android:textColor="#FFC2AF"
+        android:textSize="40dp" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="200dp"
+        android:layout_height="3dp"
+        android:layout_below="@id/p_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dp"
+        android:background="#808080" />
+
+    <FrameLayout
+        android:id="@+id/profilePictureFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/frame_border">
+
+        <ImageView
+            android:id="@+id/imageViewProfile"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/ic_default_profile" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profilePictureFrame"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageViewCamera"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_camera" />
+
+        <TextView
+            android:id="@+id/textViewCameraLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@font/main_font"
+            android:text="직접 촬영"
+            android:textColor="#6F6F6F"
+            android:textSize="28dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayoutCamera"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageViewGallery"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_gallery" />
+
+        <TextView
+            android:id="@+id/textViewGalleryLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@font/main_font"
+            android:text="갤러리에서 선택"
+            android:textColor="#6F6F6F"
+            android:textSize="28dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/buttonRecover"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="다시 진단"
+            android:textSize="28dp"
+            android:background="@drawable/box2"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/main_font"
+            android:padding="10dp"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="확정!"
+            android:textSize="28dp"
+            android:background="@drawable/box2"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/main_font"
+            android:padding="15dp"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -31,6 +32,12 @@ class ClosetActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_closet)
+
+        val makeCodyImageView = findViewById<ImageView>(R.id.makecody)
+        makeCodyImageView.setOnClickListener {
+            val intent = Intent(this, CreateOutfitActivity::class.java)
+            startActivity(intent)
+        }
 
         val clothes = arrayOf("모자", "상의", "하의")
         val codis = arrayOf("코디1", "코디2", "코디3")
