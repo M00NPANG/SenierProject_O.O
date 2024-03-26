@@ -39,9 +39,10 @@ class CodyAdapter(private val context: Context, private val dataSource: List<Cod
             // 내부 저장소의 이미지 경로가 있으면 Bitmap을 로드해서 설정
             val bitmap = BitmapFactory.decodeFile(path)
             viewHolder.imageView.setImageBitmap(bitmap)
-        } ?: codyGridItem.imageResId?.let { resId ->
-            // 리소스 ID가 있으면 해당 이미지를 설정
-            viewHolder.imageView.setImageResource(resId)
+        } ?: run {
+            // imagePath가 없는 경우, 기본 이미지 설정
+            viewHolder.imageView.setImageResource(R.drawable.test_cody)
+            // viewHolder.imageView.setImageBitmap(null)
         }
 
         return view

@@ -24,8 +24,8 @@ data class Post(      // 받기 위한 codiset 정보
     val userName : String
 )
 
-data class CodyGridItem(  // 실제로 보이기 위한 codiset 정보
-    val imageResId: Int? = null,
+data class CodyGridItem(  // 실제로 보이기 위한 codiset 정보 즉 Post임
+    val post_id: Int? = null,
     val imagePath: String? = null,
     val title: String,
     val hashtag: String? = null,

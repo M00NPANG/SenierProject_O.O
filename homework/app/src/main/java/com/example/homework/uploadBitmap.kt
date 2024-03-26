@@ -104,7 +104,7 @@ fun uploadCodiSet(bitmap: Bitmap, title: String, hashtag: String, comment: Strin
 
 
 
-fun uploadClothes(bitmap: Bitmap, cl_category : Int, useremail: String, url: String) {
+fun uploadClothes(bitmap: Bitmap, cl_category : Int, useremail: String, cl_personal_color:String,url: String) {
     val stream = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.PNG, 80, stream) // JPEG으로 변경, 품질 80
     val byteArray = stream.toByteArray()
@@ -115,6 +115,7 @@ fun uploadClothes(bitmap: Bitmap, cl_category : Int, useremail: String, url: Str
             byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull()))
         .addFormDataPart("cl_category", cl_category.toString())
         .addFormDataPart("useremail", useremail)
+        .addFormDataPart("cl_personal_color",cl_personal_color)
         .build()
 
     // 요청 생성 (post)

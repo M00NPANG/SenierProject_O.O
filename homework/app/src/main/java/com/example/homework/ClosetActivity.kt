@@ -151,17 +151,17 @@ class ClosetActivity : AppCompatActivity() {
             val codiname: TextView = codyView.findViewById(R.id.codyName)
             val username: TextView = codyView.findViewById(R.id.userName)
             val hashtag: TextView = codyView.findViewById(R.id.tags)
+            // 이미지 경로가 있으면 해당 경로로 이미지 로드
             item.imagePath?.let { path ->
                 val fullPath = if (path.startsWith("http")) {
                     path // 이미 전체 URL인 경우 그대로 사용
                 } else {
                     "$ipAddr$path" // 상대 경로인 경우 기본 URL과 결합
                 }
-                Glide.with(this)
-                    .load(fullPath)
-                    .into(imageView)
-            } ?: item.imageResId?.let { resId ->
-                imageView.setImageResource(resId)
+                Glide.with(this).load(fullPath).into(imageView)
+            } ?: run {
+                // imagePath가 없는 경우, 기본 이미지 설정 또는 이미지 뷰를 숨김
+                // 예: imageView.setImageResource(R.drawable.default_image)
             }
 
             codiname.text = item.title
@@ -194,36 +194,35 @@ class ClosetActivity : AppCompatActivity() {
             ClothCategory("신발", mutableListOf(GridItem("https://storage.googleapis.com/codiset/ef0d2fbd-b232-4a19-ae59-917dba66ced7")))
         )
 
-
-        val categoryIdToIndex = mapOf(
-            60 to 0, // 패션 잡화
-            10 to 1, // 상의
-            20 to 2, // 하의
-            30 to 3, // 원피스/투피스/점프슈트
-            40 to 4, // 아우터
-            50 to 5  // 신발
-        )
-        //디폴트 추가
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/cap2.png")
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/shirt2.png")
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/skirt2.png")
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/59ae9d27-d63e-4334-bfa8-202c7da66c2d")
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/64fff404-69e0-4b6a-b0e8-d93a4e5a0a8b")
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/ef0d2fbd-b232-4a19-ae59-917dba66ced7")
-
         // 서버에서 받은 데이터를 각 카테고리에 추가
         clothesList.forEach { cloth ->
             cloth.cl_category?.let { categoryId ->
-                val categoryIndex = categoryIdToIndex[categoryId]
+                val categoryIndex = when {
+                    categoryId.toString().startsWith("6") -> 0 // 패션 잡화
+                    categoryId.toString().startsWith("1") -> 1 // 상의
+                    categoryId.toString().startsWith("2") -> 2 // 하의
+                    categoryId.toString().startsWith("3") -> 3 // 한벌옷
+                    categoryId.toString().startsWith("4") -> 4 // 아우터
+                    categoryId.toString().startsWith("5") -> 5 // 신발
+                    else -> null
+                }
                 categoryIndex?.let { index ->
                     categories[index].items.add(GridItem(cloth.cl_photo_path ?: "Default URL for missing image"))
-                    cloth.cl_photo_path?.let { ClothesRepository.addClothesUrl(it)}
-                    }
+                    cloth.cl_photo_path?.let { ClothesRepository.addClothesUrl(it) }
+                }
+            }
+        }
+
+        // 카테고리별 기본 아이템 추가를 위한 URL들 다시 추가
+        categories.forEach { category ->
+            category.items.firstOrNull()?.let { gridItem ->
+                ClothesRepository.addClothesUrl(gridItem.imageURL)
             }
         }
 
         return categories
     }
+
 
 
 
@@ -368,48 +367,52 @@ class ClosetActivity : AppCompatActivity() {
 
 }
 
-// 저장한 코디셋 접근용
-fun getInternalStorageImagePath(context: Context, filename: String): String {
-    return File(context.filesDir, filename).absolutePath
-}
+
+
+
 
 /*
- private fun codyButtonSelect(num : Int){
-        /*
-        lifecycleScope.launch {
-            receiveClothes(SharedPreferencesUtils.loadEmail(this@ClosetActivity).toString())
-        }
-        */
-        val email : String = SharedPreferencesUtils.loadEmail(this).toString()
-        if(num == 1){
-            clothButton.isSelected = true
-            codyButton.isSelected = false
-            val categories = listOf(
-                ClothCategory("패션 잡화", listOf(GridItem(R.drawable.cap2))), //60
-                ClothCategory("상의", listOf(GridItem(R.drawable.shirt2))), // 10
-                ClothCategory("하의", listOf(GridItem(R.drawable.skirt2))), // 20
-                ClothCategory("원피스/투피스/점프슈트", listOf(GridItem(R.drawable.skirt2))), // 30
-                ClothCategory("아우터", listOf(GridItem(R.drawable.shoes))), // 40
-                ClothCategory("신발", listOf(GridItem(R.drawable.shoes))),)  // 50
-            clothesAdapter = ClothesAdapter(categories)
-            recyclerView.adapter = clothesAdapter
-            recyclerView.visibility = View.VISIBLE
-            gridLayoutCody.visibility = View.GONE
-        }
-        else if(num == 2){
-            clothButton.isSelected = false
-            codyButton.isSelected = true
+suspend fun checkCategory(clothesList: List<Clothes>): List<ClothCategory> { //카테고리를 분류함
+        ClothesRepository.clearClothesUrls()
 
-            gridLayoutCody.removeAllViews() // 기존에 있는 뷰를 제거
-            CoroutineScope(Dispatchers.Main).launch {
-                val codyItems = receivePosts(email) // 서버로부터 데이터를 받아옴
-                addCodyItemsToGridLayout(codyItems) // UI 업데이트
-                recyclerView.visibility = View.GONE
-                gridLayoutCody.visibility = View.VISIBLE
-                Log.d("받은결과", codyItems.toString())
+        // 카테고리별 기본 아이템들 넣음
+        val categories = mutableListOf(
+            ClothCategory("패션 잡화", mutableListOf(GridItem("https://storage.googleapis.com/codiset/cap2.png"))),
+            ClothCategory("상의", mutableListOf(GridItem("https://storage.googleapis.com/codiset/shirt2.png"))),
+            ClothCategory("하의", mutableListOf(GridItem("https://storage.googleapis.com/codiset/skirt2.png"))),
+            ClothCategory("한벌옷", mutableListOf(GridItem("https://storage.googleapis.com/codiset/59ae9d27-d63e-4334-bfa8-202c7da66c2d"))),
+            ClothCategory("아우터", mutableListOf(GridItem("https://storage.googleapis.com/codiset/64fff404-69e0-4b6a-b0e8-d93a4e5a0a8b"))),
+            ClothCategory("신발", mutableListOf(GridItem("https://storage.googleapis.com/codiset/ef0d2fbd-b232-4a19-ae59-917dba66ced7")))
+        )
+
+
+        val categoryIdToIndex = mapOf(
+            60 to 0, // 패션 잡화
+            10 to 1, // 상의
+            20 to 2, // 하의
+            30 to 3, // 원피스/투피스/점프슈트
+            40 to 4, // 아우터
+            50 to 5  // 신발
+        )
+        //디폴트 추가
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/cap2.png")
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/shirt2.png")
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/skirt2.png")
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/59ae9d27-d63e-4334-bfa8-202c7da66c2d")
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/64fff404-69e0-4b6a-b0e8-d93a4e5a0a8b")
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/ef0d2fbd-b232-4a19-ae59-917dba66ced7")
+
+        // 서버에서 받은 데이터를 각 카테고리에 추가
+        clothesList.forEach { cloth ->
+            cloth.cl_category?.let { categoryId ->
+                val categoryIndex = categoryIdToIndex[categoryId]
+                categoryIndex?.let { index ->
+                    categories[index].items.add(GridItem(cloth.cl_photo_path ?: "Default URL for missing image"))
+                    cloth.cl_photo_path?.let { ClothesRepository.addClothesUrl(it)}
+                    }
             }
-
         }
 
+        return categories
     }
  */

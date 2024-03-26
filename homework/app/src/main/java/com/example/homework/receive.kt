@@ -1,28 +1,14 @@
 package com.example.homework
 import java.lang.reflect.Type
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
-import android.widget.TextView
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
-import java.util.concurrent.TimeUnit
 
 @GlideModule
 class GlideModule : AppGlideModule() { //글라이드 쓰려고 선언
@@ -50,6 +36,7 @@ suspend fun receivePosts(email : String): List<CodyGridItem> = withContext(Dispa
                 postList.forEach { post ->
                     // imagePath가 있는 경우와 없는 경우를 모두 처리
                     posts.add(CodyGridItem(
+                        post_id = post.post_id,
                         imagePath = post.imagePath,
                         title = post.title,
                         hashtag = post.hashtag,
@@ -69,7 +56,6 @@ suspend fun receivePosts(email : String): List<CodyGridItem> = withContext(Dispa
 
 
 suspend fun receiveClothes(email: String): List<Clothes> = withContext(Dispatchers.IO) {
-    Log.d("현재 email", email)
     val clothesList = mutableListOf<Clothes>()
     try {
         val url = "$ipAddr/receiveClothes?email=$email"
