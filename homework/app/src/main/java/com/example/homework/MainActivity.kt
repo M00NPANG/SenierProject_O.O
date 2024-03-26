@@ -6,7 +6,7 @@ import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
-val ipAddr = "http://192.168.123.100:8080"
+val ipAddr = "http://192.168.123.105:8080" // http://192.168.123.103:8080
 
 class MainActivity : AppCompatActivity() {
     lateinit var loginBtn : Button
@@ -16,23 +16,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        // 자동 로그인
+        val loggedInEmail = SharedPreferencesUtils.loadEmail(this)
+        // 로그인한 이메일이 있다면(즉, null이 아니라면) 사용자가 이미 로그인했다고 침
+        if (loggedInEmail != null) {
+            // 로비 액티비티로 이동
+            val intent = Intent(this, LobbyActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+
+        }
+
+        testBtn = findViewById(R.id.btnTest)
         loginBtn = findViewById(R.id.btnLogin)
+
         loginBtn.setOnClickListener {
             intent = Intent(this@MainActivity,LoginActivity::class.java)
             startActivity(intent)
         }
-
-        testBtn = findViewById(R.id.btnTest)
         testBtn.setOnClickListener {
-            intent = Intent(this@MainActivity,TestActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this@MainActivity,OmniusActivity::class.java))
         }
 
-        test2Btn = findViewById(R.id.btnTest2)
-        test2Btn.setOnClickListener {
-            intent = Intent(this@MainActivity,CreateOutfitActivity::class.java)
-            startActivity(intent)
-        }
     }
 }
 

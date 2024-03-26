@@ -48,12 +48,13 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent) //
         }
         btnLogin.setOnClickListener { // 로그인 버튼
-            val intent = Intent(this@LoginActivity, LobbyActivity::class.java)
-            startActivity(intent)
+            //val intent = Intent(this@LoginActivity, LobbyActivity::class.java)
+            //startActivity(intent)
 
-            //CoroutineScope(Dispatchers.IO).launch {
-            //    login()
-            //}
+            CoroutineScope(Dispatchers.IO).launch {
+                login()
+
+            }
 
         }
         btnKakao.setOnClickListener {// 카카오로그인 버튼
@@ -78,6 +79,8 @@ class LoginActivity : AppCompatActivity() {
             when (responseCode) {
                 1 -> {
                     // 로그인 성공
+                    SharedPreferencesUtils.saveEmail(this@LoginActivity, checkID.text.toString())// 아이디 저장
+
                     startActivity(Intent(this@LoginActivity, LobbyActivity::class.java))
                 }
                 0 -> {
@@ -88,6 +91,8 @@ class LoginActivity : AppCompatActivity() {
                 }
                 else -> {
                     // 에러
+                    val shakeAnimation = AnimationUtils.loadAnimation(applicationContext, R.anim.shake)
+                    findViewById<View>(R.id.loginActivityView).startAnimation(shakeAnimation)
                     Toast.makeText(this@LoginActivity, "오류 발생", Toast.LENGTH_SHORT).show()
                 }
             }

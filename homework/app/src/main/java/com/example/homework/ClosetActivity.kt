@@ -1,8 +1,11 @@
 package com.example.homework
 
+import android.annotation.SuppressLint
+import android.content.ContentValues
+import android.graphics.Matrix
+import androidx.exifinterface.media.ExifInterface
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -13,29 +16,35 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.GridLayout
-import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dev.eren.removebg.RemoveBg
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
+import kotlin.math.max
 
-data class GridItem(val imageResId: Int)
-data class ClothCategory(val title: String, val items: List<GridItem>)
+//data class GridItem(val imageResId: Int)
+data class GridItem(val imageURL: String)
+data class ClothCategory(val title: String, val items: MutableList<GridItem>)
 //data class CodyGridItem(val imageResId: Int, val title: String)
-data class CodyGridItem(val imageResId: Int? = null, val imagePath: String? = null, val title: String)
 
 class ClosetActivity : AppCompatActivity() {
     private val PICK_IMAGE_REQUEST = 1
@@ -46,44 +55,36 @@ class ClosetActivity : AppCompatActivity() {
     private lateinit var gridLayoutCody: GridLayout
     private lateinit var clothButton : Button
     private lateinit var codyButton : Button
-
+    private lateinit var homeButton : ImageView
+    private lateinit var storageButton : ImageView
+    private lateinit var closetButton : ImageView
+    private lateinit var bellButton : ImageView
+    private lateinit var userButton : ImageView
+    private lateinit var currentPhotoUri: Uri
     private val REQUEST_IMAGE_CAPTURE = 1
     private val CAMERA_PERMISSION_CODE = 101
+    lateinit var bitmap : Bitmap
 
+    @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_closet)
-        clothButton = findViewById(R.id.cloth)
-        codyButton = findViewById(R.id.cody)
-
+        initButtons()
         clothButton.isSelected = true
         //아이템용 리사이클러 뷰
         recyclerView = findViewById(R.id.recyclerViewClothes1)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val categories = listOf(
-            ClothCategory("모자", listOf(GridItem(R.drawable.cap2))),
-            ClothCategory("상의", listOf(GridItem(R.drawable.shirt2), GridItem(R.drawable.hanbok))),
-            ClothCategory("하의", listOf(GridItem(R.drawable.skirt2), GridItem(R.drawable.hanbok2), GridItem(R.drawable.hanbok2), GridItem(R.drawable.hanbok2), GridItem(R.drawable.hanbok2))),
-            ClothCategory("신발", listOf(GridItem(R.drawable.shoes))))
-        clothesAdapter = ClothesAdapter(categories)
-        recyclerView.adapter = clothesAdapter
+        codyButtonSelect(1)
 
-        // 옷 버튼 눌렀을 때
-        clothButton.setOnClickListener {
-            codyButtonSelect(1)
 
-        }
-        //코디 버튼 눌렀을 떄
-        codyButton.setOnClickListener {
-            codyButtonSelect(2)
-        }
 
         val fabAdd = findViewById<FloatingActionButton>(R.id.fab_add)
         val fabGallery = findViewById<FloatingActionButton>(R.id.fab_gallery)
         val fabCamera = findViewById<FloatingActionButton>(R.id.fab_camera)
+        val fabCodi = findViewById<FloatingActionButton>(R.id.fab_codi)
 
         fabAdd.setOnClickListener {
-            toggleFabVisibility(fabGallery, fabCamera)
+            adjustFabVisibilityBasedOnSelection(fabCamera, fabGallery, fabCodi)
         }
 
         fabGallery.setOnClickListener {
@@ -94,50 +95,160 @@ class ClosetActivity : AppCompatActivity() {
             intent = Intent(this@ClosetActivity, TestActivity::class.java)
             startActivity(intent)
         }
+        fabCodi.setOnClickListener {
+            intent = Intent(this@ClosetActivity, CreateOutfitActivity::class.java)
+            startActivity(intent)
+        }
     }
-    private fun addCodyItemsToGridLayout(codyItems: List<CodyGridItem>) {
+    private fun initButtons() {
+        clothButton = findViewById(R.id.cloth)
+        codyButton = findViewById(R.id.cody)
+        homeButton = findViewById(R.id.home)
+        closetButton = findViewById(R.id.closet)
+        storageButton = findViewById(R.id.storage)
+        bellButton = findViewById(R.id.bell)
+        userButton = findViewById(R.id.user)
+        gridLayoutCody = findViewById(R.id.gridLayoutCody)
+
+        clothButton.setOnClickListener {
+            codyButtonSelect(1)
+        }
+
+        codyButton.setOnClickListener {
+            codyButtonSelect(2)
+        }
+
+        homeButton.setOnClickListener {
+            // 홈 버튼 클릭 시의 동작
+            finish()
+        }
+
+        closetButton.setOnClickListener {
+            // 옷장 버튼 클릭 시의 동작
+            val intent = Intent(this, ClosetActivity::class.java)
+            finish()
+            startActivity(intent)
+        }
+
+        storageButton.setOnClickListener {
+            // 저장소 버튼 클릭 시의 동작
+        }
+
+        bellButton.setOnClickListener {
+            // 알림 버튼 클릭 시의 동작
+        }
+
+        userButton.setOnClickListener {
+            // 사용자 버튼 클릭 시의 동작
+        }
+    }
+
+
+    private fun addCodyItemsToGridLayout(codyItems: List<CodyGridItem>) { // 본인이 만든 코디세트를 띄움
         codyItems.forEach { item ->
             val codyView = LayoutInflater.from(this).inflate(R.layout.item_post, gridLayoutCody, false)
             val imageView: ImageView = codyView.findViewById(R.id.uploadedImageView)
-            val textView: TextView = codyView.findViewById(R.id.codyName)
-
-            //imageView.setImageResource(item.imageResId)
+            val codiname: TextView = codyView.findViewById(R.id.codyName)
+            val username: TextView = codyView.findViewById(R.id.userName)
+            val hashtag: TextView = codyView.findViewById(R.id.tags)
             item.imagePath?.let { path ->
-                val bitmap = BitmapFactory.decodeFile(path)
-                imageView.setImageBitmap(bitmap)
+                val fullPath = if (path.startsWith("http")) {
+                    path // 이미 전체 URL인 경우 그대로 사용
+                } else {
+                    "$ipAddr$path" // 상대 경로인 경우 기본 URL과 결합
+                }
+                Glide.with(this)
+                    .load(fullPath)
+                    .into(imageView)
             } ?: item.imageResId?.let { resId ->
                 imageView.setImageResource(resId)
             }
 
-            textView.text = item.title
-
-
+            codiname.text = item.title
+            username.text= item.username
+            hashtag.text = item.hashtag
             val layoutParams = GridLayout.LayoutParams()
-
             val pixels = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 10f,
                 resources.displayMetrics
             ).toInt()
 
-            //layoutParams.width = pixels
-            //layoutParams.height = pixels
             layoutParams.rightMargin = pixels
             layoutParams.bottomMargin = pixels
 
-            gridLayoutCody.addView(codyView,layoutParams)
+            gridLayoutCody.addView(codyView, layoutParams)
         }
     }
 
-    private fun toggleFabVisibility(vararg fabs: FloatingActionButton) {
-        fabs.forEach { fab ->
-            fab.visibility = if (fab.visibility == FloatingActionButton.VISIBLE) {
-                FloatingActionButton.INVISIBLE
-            } else {
-                FloatingActionButton.VISIBLE
+    suspend fun checkCategory(clothesList: List<Clothes>): List<ClothCategory> {
+        ClothesRepository.clearClothesUrls()
+
+        // 카테고리별 기본 아이템들 넣음
+        val categories = mutableListOf(
+            ClothCategory("패션 잡화", mutableListOf(GridItem("https://storage.googleapis.com/codiset/cap2.png"))),
+            ClothCategory("상의", mutableListOf(GridItem("https://storage.googleapis.com/codiset/shirt2.png"))),
+            ClothCategory("하의", mutableListOf(GridItem("https://storage.googleapis.com/codiset/skirt2.png"))),
+            ClothCategory("한벌옷", mutableListOf(GridItem("https://storage.googleapis.com/codiset/59ae9d27-d63e-4334-bfa8-202c7da66c2d"))),
+            ClothCategory("아우터", mutableListOf(GridItem("https://storage.googleapis.com/codiset/64fff404-69e0-4b6a-b0e8-d93a4e5a0a8b"))),
+            ClothCategory("신발", mutableListOf(GridItem("https://storage.googleapis.com/codiset/ef0d2fbd-b232-4a19-ae59-917dba66ced7")))
+        )
+
+
+        val categoryIdToIndex = mapOf(
+            60 to 0, // 패션 잡화
+            10 to 1, // 상의
+            20 to 2, // 하의
+            30 to 3, // 원피스/투피스/점프슈트
+            40 to 4, // 아우터
+            50 to 5  // 신발
+        )
+        //디폴트 추가
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/cap2.png")
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/shirt2.png")
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/skirt2.png")
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/59ae9d27-d63e-4334-bfa8-202c7da66c2d")
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/64fff404-69e0-4b6a-b0e8-d93a4e5a0a8b")
+        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/ef0d2fbd-b232-4a19-ae59-917dba66ced7")
+
+        // 서버에서 받은 데이터를 각 카테고리에 추가
+        clothesList.forEach { cloth ->
+            cloth.cl_category?.let { categoryId ->
+                val categoryIndex = categoryIdToIndex[categoryId]
+                categoryIndex?.let { index ->
+                    categories[index].items.add(GridItem(cloth.cl_photo_path ?: "Default URL for missing image"))
+                    cloth.cl_photo_path?.let { ClothesRepository.addClothesUrl(it)}
+                    }
             }
         }
+
+        return categories
     }
+
+
+
+
+
+    private fun adjustFabVisibilityBasedOnSelection(fabCamera: FloatingActionButton, fabGallery: FloatingActionButton, fabCodi: FloatingActionButton) {
+        if (clothButton.isSelected) {
+            // clothButton이 선택된 상태일 때
+            // fabCamera와 fabGallery의 가시성을 토글하고, fabCodi는 숨깁니다.
+            fabCamera.visibility = toggleVisibility(fabCamera.visibility)
+            fabGallery.visibility = toggleVisibility(fabGallery.visibility)
+            fabCodi.visibility = FloatingActionButton.INVISIBLE
+        } else if (codyButton.isSelected) {
+            // codyButton이 선택된 상태일 때
+            // fabCodi의 가시성을 토글하고, fabCamera와 fabGallery는 숨깁니다.
+            fabCodi.visibility = toggleVisibility(fabCodi.visibility)
+            fabCamera.visibility = FloatingActionButton.INVISIBLE
+            fabGallery.visibility = FloatingActionButton.INVISIBLE
+        }
+    }
+
+    private fun toggleVisibility(currentVisibility: Int): Int {
+        return if (currentVisibility == FloatingActionButton.VISIBLE) FloatingActionButton.INVISIBLE else FloatingActionButton.VISIBLE
+    }
+
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -149,83 +260,111 @@ class ClosetActivity : AppCompatActivity() {
         if (resultCode == RESULT_OK) {
             val bitmap: Bitmap? = when (requestCode) {
                 TAKE_PHOTO_REQUEST -> {
-                    // 카메라 사진 촬영 결과 처리
                     val photoFile = File(currentPhotoPath)
                     BitmapFactory.decodeFile(photoFile.absolutePath)
                 }
+
                 PICK_IMAGE_REQUEST -> {
-                    // 갤러리에서 선택한 이미지 결과 처리
+                    // 갤러리에서 선택했을 때 처리
+                    data?.data?.let { uri ->
+                        getCorrectlyOrientedImage(this, uri)
+                    }
+                    /*
                     data?.data?.let { uri ->
                         contentResolver.openInputStream(uri).use { inputStream ->
                             BitmapFactory.decodeStream(inputStream)
                         }
-                    }
+                    }*/
                 }
                 else -> null
             }
-
             bitmap?.let {
-                // 서버 URL 설정
-                val endPoint = "/testUpload"
-                val url = ipAddr + endPoint
-                // Bitmap을 서버로 업로드
-                uploadBitmap(it, url)
+                lifecycleScope.launch {
+                    val remover = RemoveBg(this@ClosetActivity)
+
+                    var outputImage: Bitmap?
+
+                    remover.clearBackground(it).collect { output ->
+                        if (output != null) {
+                            outputImage = output
+                            BitmapStorage.Bitmap = outputImage
+                            startActivity(Intent(this@ClosetActivity, CategoryActivity::class.java))
+                        }
+                    }
+
+                }
             }
         }
     }
 
 
-    private fun codyButtonSelect(num : Int){
-        if(num == 1){
+    private fun codyButtonSelect(num : Int){ // 옷/코디버튼 눌렀을 때
+        val email : String = SharedPreferencesUtils.loadEmail(this).toString()
+        if(num == 1){ // 옷 버튼이 눌렸을 때
             clothButton.isSelected = true
             codyButton.isSelected = false
-            val categories = listOf(
-                ClothCategory("모자", listOf(GridItem(R.drawable.cap2))),
-                ClothCategory("상의", listOf(GridItem(R.drawable.shirt2), GridItem(R.drawable.hanbok))),
-                ClothCategory("하의", listOf(GridItem(R.drawable.skirt2), GridItem(R.drawable.hanbok2), GridItem(R.drawable.hanbok2), GridItem(R.drawable.hanbok2), GridItem(R.drawable.hanbok2))),
-                ClothCategory("신발", listOf(GridItem(R.drawable.shoes))))
-            clothesAdapter = ClothesAdapter(categories)
-            recyclerView.adapter = clothesAdapter
+
+            lifecycleScope.launch {
+                val clothesList = receiveClothes(email) // 서버로부터 데이터 받아오기
+                val categories = checkCategory(clothesList) // 데이터 분류
+
+                withContext(Dispatchers.Main) {
+                    // 분류된 데이터로 RecyclerView 업데이트
+                    clothesAdapter = ClothesAdapter(categories)
+                    recyclerView.adapter = clothesAdapter
+                }
+            }
             recyclerView.visibility = View.VISIBLE
             gridLayoutCody.visibility = View.GONE
         }
-        else if(num == 2){
-            val context: Context = this // 현재 Context
-            val filename = "test_bitmap.png" // 내부 저장소에 저장된 파일 이름
-            val imagePath = getInternalStorageImagePath(context, filename) // 파일 경로 얻기
+        else if(num == 2){ // 코디 버튼이 눌렸을 떄
             clothButton.isSelected = false
             codyButton.isSelected = true
-            gridLayoutCody = findViewById(R.id.gridLayoutCody)
-            val codyItems = listOf(
-                CodyGridItem(R.drawable.test_cody, title ="아이템 제목 1"),
-                CodyGridItem(R.drawable.test_cody, title = "아이템 제목 2"),
-                CodyGridItem(R.drawable.test_cody, title = "아이템 제목 3"),
-                CodyGridItem(title = filename, imagePath = imagePath)
-                //CodyGridItem(imagePath = imagePath, title = "아이템 제목 4") // 객체 생성
-                // 추가 아이템...
-            )
 
-            addCodyItemsToGridLayout(codyItems)
-            recyclerView.visibility = View.GONE
-            gridLayoutCody.visibility = View.VISIBLE
+            gridLayoutCody.removeAllViews() // 기존에 있는 뷰를 제거
+            CoroutineScope(Dispatchers.Main).launch {
+                val codyItems = receivePosts(email) // 서버로부터 데이터를 받아옴
+                addCodyItemsToGridLayout(codyItems) // UI 업데이트
+                recyclerView.visibility = View.GONE
+                gridLayoutCody.visibility = View.VISIBLE
+                Log.d("받은결과", codyItems.toString())
+            }
+
         }
 
     }
 
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        // 이미지 파일 이름 생성
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        ).apply {
-            // 파일: 경로를 저장합니다.
-            currentPhotoPath = absolutePath
+    // 갤러리에서 선택한 이미지의 URI로부터 Bitmap을 로딩하고, 필요한 회전 처리를 수행하는 함수
+    private fun getCorrectlyOrientedImage(context: Context, photoUri: Uri): Bitmap? {
+        // 이미지의 회전 정보를 얻기 위해 ExifInterface 사용
+        val orientation = context.contentResolver.openInputStream(photoUri)?.use { inputStream ->
+            val exifInterface = ExifInterface(inputStream)
+            exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        } ?: ExifInterface.ORIENTATION_NORMAL
+
+        // 회전 각도를 결정
+        val rotationAngle = when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> 90
+            ExifInterface.ORIENTATION_ROTATE_180 -> 180
+            ExifInterface.ORIENTATION_ROTATE_270 -> 270
+            else -> 0
+        }
+
+        // Bitmap을 디코드하는 데 사용될 두 번째 InputStream
+        val bitmap = context.contentResolver.openInputStream(photoUri)?.use { inputStream ->
+            BitmapFactory.decodeStream(inputStream)
+        }
+
+        // 필요한 회전 처리 수행
+        return if (rotationAngle != 0 && bitmap != null) {
+            val matrix = Matrix().apply { postRotate(rotationAngle.toFloat()) }
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        } else {
+            bitmap
         }
     }
+
+
 
 }
 
@@ -234,3 +373,43 @@ fun getInternalStorageImagePath(context: Context, filename: String): String {
     return File(context.filesDir, filename).absolutePath
 }
 
+/*
+ private fun codyButtonSelect(num : Int){
+        /*
+        lifecycleScope.launch {
+            receiveClothes(SharedPreferencesUtils.loadEmail(this@ClosetActivity).toString())
+        }
+        */
+        val email : String = SharedPreferencesUtils.loadEmail(this).toString()
+        if(num == 1){
+            clothButton.isSelected = true
+            codyButton.isSelected = false
+            val categories = listOf(
+                ClothCategory("패션 잡화", listOf(GridItem(R.drawable.cap2))), //60
+                ClothCategory("상의", listOf(GridItem(R.drawable.shirt2))), // 10
+                ClothCategory("하의", listOf(GridItem(R.drawable.skirt2))), // 20
+                ClothCategory("원피스/투피스/점프슈트", listOf(GridItem(R.drawable.skirt2))), // 30
+                ClothCategory("아우터", listOf(GridItem(R.drawable.shoes))), // 40
+                ClothCategory("신발", listOf(GridItem(R.drawable.shoes))),)  // 50
+            clothesAdapter = ClothesAdapter(categories)
+            recyclerView.adapter = clothesAdapter
+            recyclerView.visibility = View.VISIBLE
+            gridLayoutCody.visibility = View.GONE
+        }
+        else if(num == 2){
+            clothButton.isSelected = false
+            codyButton.isSelected = true
+
+            gridLayoutCody.removeAllViews() // 기존에 있는 뷰를 제거
+            CoroutineScope(Dispatchers.Main).launch {
+                val codyItems = receivePosts(email) // 서버로부터 데이터를 받아옴
+                addCodyItemsToGridLayout(codyItems) // UI 업데이트
+                recyclerView.visibility = View.GONE
+                gridLayoutCody.visibility = View.VISIBLE
+                Log.d("받은결과", codyItems.toString())
+            }
+
+        }
+
+    }
+ */

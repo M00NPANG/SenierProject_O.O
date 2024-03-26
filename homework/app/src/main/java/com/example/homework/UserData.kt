@@ -15,15 +15,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Response
 import java.io.IOException
 
-data class User(
-    var user_id : Long? = null, // 시퀀스넘버
-    var password : String? = null, // 비밀번호
-    var email: String? = null,// 아이디(이메일)
-    var name : String? = null,
-    var user_percol : String? = null,
-    var user_color : String? = null,
-    var user_style : String? = null
-)
+
 
 suspend fun sendUserData(user: User, url: String): Int = withContext(Dispatchers.IO) {
     val client = OkHttpClient()

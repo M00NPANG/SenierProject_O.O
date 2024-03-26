@@ -27,7 +27,7 @@ class PostActivity : AppCompatActivity() {
     lateinit var gridView: GridView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_post)
+        setContentView(R.layout.activity_post)/*
 
         val capImg = arrayOf(R.drawable.cap,R.drawable.cap2)
         val shirtImg = arrayOf(R.drawable.shirt, R.drawable.hanbok,R.drawable.shirt2)
@@ -150,6 +150,7 @@ class PostActivity : AppCompatActivity() {
 
         (findViewById<ViewGroup>(R.id.view)).addView(imageView)
         selectedImages.add(imageData)
+        */
     }
 
 

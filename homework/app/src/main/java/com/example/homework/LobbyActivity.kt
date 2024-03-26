@@ -33,8 +33,8 @@ data class ITEM(val category : String, val fcstDate : String, val fcstTime : Str
 
 //var gson= GsonBuilder().setLenient().create()
 
-private val retrofit = Retrofit.Builder()
-    .baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")//http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0
+private val retrofit = Retrofit.Builder() // http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst <- 초단기예보
+    .baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")//http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0 <- 단기예보
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
@@ -54,9 +54,9 @@ class LobbyActivity : AppCompatActivity() {
     lateinit var tvSky: TextView            // 하늘 상태
     lateinit var tvTemp: TextView           // 온도
     lateinit var skyImg : ImageView // 하늘 이미지
-    var base_date = "20240302"  // 발표 일자
+    var base_date = "20240317"  // 발표 일자
     var base_time = "aaaa"      // 발표 시각
-
+    var time : String = ""
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -72,11 +72,20 @@ class LobbyActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         getCurrentLocation() // 현재 위치를 구하는 것 뿐 아니라 그 위치로 기상청 api에 날씨정보를 요청함
-
         val closet : ImageView = findViewById(R.id.closet)
         closet.setOnClickListener{
             intent = Intent(this@LobbyActivity,ClosetActivity::class.java)
             startActivity(intent)
+        }
+        val home : ImageView = findViewById(R.id.home)
+        home.setOnClickListener {
+            val intent = Intent(this, LobbyActivity::class.java)
+            finish()
+            startActivity(intent)
+        }
+        val test : ImageView = findViewById(R.id.user)
+        test.setOnClickListener {
+            startActivity(Intent(this@LobbyActivity,ProfilesetupActivity::class.java))
         }
 
     }
@@ -114,24 +123,14 @@ class LobbyActivity : AppCompatActivity() {
         // 현재 날짜, 시간 정보 가져오기
         val cal = Calendar.getInstance()
         base_date = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(cal.time) // 현재 날짜
-        val time = SimpleDateFormat("HH", Locale.getDefault()).format(cal.time) // 현재 시간
+        time = SimpleDateFormat("HH", Locale.getDefault()).format(cal.time) // 현재 시간
         // API 가져오기 적당하게 변환
         base_time = getTime(time)
 
-        /*
-        // 동네예보  API는 3시간마다 현재시간+4시간 뒤의 날씨 예보를 알려주기 때문에
-        // 현재 시각이 00시가 넘었다면 어제 예보한 데이터를 가져와야함
-        if (base_time >= "2000") {
-            cal.add(Calendar.DATE, -1).toString() // 원래는 cal.add(Calendar.DATE, -1).toString()
-            base_date = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(cal.time)
-        }
-        */
 
         // 날씨 정보 가져오기
         // (응답 자료 형식-"JSON", 한 페이지 결과 수 = 10, 페이지 번호 = 1, 발표 날싸, 발표 시각, 예보지점 좌표)
         val call = ApiObject.retrofitService.GetWeather("JSON", 10, 1, base_date, base_time, nx, ny)
-        Log.d("basetime",base_time)
-        Log.d("basedate",base_date)
         // 비동기 실행
         call.enqueue(object : retrofit2.Callback<WEATHER> {
             // 응답 성공 시
@@ -163,7 +162,7 @@ class LobbyActivity : AppCompatActivity() {
 
                             // 날씨 정보 보이기
                             setWeather(rainRatio, rainType, humidity, sky, temp)
-
+                            Log.d("location",base_date)
                             // 토스트 띄우기
                             Toast.makeText(applicationContext, items[0].fcstDate + ", " + items[0].fcstTime + "의 날씨 정보입니다.", Toast.LENGTH_SHORT).show()
                         } else {
@@ -209,6 +208,7 @@ class LobbyActivity : AppCompatActivity() {
 
     // 동네 예보 API는 3시간마다 현재시각+4시간 뒤의 날씨 예보를 보여줌
     fun getTime(time : String) : String {
+
         var result = ""
         when(time) {
             in "00".."02" -> result = "0200"    // 00~02  "2000"
@@ -221,14 +221,56 @@ class LobbyActivity : AppCompatActivity() {
             else -> result = "2300"             // 21~23   "1700"
         }
         return result
+        /*
+        var result = ""
+        when(time){
+            "00"-> result = "0030"
+            "01"-> result = "0130"
+            "02"-> result = "0230"
+            "03"-> result = "0330"
+            "04"-> result = "0430"
+            "05"-> result = "0530"
+            "06"-> result = "0630"
+            "07"-> result = "0730"
+            "08"-> result = "0830"
+            "09"-> result = "0930"
+            "10"-> result = "1030"
+            "11"-> result = "1130"
+            "12"-> result = "1230"
+            "13"-> result = "1330"
+            "14"-> result = "1430"
+            "15"-> result = "1530"
+            "16"-> result = "1630"
+            "17"-> result = "1730"
+            "18"-> result = "1830"
+            "19"-> result = "1930"
+            "20"-> result = "2030"
+            "21"-> result = "2130"
+            "22"-> result = "2230"
+            "23"-> result = "2330"
+        }
+        return result
+        */
+
     }
 
     fun setSky(sky : String){ // 하늘상태임
-        when(sky) {
-            "1" -> skyImg.setImageResource(R.drawable.sun) // 맑음
-            "3" -> skyImg.setImageResource(R.drawable.little_cloud) // 약간 흐림
-            "4" -> skyImg.setImageResource(R.drawable.cloud) // 흐림
-            else -> "오류"
+        Log.d("time",time)
+        if(time.toInt() < 5  || time.toInt() > 17){
+            when(sky) {
+                "1" -> skyImg.setImageResource(R.drawable.moon) // 맑음(달)
+                "3" -> skyImg.setImageResource(R.drawable.little_cloud_moon) // 약간 흐림(달)
+                "4" -> skyImg.setImageResource(R.drawable.cloud) // 흐림
+                else -> "오류"
+            }
+        }
+        else{
+            when(sky) {  //
+                "1" -> skyImg.setImageResource(R.drawable.sun) // 맑음(해)
+                "3" -> skyImg.setImageResource(R.drawable.little_cloud) // 약간 흐림(해)
+                "4" -> skyImg.setImageResource(R.drawable.cloud) // 흐림
+                else -> "오류"
+            }
         }
     }
 
@@ -306,6 +348,5 @@ class LobbyActivity : AppCompatActivity() {
         var x = 0.0
         var y = 0.0
     }
-
 }
 

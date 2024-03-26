@@ -1,7 +1,11 @@
 package com.example.homework
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -11,6 +15,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -53,7 +58,7 @@ fun uploadBitmap(bitmap: Bitmap, url: String){
     })
 }
 
-fun uploadCodiSet(bitmap: Bitmap, title: String, hashtag: String, comment: String, username: String, url: String) {
+fun uploadCodiSet(bitmap: Bitmap, title: String, hashtag: String, comment: String, useremail: String, url: String) {
     val stream = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream) // JPEG으로 변경, 품질 80
     val byteArray = stream.toByteArray()
@@ -65,7 +70,7 @@ fun uploadCodiSet(bitmap: Bitmap, title: String, hashtag: String, comment: Strin
         .addFormDataPart("title", title)
         .addFormDataPart("hashtag", hashtag)
         .addFormDataPart("comment", comment)
-        .addFormDataPart("username", username)
+        .addFormDataPart("useremail", useremail)
         .build()
 
     // 요청 생성 (post)
@@ -97,18 +102,19 @@ fun uploadCodiSet(bitmap: Bitmap, title: String, hashtag: String, comment: Strin
     })
 }
 
-fun uploadImage(bitmap: Bitmap, title: String, category: String, userEmail: String, url: String) {
+
+
+fun uploadClothes(bitmap: Bitmap, cl_category : Int, useremail: String, url: String) {
     val stream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream) // JPEG으로 변경, 품질 80
+    bitmap.compress(Bitmap.CompressFormat.PNG, 80, stream) // JPEG으로 변경, 품질 80
     val byteArray = stream.toByteArray()
 
     // 멀티파트 바디 구성
     val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-        .addFormDataPart("image", "codi_image.jpg",
+        .addFormDataPart("image", "codi_image.png",
             byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull()))
-        .addFormDataPart("title", title)
-        .addFormDataPart("category", category)
-        .addFormDataPart("user_email", userEmail)
+        .addFormDataPart("cl_category", cl_category.toString())
+        .addFormDataPart("useremail", useremail)
         .build()
 
     // 요청 생성 (post)
@@ -138,4 +144,36 @@ fun uploadImage(bitmap: Bitmap, title: String, category: String, userEmail: Stri
             }
         }
     })
+}
+
+suspend fun uploadFace(bitmap: Bitmap, url: String): String = withContext(Dispatchers.IO) {
+    val stream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream) // JPEG으로 변경, 품질 80
+    val byteArray = stream.toByteArray()
+    val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+        .addFormDataPart("file", "image.jpg", byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull()))
+        .build()
+
+    val request = Request.Builder()
+        .url(url)
+        .post(requestBody)
+        .build()
+
+    val client = OkHttpClient.Builder()
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .build()
+
+    try {
+        val response = client.newCall(request).execute() // 동기 호출로 변경
+        if (response.isSuccessful) {
+            response.body?.string() ?: "receive fail" // 성공 시 응답 내용 리턴, null이면 "fail"
+        } else {
+            "fail" // 실패 시 "fail" 리턴
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+        "exception" // 예외 발생 시 "exception" 리턴
+    }
 }

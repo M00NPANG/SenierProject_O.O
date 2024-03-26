@@ -44,6 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
             android:textSize="0dp"
             android:text="no data"
             android:id="@+id/tvSky"/>
@@ -67,6 +68,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
             android:layout_marginTop="195dp"
             android:background="#B3FFFFFF">
 
@@ -81,6 +83,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
             android:layout_marginLeft="170dp"
             android:layout_marginTop="255dp"
             android:src="@drawable/menu_box" />
@@ -100,6 +103,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="107dp"
@@ -109,6 +113,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="23dp"
@@ -140,6 +145,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constrainedWidth="true"
         android:background="#FFFFFF"
         android:elevation="8dp"
         android:orientation="horizontal"
@@ -151,6 +157,7 @@
             android:id="@+id/home"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"
@@ -176,6 +183,7 @@
             android:id="@+id/closet"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"
@@ -189,6 +197,7 @@
             android:id="@+id/bell"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+
             android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="16dp"

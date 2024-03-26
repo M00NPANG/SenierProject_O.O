@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/nameCheckButton"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -143,7 +143,7 @@
                 android:layout_marginRight="30dp" />
         </LinearLayout>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/registButton"
             android:layout_width="350dp"
             android:layout_height="wrap_content"

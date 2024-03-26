@@ -19,6 +19,9 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
+import dev.eren.removebg.RemoveBg
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -109,6 +112,7 @@ class TestActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             setPic()
+
         }
     }
 
@@ -134,12 +138,22 @@ class TestActivity : AppCompatActivity() {
 
             // 회전된 비트맵 생성
             val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-            imageView.setImageBitmap(rotatedBitmap)
 
-            val endPoint = "/testUpload"
-            val url = ipAddr + endPoint
-            uploadBitmap(rotatedBitmap, url)
-            finish()
+            lifecycleScope.launch {
+                val remover = RemoveBg(this@TestActivity)
+
+                var outputImage: Bitmap?
+
+                remover.clearBackground(rotatedBitmap).collect { output ->
+                    if (output != null) {
+                        outputImage = output
+                        BitmapStorage.Bitmap = outputImage
+                        startActivity(Intent(this@TestActivity,CategoryActivity::class.java))
+                        finish()
+                    }
+                }
+            }
+
         }
     }
 }

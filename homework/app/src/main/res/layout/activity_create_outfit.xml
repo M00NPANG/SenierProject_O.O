@@ -31,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_redo"
+            android:visibility="invisible"
             android:padding="10dp"/>
 
         <Space
@@ -55,7 +56,6 @@
         android:layout_weight="1">
         <!-- 누끼된 옷 아이템은 프로그래매틱하게 추가됨 -->
     </FrameLayout>
-
 
     <!-- 구분선 -->
     <View

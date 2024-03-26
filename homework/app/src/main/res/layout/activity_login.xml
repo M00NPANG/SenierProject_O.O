@@ -75,7 +75,7 @@
             android:textSize="16dp" />
 
     </LinearLayout>
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/regularLogin"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
@@ -88,8 +88,7 @@
         android:fontFamily="@font/main_font"
         android:textSize="28dp"
         android:textColor="@color/white"
-        android:padding="10dp"
-        />
+        android:padding="10dp"/>
 
     <ImageView
         android:layout_width="wrap_content"

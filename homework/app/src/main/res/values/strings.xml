@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">homework</string>
     <string name="search_hint">검색</string>
+    <string-array name="menu_items">
+        <item>기타 잡화</item>
+        <item>상의</item>
+        <item>하의</item>
+        <item>하의(원피스/투피스/점프슈트)</item>
+        <item>아우터</item>
+        <item>신발</item>
+    </string-array>
 </resources>

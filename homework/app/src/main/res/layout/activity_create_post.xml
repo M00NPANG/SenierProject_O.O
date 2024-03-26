@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- 뒤로가기 버튼 -->
     <ImageView
@@ -18,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_complete"
-        android:padding="10dp"/> <!-- 완료 아이콘 리소스 설정 필요 -->
+        android:padding="10dp"/>
 
     <!-- 코디 이미지 -->
     <ImageView
@@ -26,9 +27,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/backButton"
-        android:layout_weight="1"/>
-        <!--android:layout_weight="1"-->
-    <!-- android:src="@drawable/ic_codi" 코디 이미지 리소스 설정 필요 -->
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"/>
+    <!-- 추가 속성을 이용해 높이 조절 -->
 
     <!-- 구분선 -->
     <View
@@ -38,12 +39,13 @@
         android:layout_below="@id/codiImage"
         android:background="#D3D3D3" />
 
-    <!-- 코디 이름 -->
+    <!-- 코디 이름 라벨 -->
     <TextView
         android:id="@+id/codiNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/divider1"
+        android:layout_marginTop="8dp"
         android:text="코디 이름" />
 
     <!-- 코디 이름 입력 -->
@@ -52,15 +54,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/codiNameLabel"
-        android:layout_alignBaseline="@id/codiNameLabel" />
+        android:layout_alignBaseline="@id/codiNameLabel"
+        android:layout_marginStart="8dp" />
 
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/codiNameEdit"
+        android:id="@+id/chipGroup"/>
     <!-- 해시태그 입력 -->
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/hashtagEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/codiNameEdit"
-        android:hint="#해시태그 #예시 #브랜드" />
+        android:layout_below="@id/chipGroup"
+        android:hint="#해시태그 #예시 #브랜드"
+        android:completionThreshold="1"/>
 
     <!-- 두 번째 구분선 -->
     <View
@@ -75,7 +84,7 @@
         android:id="@+id/codiDescriptionLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/divider2"
+        android:layout_below="@id/hashtagEdit"
         android:text="코디 설명" />
 
     <!-- 코디 설명 입력 -->

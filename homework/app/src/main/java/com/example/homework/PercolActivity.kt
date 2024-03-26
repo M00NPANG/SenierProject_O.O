@@ -42,6 +42,7 @@ class PercolActivity : AppCompatActivity() {
     var userPercol : String = ""
     var userStyle : String = ""
     var userColor : String = ""
+    var userImg : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,10 +74,16 @@ class PercolActivity : AppCompatActivity() {
         }
 
         sendButton.setOnClickListener {
+
             val endPoint = "/testUpload"
             val url = ipAddr + endPoint
             uploadBitmap(bitmapForPercol, url)
-            userPercol = "winter_cool"  // 임의로 설정한 톤
+            /*
+            lifecycleScope.launch {
+                userPercol = uploadFace(bitmapForPercol,url)
+            }
+            */
+            userPercol = "summer_cool"  // 임의로 설정한 퍼컬
             var user : User
             user = User(
                 name = userName,
@@ -87,7 +94,7 @@ class PercolActivity : AppCompatActivity() {
                 user_style = userStyle
             )
             val endPoint2 = "/api/join"
-            val url2 = ipAddr + endPoint
+            val url2 = ipAddr + endPoint2
             var result : Int
             lifecycleScope.launch {
                 result = sendUserDataToJoin(user, url2)
@@ -96,7 +103,7 @@ class PercolActivity : AppCompatActivity() {
                     if (result == 0) {
                         Toast.makeText(this@PercolActivity, "회원가입 성공", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@PercolActivity, LoginActivity::class.java)
-                        // 현재 태스크에 속한 모든 액티비티를 제거하고 새로운 태스크를 시작
+                        // 현재 태스크에 속한 모든 액티비티를 제거하고 새로운 태스크를 시작 >> 로그인 액티비티
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                         finish()

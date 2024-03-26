@@ -45,8 +45,6 @@ dependencies {
     implementation("androidx.annotation:annotation:1.6.0")
     implementation ("com.squareup.okhttp3:okhttp:4.9.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
-
-    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
     implementation ("com.google.code.gson:gson:2.8.6")
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
@@ -54,6 +52,13 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 
+    implementation ("com.github.erenalpaslan:removebg:1.0.4")  // 배경지우는거
+
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation("androidx.palette:palette-ktx:1.0.0")  // 이미지경로를 이미지로 바꾸는 glide 라이브러릴 깃허브에서 가져옴
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+
+    implementation ("androidx.security:security-crypto:1.0.0")
     implementation ("com.google.android.gms:play-services-location:17.0.0")
 
     implementation("androidx.core:core-ktx:1.10.1")

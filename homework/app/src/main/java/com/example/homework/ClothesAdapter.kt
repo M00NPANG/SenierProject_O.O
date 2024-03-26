@@ -7,7 +7,32 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
+class ClothesAdapter(private val categories: List<ClothCategory>) : RecyclerView.Adapter<ClothesAdapter.ClothesViewHolder>() {
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClothesViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_layout, parent, false)
+        return ClothesViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ClothesViewHolder, position: Int) {
+        holder.bind(categories[position])
+    }
+
+    override fun getItemCount(): Int = categories.size
+
+    class ClothesViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+        fun bind(category: ClothCategory) {
+            val titleTextView: TextView = view.findViewById(R.id.title)
+            val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewClothes2)
+            titleTextView.text = category.title
+            recyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView.adapter = GridAdapter(category.items)
+        }
+    }
+}
+
+
+/*
 class ClothesAdapter(private val categories: List<ClothCategory>) : RecyclerView.Adapter<ClothesAdapter.ClothesViewHolder>() {
 
     class ClothesViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
@@ -34,3 +59,4 @@ class ClothesAdapter(private val categories: List<ClothCategory>) : RecyclerView
 
     override fun getItemCount() = categories.size
 }
+*/

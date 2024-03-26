@@ -31,7 +31,7 @@
             android:id="@+id/subscribe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="구독"
+            android:text=""
             android:fontFamily="@font/main_font"
             android:layout_marginTop="18dp"
             android:layout_marginLeft="260dp"/>
@@ -42,9 +42,9 @@
         android:id="@+id/uploadedImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:src="@drawable/test_cody" />
->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -72,15 +72,15 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/heart"
             android:layout_marginLeft="240dp"
             android:layout_marginTop="25dp"/>
+        <!--android:src="@drawable/heart"-->
 
         <TextView
             android:id="@+id/heart_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xx"
+            android:text=""
             android:fontFamily="@font/main_font"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="25dp"/>

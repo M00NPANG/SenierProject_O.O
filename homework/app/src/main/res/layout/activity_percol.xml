@@ -32,7 +32,7 @@
             android:layout_marginTop="30dp"
             android:src="@drawable/unknown"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/percolButton"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
