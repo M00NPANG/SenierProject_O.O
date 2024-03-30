@@ -19,7 +19,7 @@ public class UserPreferenceController {
     }
 
     // 사용자 선호도 업데이트 (유저 이메일과 선호색, 스타일, 각 수치를 입력받음)
-    // 수정 필요
+    // 각 결과값 반환 완료. 이제 이 결과값 기반으로 게시물 보내주는 코드 개발 필요!!!
     @PostMapping("/update")
     public ResponseEntity<String> updateUserPreferences(@RequestBody UserPreferenceUpdateRequest request) {
         try {

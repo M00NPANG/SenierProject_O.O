@@ -22,11 +22,8 @@ repositories {
 }
 
 dependencies {
-<<<<<<< HEAD
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
-=======
->>>>>>> 4024be3d62498ce9be23883e92c8a8137a97c09f
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
