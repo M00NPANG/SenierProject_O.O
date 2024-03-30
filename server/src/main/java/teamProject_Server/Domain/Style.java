@@ -31,7 +31,7 @@ public class Style {
 
 
     // 생성자
-    public Style() {}
+    // public Style() {}
 
     public Style(User user, Integer sty_street, Integer sty_modern, Integer sty_minimal, Integer sty_feminine, Integer sty_simpleBasic, Integer sty_americanCasual, Integer sty_businessCasual, Integer sty_casual, Integer sty_retro, Integer sty_sports, Integer sty_classic, Integer sty_elegant, Integer sty_girlish, Integer sty_tomboy, Integer sty_vintage ) {
         this.user = user;
@@ -50,6 +50,10 @@ public class Style {
         this.sty_girlish = sty_girlish;
         this.sty_tomboy = sty_tomboy;
         this.sty_vintage = sty_vintage;
+    }
+
+    public Style() {
+
     }
     // getter and setter
 
