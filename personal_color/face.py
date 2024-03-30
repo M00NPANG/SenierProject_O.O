@@ -237,14 +237,14 @@ class PersonalColor:
 
         if(self.is_warm(b,v)):
             if(self.is_spr(b,v)):
-                season ="봄 웜"
+                season ="spring"
             else:
-                season ="가을 웜"
+                season ="autumn"
         else:
             if(self.is_smr(b,v)):
-                season ="가을 쿨"
+                season ="summer"
             else:
-                season ="겨울 쿨"
+                season ="winter"
         
         return season
     
