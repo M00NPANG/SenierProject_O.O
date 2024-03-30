@@ -10,9 +10,9 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long img_id;
 
-    private String fileName;
-    private String fileOriName;
-    private String fileUrl;
+    private String fileName;    // 저장될 파일 이름
+    private String fileOriName; // 파일의 원래 이름
+    private String fileUrl;     // 파일 URL
 
     // 생성자
     public Image() {};

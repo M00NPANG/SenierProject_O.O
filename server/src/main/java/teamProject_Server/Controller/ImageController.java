@@ -1,16 +1,16 @@
 package teamProject_Server.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import teamProject_Server.Domain.Post;
 import teamProject_Server.Service.ImageService;
 
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/image")
@@ -19,6 +19,7 @@ public class ImageController {
 
     @Autowired
     public ImageController(ImageService imageService) { this.imageService = imageService; }
+
 
     // 이미지 업로드
     @PostMapping("/upload")
@@ -34,4 +35,3 @@ public class ImageController {
     }
 
 }
-
