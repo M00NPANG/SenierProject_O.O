@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:id="@+id/loginActivityView"
+    android:background="@color/white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="225dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="52dp"
+            android:src="@drawable/logo_pink" />
+        <EditText
+            android:id="@+id/inputID"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/box"
+            android:padding="15dp"
+            android:textSize="16dp"
+            android:hint="이메일"
+            android:fontFamily="@font/main_font"
+            android:textColor="#B3B3B3" />
+
+        <EditText
+            android:id="@+id/inputPW"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/box"
+            android:padding="15dp"
+            android:textSize="16dp"
+            android:hint="비밀번호"
+            android:fontFamily="@font/main_font"
+            android:textColor="#B3B3B3"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="-1dp"
+        android:layout_marginBottom="325dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/regularRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginLeft="43dp"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/main_font"
+            android:text="처음이신가요?"
+            android:textColor="#6F6F6F"
+            android:textSize="16dp" />
+        <TextView
+            android:id="@+id/findPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="110dp"
+            android:text="비밀번호를 잊으셨나요?"
+            android:fontFamily="@font/main_font"
+            android:textColor="#6F6F6F"
+            android:textSize="16dp" />
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/regularLogin"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="250dp"
+        android:gravity="center"
+        android:background="@drawable/box_btn"
+        android:text="로그인"
+        android:fontFamily="@font/main_font"
+        android:textSize="28dp"
+        android:textColor="@color/white"
+        android:padding="10dp"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="199dp"
+        android:src="@drawable/line_or" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/kakaoLogin"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="109dp"
+        android:src="@drawable/login_kakao" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:id="@+id/googleLogin"
+        android:src="@drawable/login_google" />
+</RelativeLayout>
