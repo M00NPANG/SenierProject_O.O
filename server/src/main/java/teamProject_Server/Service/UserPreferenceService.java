@@ -27,34 +27,37 @@ public class UserPreferenceService {
 
     // 유저 선호도 업데이트 -> 결과값 반환
     // 결과값을 반환 할 입시리파지토리(DTO) 구성 필요
-    public Map<String, Double> updateUserPreferences(String userEmail, String userColor, String userStyle, Long numC, Long numS) {
+    public Map<String, Double> updateUserPreferences(String userEmail, String userColor, String[] userStyles, Long numC, Long[] numS) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
 
-        if (userColor != null) {
+        if (userColor != null && !userColor.isEmpty()) {
             // 유저 선호색 가중치 증가
             Color color = colorRepository.findByUser(user);
             updateColorPreferenceCount(color, userColor, numC);
         }
 
-        if (userStyle != null) {
-            // 유저 선호스타일 가중치 증가
+        if (userStyles != null && numS != null) {
             Style style = styleRepository.findByUser(user);
-            updateStylePreferenceCount(style, userStyle, numS);
+            for (int i = 0; i < userStyles.length; i++) {
+                String currentStyle = userStyles[i];
+                Long currentNumS = (i < numS.length) ? numS[i] : 0; // numS가 userStyles보다 짧은 경우를 처리
+                updateStylePreferenceCount(style, currentStyle, currentNumS);
+            }
         }
+
+
+
 
         // 사용자의 선호색을 기반으로 3순위 정렬
         Color color = colorRepository.findByUser(user);
         Map<String, Double> topThreeColors = getTopThreeColors(color);
-        
+
         // 사용자의 선호스타일을 기반으로 3순위 정렬
         Style style = styleRepository.findByUser(user);
         Map<String, Double> topThreeStyles = getTopThreeStyles(style);
 
-        Map<String, Double> mergedMap = new HashMap<>();
-        mergedMap = mergeMaps(topThreeStyles,topThreeColors);
-
-        return mergedMap;
+        return mergeMaps(topThreeColors, topThreeStyles);
     }
 
     // 유저 선호색 학습
