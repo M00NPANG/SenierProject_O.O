@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import teamProject_Server.Domain.Clothes;
 import teamProject_Server.Domain.Post;
-import teamProject_Server.Domain.User;
 import teamProject_Server.Service.ClothesService;
-import teamProject_Server.Service.FileStorageService;
+import teamProject_Server.Repository.FileStorageService;
 import teamProject_Server.Service.PostService;
 import teamProject_Server.Service.UserService;
 
