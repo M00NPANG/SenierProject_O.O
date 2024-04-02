@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     // user 저장
+    @SuppressWarnings("NullableProblems")
     User save(User user);
 
     // 특정 이메일 주소로 회원을 찾는 메소드
