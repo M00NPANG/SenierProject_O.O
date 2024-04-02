@@ -1,8 +1,11 @@
 package teamProject_Server.Domain;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
-import lombok.Getter;
+import java.io.IOException;
+import java.util.List;
+import java.util.Arrays;
 
 @Entity
 @Table(name = "post")
@@ -27,10 +30,20 @@ public class Post {
         this.userName = userName;
     }
 
-    public String getHashtag() { return hashtag; }
-    public void setHashtag(String hashtag) { this.hashtag = hashtag; }
 
-    public void setContent(String content) { this.content = content; }
+    // 해시태그를 JSON으로 설정
+    // JSON 형태의 해시태그 문자열을 설정하는 메서드
+    public void setHashtags(List<String> hashtags) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        this.hashtag = mapper.writeValueAsString(hashtags);
+    }
+
+    // JSON 형태의 해시태그 문자열을 List<String>으로 변환하여 반환하는 메서드
+    public List<String> getHashtags() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String[] tagsArray = mapper.readValue(this.hashtag , String[].class);
+        return Arrays.asList(tagsArray);
+    }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
