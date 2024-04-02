@@ -1,3 +1,226 @@
+GET http://localhost:8080/api/preferences/receiveRecommendedPosts?userEmail=2222
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/api/preferences/receiveRecommendedPosts?userEmail=2222
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 121
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "",
+  "userStyles": ["minimal", "street"],
+  "colorNum": 0,
+  "styleNum": [2,3]
+}
+
+<> 2024-04-03T014116.200.txt
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 121
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "",
+  "userStyles": ["minimal", "street"],
+  "colorNum": 0,
+  "styleNum": [2,3]
+}
+
+<> 2024-04-02T150538.200.txt
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 121
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "",
+  "userStyles": ["minimal", "street"],
+  "colorNum": 0,
+  "styleNum": [2,3]
+}
+
+<> 2024-04-02T145259.400.txt
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 124
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "null",
+  "userStyles": ["street","minimal"],
+  "colorNum": 0,
+  "styleNum": [5,6]
+}
+
+<> 2024-04-02T145047.400.txt
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 120
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "",
+  "userStyles": ["street","minimal"],
+  "colorNum": 0,
+  "styleNum": [5,6]
+}
+
+<> 2024-04-02T145037.400.txt
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 124
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "yellow",
+  "userStyle": ["retro","street"],
+  "colorNum": 5,
+  "styleNum": [5, 6]
+}
+
+<> 2024-04-02T144956.200.txt
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 124
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "yellow",
+  "userStyle": ["retro","street"],
+  "colorNum": 5,
+  "styleNum": [5, 6]
+}
+
+<> 2024-04-02T144930.200.txt
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 126
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "yellow",
+  "userStyle": ["minimal","street"],
+  "colorNum": 5,
+  "styleNum": [5, 6]
+}
+
+<> 2024-04-02T144902.200.txt
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 126
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "yellow",
+  "userStyle": ["minimal","street"],
+  "colorNum": 5,
+  "styleNum": [5, 6]
+}
+
+<> 2024-04-02T144705.200.txt
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 121
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "yellow",
+  "userStyle": ["minimal","street"],
+  "colorNum": 5,
+  "styleNum": 5
+}
+
+<> 2024-04-02T144208.200.txt
+
+###
+
+POST http://localhost:8080/api/preferences/update
+Content-Type: application/json
+Content-Length: 121
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userEmail": "2222",
+  "userColor": "yellow",
+  "userStyle": ["minimal","street"],
+  "colorNum": 5,
+  "styleNum": 5
+}
+
+<> 2024-04-02T144147.200.txt
+
+###
+
 POST http://localhost:8080/api/preferences/update
 Content-Type: application/json
 Content-Length: 110

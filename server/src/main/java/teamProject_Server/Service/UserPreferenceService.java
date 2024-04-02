@@ -1,15 +1,15 @@
 package teamProject_Server.Service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import teamProject_Server.Domain.Color;
-import teamProject_Server.Domain.Style;
-import teamProject_Server.Domain.User;
-import teamProject_Server.Repository.ColorRepository;
-import teamProject_Server.Repository.StyleRepository;
-import teamProject_Server.Repository.UserRepository;
+import teamProject_Server.Domain.*;
+import teamProject_Server.Repository.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserPreferenceService {
@@ -17,16 +17,49 @@ public class UserPreferenceService {
     private final UserRepository userRepository;
     private final ColorRepository colorRepository;
     private final StyleRepository styleRepository;
+    private final PreferencesRepository preferencesRepository;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public UserPreferenceService(UserRepository userRepository, ColorRepository colorRepository, StyleRepository styleRepository) {
+    private PostRepository postRepository;
+
+    @Autowired
+    public UserPreferenceService(UserRepository userRepository, ColorRepository colorRepository, StyleRepository styleRepository, PreferencesRepository preferencesRepository, ObjectMapper objectMapper) {
         this.userRepository = userRepository;
         this.colorRepository = colorRepository;
         this.styleRepository = styleRepository;
+        this.preferencesRepository = preferencesRepository;
+        this.objectMapper = objectMapper;
     }
 
-    // 유저 선호도 업데이트 -> 결과값 반환
-    // 결과값을 반환 할 입시리파지토리(DTO) 구성 필요
+    public List<Post> fetchPostsForUser(String userEmail) throws JsonProcessingException {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        Preferences preferences = (Preferences) preferencesRepository.findByUser(user)
+                .orElseThrow(() -> new IllegalArgumentException("선호도 정보를 찾을 수 없습니다."));
+
+        Map<String, Double> prefMap = objectMapper.readValue(preferences.getPreferences(), new TypeReference<>() {
+        });
+        // 0이 아닌 선호도와 스타일만 필터링
+        Map<String, Double> nonZeroStyles = prefMap.entrySet().stream()
+                .filter(e -> !e.getValue().equals(0.0) && !Arrays.asList("red", "orange", "yellow", "green", "blue", "purple", "brown", "gray").contains(e.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        // 개인 색상과 일치하고 해시태그가 있는 게시물 필터링
+        List<Post> relevantPosts = new ArrayList<>();
+        for (String style : nonZeroStyles.keySet()) {
+            List<Post> posts = postRepository.findRelevantPosts(userEmail, user.getUser_percol(), "[\"" + style + "\"]");
+            // 스타일 선호도에 따라 게시물을 확률적으로 선택
+            int toSelect = (int) (posts.size() * (nonZeroStyles.get(style) / 100));
+            Collections.shuffle(posts);
+            relevantPosts.addAll(posts.subList(0, Math.min(toSelect, posts.size())));
+        }
+
+        return relevantPosts.stream().distinct().collect(Collectors.toList()); // 중복 제거
+    }
+
+
+    // 유저 선호도 업데이트
     public Map<String, Double> updateUserPreferences(String userEmail, String userColor, String[] userStyles, Long numC, Long[] numS) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
@@ -45,10 +78,7 @@ public class UserPreferenceService {
                 updateStylePreferenceCount(style, currentStyle, currentNumS);
             }
         }
-
-
-
-
+        
         // 사용자의 선호색을 기반으로 3순위 정렬
         Color color = colorRepository.findByUser(user);
         Map<String, Double> topThreeColors = getTopThreeColors(color);
@@ -57,7 +87,26 @@ public class UserPreferenceService {
         Style style = styleRepository.findByUser(user);
         Map<String, Double> topThreeStyles = getTopThreeStyles(style);
 
-        return mergeMaps(topThreeColors, topThreeStyles);
+        Map<String, Double> mergedPreferences = mergeMaps(topThreeColors, topThreeStyles);
+        try {
+            savePreferences(userEmail, mergedPreferences);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace(); // 오류 처리
+        }
+
+        return mergedPreferences;
+    }
+
+    // 결과값을 DB에 저장.
+    private void savePreferences(String userEmail, Map<String, Double> preferencesMap) throws JsonProcessingException {
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        String preferencesJson = objectMapper.writeValueAsString(preferencesMap);
+
+        Preferences preferences = new Preferences();
+        preferences.setUser(user);
+        preferences.setPreferences(preferencesJson);
+
+        preferencesRepository.save(preferences);
     }
 
     // 유저 선호색 학습
@@ -203,7 +252,7 @@ public class UserPreferenceService {
         return topThreeStyleWithPercentage;
     }
 
-    // 스타잏맵과 선호색맵 병합
+    // 스타일 맵과 선호색 맵 병합
     private Map<String, Double> mergeMaps(Map<String, Double> map1, Map<String, Double> map2) {
         Map<String, Double> mergedMap = new HashMap<>();
         mergedMap.putAll(map1);
