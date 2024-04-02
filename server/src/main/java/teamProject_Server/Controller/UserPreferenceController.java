@@ -3,9 +3,11 @@ package teamProject_Server.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import teamProject_Server.Domain.Post;
 import teamProject_Server.Service.UserPreferenceService;
 import teamProject_Server.DTO.UserPreferenceUpdateRequest;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,6 +36,17 @@ public class UserPreferenceController {
             return ResponseEntity.ok("사용자의 선호도가 업데이트되었습니다 : " + resultMap);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/receiveRecommendedPosts")
+    public ResponseEntity<Object> receiveRecommendedPosts(@RequestParam String userEmail) {
+        try {
+            List<Post> posts = userPreferenceService.fetchPostsForUser(userEmail);
+            return ResponseEntity.ok(posts);
+        } catch (Exception e) {
+            // 예외 처리 (예: 사용자를 찾을 수 없거나, JSON 처리 중 오류 발생 등)
+            return ResponseEntity.badRequest().body(null);
         }
     }
 }
