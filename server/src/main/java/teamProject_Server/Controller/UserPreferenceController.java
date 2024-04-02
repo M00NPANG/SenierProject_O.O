@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamProject_Server.Service.UserPreferenceService;
-import teamProject_Server.UserPreferenceUpdateRequest;
+import teamProject_Server.DTO.UserPreferenceUpdateRequest;
 
 import java.util.Map;
 
@@ -25,9 +25,9 @@ public class UserPreferenceController {
         try {
             String userEmail = request.getUserEmail();
             String userColor = request.getUserColor();
-            String userStyle = request.getUserStyle();
+            String[] userStyle = request.getUserStyle();
             Long colorNum = request.getColorNum();
-            Long styleNum = request.getStyleNum();
+            Long[] styleNum = request.getStyleNum();
 
             Map<String, Double> resultMap = userPreferenceService.updateUserPreferences(userEmail, userColor, userStyle, colorNum, styleNum);
 
