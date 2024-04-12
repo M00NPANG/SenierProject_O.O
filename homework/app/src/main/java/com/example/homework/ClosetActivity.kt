@@ -183,7 +183,6 @@ class ClosetActivity : AppCompatActivity() {
 
     suspend fun checkCategory(clothesList: List<Clothes>): List<ClothCategory> {
         ClothesRepository.clearClothesUrls()
-
         // 카테고리별 기본 아이템들 넣음
         val categories = mutableListOf(
             ClothCategory("패션 잡화", mutableListOf(GridItem("https://storage.googleapis.com/codiset/cap2.png"))),
@@ -208,12 +207,13 @@ class ClosetActivity : AppCompatActivity() {
                 }
                 categoryIndex?.let { index ->
                     categories[index].items.add(GridItem(cloth.cl_photo_path ?: "Default URL for missing image"))
-                    cloth.cl_photo_path?.let { ClothesRepository.addClothesUrl(it) }
+                    cloth.cl_photo_path?.let { ClothesRepository.addClothesUrl(it)
+                    ClothesRepository.addClothesData(clothesList) }
                 }
             }
         }
 
-        // 카테고리별 기본 아이템 추가를 위한 URL들 다시 추가
+        // 카테고리별 기본 아이템을 추가함
         categories.forEach { category ->
             category.items.firstOrNull()?.let { gridItem ->
                 ClothesRepository.addClothesUrl(gridItem.imageURL)
@@ -227,17 +227,14 @@ class ClosetActivity : AppCompatActivity() {
 
 
 
-
     private fun adjustFabVisibilityBasedOnSelection(fabCamera: FloatingActionButton, fabGallery: FloatingActionButton, fabCodi: FloatingActionButton) {
         if (clothButton.isSelected) {
             // clothButton이 선택된 상태일 때
-            // fabCamera와 fabGallery의 가시성을 토글하고, fabCodi는 숨깁니다.
             fabCamera.visibility = toggleVisibility(fabCamera.visibility)
             fabGallery.visibility = toggleVisibility(fabGallery.visibility)
             fabCodi.visibility = FloatingActionButton.INVISIBLE
         } else if (codyButton.isSelected) {
             // codyButton이 선택된 상태일 때
-            // fabCodi의 가시성을 토글하고, fabCamera와 fabGallery는 숨깁니다.
             fabCodi.visibility = toggleVisibility(fabCodi.visibility)
             fabCamera.visibility = FloatingActionButton.INVISIBLE
             fabGallery.visibility = FloatingActionButton.INVISIBLE
@@ -330,6 +327,9 @@ class ClosetActivity : AppCompatActivity() {
             }
 
         }
+        else{
+            Log.e("ClosetActivity Error","버튼이 정상적으로 눌리지 않음")
+        }
 
     }
 
@@ -366,53 +366,3 @@ class ClosetActivity : AppCompatActivity() {
 
 
 }
-
-
-
-
-
-/*
-suspend fun checkCategory(clothesList: List<Clothes>): List<ClothCategory> { //카테고리를 분류함
-        ClothesRepository.clearClothesUrls()
-
-        // 카테고리별 기본 아이템들 넣음
-        val categories = mutableListOf(
-            ClothCategory("패션 잡화", mutableListOf(GridItem("https://storage.googleapis.com/codiset/cap2.png"))),
-            ClothCategory("상의", mutableListOf(GridItem("https://storage.googleapis.com/codiset/shirt2.png"))),
-            ClothCategory("하의", mutableListOf(GridItem("https://storage.googleapis.com/codiset/skirt2.png"))),
-            ClothCategory("한벌옷", mutableListOf(GridItem("https://storage.googleapis.com/codiset/59ae9d27-d63e-4334-bfa8-202c7da66c2d"))),
-            ClothCategory("아우터", mutableListOf(GridItem("https://storage.googleapis.com/codiset/64fff404-69e0-4b6a-b0e8-d93a4e5a0a8b"))),
-            ClothCategory("신발", mutableListOf(GridItem("https://storage.googleapis.com/codiset/ef0d2fbd-b232-4a19-ae59-917dba66ced7")))
-        )
-
-
-        val categoryIdToIndex = mapOf(
-            60 to 0, // 패션 잡화
-            10 to 1, // 상의
-            20 to 2, // 하의
-            30 to 3, // 원피스/투피스/점프슈트
-            40 to 4, // 아우터
-            50 to 5  // 신발
-        )
-        //디폴트 추가
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/cap2.png")
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/shirt2.png")
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/skirt2.png")
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/59ae9d27-d63e-4334-bfa8-202c7da66c2d")
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/64fff404-69e0-4b6a-b0e8-d93a4e5a0a8b")
-        ClothesRepository.addClothesUrl("https://storage.googleapis.com/codiset/ef0d2fbd-b232-4a19-ae59-917dba66ced7")
-
-        // 서버에서 받은 데이터를 각 카테고리에 추가
-        clothesList.forEach { cloth ->
-            cloth.cl_category?.let { categoryId ->
-                val categoryIndex = categoryIdToIndex[categoryId]
-                categoryIndex?.let { index ->
-                    categories[index].items.add(GridItem(cloth.cl_photo_path ?: "Default URL for missing image"))
-                    cloth.cl_photo_path?.let { ClothesRepository.addClothesUrl(it)}
-                    }
-            }
-        }
-
-        return categories
-    }
- */

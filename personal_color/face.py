@@ -6,7 +6,7 @@ import io
 from sklearn.cluster import KMeans
 import pandas as pd
 import os
-
+import sys
 SEASON = "au_warm"
 
 
@@ -78,6 +78,9 @@ class PersonalColor:
 
 
     def skin_analysis(self, image, k=4):
+        if image is None:
+            return None
+
         # 이미지를 Lab 색공간으로 변환
         image_cv = cv2.cvtColor(np.array(image), cv2.COLOR_RGBA2BGRA)
         lab_image = cv2.cvtColor(image_cv, cv2.COLOR_BGR2Lab)
@@ -124,9 +127,10 @@ class PersonalColor:
         # 피부 톤 체크 로직과 데이터 추가 로직은 이 정보를 사용하여 구현
         season=self.skin_tone_check((L, a, b),(H, S, V))  # Lab에 대한 피부 톤 체크
         
-        print(f"퍼스널 컬러는 {season} 입니다.")
+        print(season)
         # Lab과 HSV 값을 데이터베이스에 추가하는 로직 구현
         #self.add_data( L, a, b, H, S, V)
+
 
    
 
@@ -176,11 +180,11 @@ class PersonalColor:
         body_part = ['skin', 'eyebrow', 'eye']
         for i in range(1):
             spr_dist += abs(hsv_s[i] - spr_s_std[i]) * a[i]
-            print(body_part[i],"의 spring 기준값과의 거리")
-            print(abs(hsv_s[i] - spr_s_std[i]) * a[i])
+            #print(body_part[i],"의 spring 기준값과의 거리")
+            #print(abs(hsv_s[i] - spr_s_std[i]) * a[i])
             fal_dist += abs(hsv_s[i] - fal_s_std[i]) * a[i]
-            print(body_part[i],"의 fall 기준값과의 거리")
-            print(abs(hsv_s[i] - fal_s_std[i]) * a[i])
+            #print(body_part[i],"의 fall 기준값과의 거리")
+            #print(abs(hsv_s[i] - fal_s_std[i]) * a[i])
 
         if(spr_dist <= fal_dist):
             return 1 #spring
@@ -205,11 +209,11 @@ class PersonalColor:
         body_part = ['skin', 'eyebrow', 'eye']
         for i in range(1):
             smr_dist += abs(hsv_s[i] - smr_s_std[i]) * a[i]
-            print(body_part[i],"의 summer 기준값과의 거리")
-            print(abs(hsv_s[i] - smr_s_std[i]) * a[i])
+            #print(body_part[i],"의 summer 기준값과의 거리")
+            #print(abs(hsv_s[i] - smr_s_std[i]) * a[i])
             wnt_dist += abs(hsv_s[i] - wnt_s_std[i]) * a[i]
-            print(body_part[i],"의 winter 기준값과의 거리")
-            print(abs(hsv_s[i] - wnt_s_std[i]) * a[i])
+            #print(body_part[i],"의 winter 기준값과의 거리")
+            #print(abs(hsv_s[i] - wnt_s_std[i]) * a[i])
 
         if(smr_dist <= wnt_dist):
             return 1 #summer
@@ -233,14 +237,14 @@ class PersonalColor:
 
         if(self.is_warm(b,v)):
             if(self.is_spr(b,v)):
-                season ="봄 웜"
+                season ="spring"
             else:
-                season ="가을 웜"
+                season ="autumn"
         else:
             if(self.is_smr(b,v)):
-                season ="가을 쿨"
+                season ="summer"
             else:
-                season ="겨울 쿨"
+                season ="winter"
         
         return season
     
@@ -283,14 +287,10 @@ class PersonalColor:
         return result_image
         
 # 사용 예시
-personal_color = PersonalColor()
-for i in range(1,21,1):
-    print(i)
-    image_path = f'{SEASON}\{SEASON}{i}.jpg'
+if __name__ == "__main__":
+    personal_color = PersonalColor()
+    image_path = sys.argv[1]
     white_image = personal_color.white_balance(image_path)
     result_image = personal_color.face_parsing(white_image)
-    if result_image is not None:
-        personal_color.skin_analysis(result_image, k=4)
-    else:
-        print("이미지가 없음.")
-
+    season=personal_color.skin_analysis(result_image, k=4)
+  

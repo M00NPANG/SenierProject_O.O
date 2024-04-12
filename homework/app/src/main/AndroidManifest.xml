@@ -25,9 +25,23 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.homework.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
         <activity
-            android:name=".OmniusActivity"
+            android:name=".ClothesDatailActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"
             android:exported="false" />
+
         <activity
             android:name=".CategoryActivity"
             android:exported="false" />
@@ -41,16 +55,6 @@
             android:name=".PercolActivity"
             android:exported="false" />
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.homework.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
         <activity
             android:name=".TestActivity"
             android:exported="false" />
@@ -62,9 +66,6 @@
             android:exported="false" />
         <activity
             android:name=".ClosetActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PostActivity"
             android:exported="false" />
         <activity
             android:name=".LobbyActivity"

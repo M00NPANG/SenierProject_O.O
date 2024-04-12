@@ -1,9 +1,9 @@
 package com.example.homework
 
-import android.content.Context
+
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Call
@@ -15,17 +15,18 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-
-fun uploadBitmap(bitmap: Bitmap, url: String){
+public var facecolor : String = ""
+fun uploadBitmap(bitmap: Bitmap, url: String) {
     val stream = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream) // JPEG으로 변경, 품질 80
     val byteArray = stream.toByteArray()
     val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
         .addFormDataPart("file", "image.jpg",
             byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull()))
+        .addFormDataPart("category" ,"aa")
+        .addFormDataPart("userEmail" ,"aaa")
         .build()
 
     val request = Request.Builder()
@@ -48,29 +49,33 @@ fun uploadBitmap(bitmap: Bitmap, url: String){
         override fun onResponse(call: Call, response: Response) {
             // 성공 처리, 예: 응답 내용 출력
             if (response.isSuccessful) {
-                val responseBody = response.body?.string()
+                val responseBody : String? = response.body?.string()
                 // 응답 내용 기다리고, 그 반영됨을 확인할 수 있어야함
                 Log.d("RESPONSE_ITEM","$responseBody")
-
+                facecolor = responseBody.toString()
             }
 
         }
     })
+
 }
 
-fun uploadCodiSet(bitmap: Bitmap, title: String, hashtag: String, comment: String, useremail: String, url: String) {
+fun uploadCodiSet(bitmap: Bitmap, title: String, hashtag: hashtag, comment: String, useremail: String,main_percol : String, url: String) {
     val stream = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream) // JPEG으로 변경, 품질 80
     val byteArray = stream.toByteArray()
+    val gson = Gson()
+    val styleJson = gson.toJson(hashtag)
 
     // 멀티파트 바디 구성
     val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
         .addFormDataPart("image", "codi_image.jpg",
             byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull()))
         .addFormDataPart("title", title)
-        .addFormDataPart("hashtag", hashtag)
+        .addFormDataPart("hashtag", styleJson)
         .addFormDataPart("comment", comment)
         .addFormDataPart("useremail", useremail)
+        .addFormDataPart("main_percol", main_percol)
         .build()
 
     // 요청 생성 (post)
@@ -88,12 +93,12 @@ fun uploadCodiSet(bitmap: Bitmap, title: String, hashtag: String, comment: Strin
 
     client.newCall(request).enqueue(object : Callback {
         override fun onFailure(call: Call, e: IOException) {
-            // 에러 처리
+            // 에러
             e.printStackTrace()
         }
 
         override fun onResponse(call: Call, response: Response) {
-            // 성공 처리, 예: 응답 내용 출력
+            // 성공
             if (response.isSuccessful) {
                 val responseBody = response.body?.string()
                 Log.d("RESPONSE_CODISET","$responseBody")
@@ -133,12 +138,12 @@ fun uploadClothes(bitmap: Bitmap, cl_category : Int, useremail: String, cl_perso
 
     client.newCall(request).enqueue(object : Callback {
         override fun onFailure(call: Call, e: IOException) {
-            // 에러 처리
+            // 에러
             e.printStackTrace()
         }
 
         override fun onResponse(call: Call, response: Response) {
-            // 성공 처리, 예: 응답 내용 출력
+            // 성공
             if (response.isSuccessful) {
                 val responseBody = response.body?.string()
                 Log.d("RESPONSE_CODISET","$responseBody")
@@ -147,12 +152,14 @@ fun uploadClothes(bitmap: Bitmap, cl_category : Int, useremail: String, cl_perso
     })
 }
 
-suspend fun uploadFace(bitmap: Bitmap, url: String): String = withContext(Dispatchers.IO) {
+
+suspend fun uploadFace(bitmap: Bitmap): String = withContext(Dispatchers.IO) {
+    val url = "http://10.0.2.2:8080/api/image/uploadface"
     val stream = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream) // JPEG으로 변경, 품질 80
     val byteArray = stream.toByteArray()
     val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-        .addFormDataPart("file", "image.jpg", byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull()))
+        .addFormDataPart("file", "face.jpeg", byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull()))
         .build()
 
     val request = Request.Builder()

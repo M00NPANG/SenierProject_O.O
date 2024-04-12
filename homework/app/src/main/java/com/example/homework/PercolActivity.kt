@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -75,15 +76,17 @@ class PercolActivity : AppCompatActivity() {
 
         sendButton.setOnClickListener {
 
-            val endPoint = "/testUpload"
+            val endPoint = "/api/image/upload"
             val url = ipAddr + endPoint
-            uploadBitmap(bitmapForPercol, url)
-            /*
+
+
             lifecycleScope.launch {
-                userPercol = uploadFace(bitmapForPercol,url)
+                uploadBitmap(bitmapForPercol,url)
+                userPercol = facecolor
+                Log.d("현재 이미지 : " ,userPercol)
             }
-            */
-            userPercol = "summer_cool"  // 임의로 설정한 퍼컬
+
+            //userPercol=
             var user : User
             user = User(
                 name = userName,
@@ -93,6 +96,7 @@ class PercolActivity : AppCompatActivity() {
                 user_color = userColor,
                 user_style = userStyle
             )
+            /*
             val endPoint2 = "/api/join"
             val url2 = ipAddr + endPoint2
             var result : Int
@@ -111,7 +115,7 @@ class PercolActivity : AppCompatActivity() {
                         Toast.makeText(this@PercolActivity, "회원가입 실패", Toast.LENGTH_SHORT).show()
                     }
                 }
-            }
+            }*/
 
         }
     }

@@ -1,6 +1,7 @@
 package com.example.homework
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.util.Log
 
 data class User(
@@ -14,29 +15,35 @@ data class User(
     var user_img : String? = null,
 )
 
-data class Post(      // 받기 위한 codiset 정보
+
+data class Post(      // 추천받은 게시물
     val post_id: Int?,
-    val hashtag: String,
-    val content: String,
-    val title: String,
-    val imagePath: String,
-    val userEmail: String,
-    val userName : String
+    val hashtag: String?,
+    val content: String?,
+    val title: String?,
+    val imagePath: String?,
+    val userEmail: String?,
+    val userName : String?,
+    val post_color : String?,
+    val post_percol : String?,
+    var isLiked: Boolean? = false
 )
 
-data class CodyGridItem(  // 실제로 보이기 위한 codiset 정보 즉 Post임
+data class CodyGridItem(  // 본인이만든 게시물
     val post_id: Int? = null,
     val imagePath: String? = null,
     val title: String,
     val hashtag: String? = null,
     val content: String? = null,
     val useremail:String? = null,
-    val username: String? = null
+    val username: String? = null,
+    val color : String? = null,
+    val percol : String? = null
 )
 
 data class Clothes(
-    val cl_id: Int?,                //클라이언트에서 보낼 땐 안줘도 될듯
-    val user_id : User?,            //클라이언트에서 보낼 땐 안줘도 될듯
+    val cl_id: Int?,
+    val user_id : User?,
     val cl_category: Int?,
     val cl_brand : String?,
     val cl_name : String?,
@@ -68,8 +75,39 @@ data class style(
     val sty_girlish : Int?,
     val sty_tomboy : Int?,
     val sty_vintage : Int?,
-    val user_id: Long?
+    val sty_sports : Int?,
+    val user_id: Long?,
 )
+
+data class hashtag(
+    val hashtag_id : Long?,
+    val hashtag_street : Int?,
+    val hashtag_modern : Int?,
+    val hashtag_minimal : Int?,
+    val hashtag_feminine : Int?,
+    val hashtag_simpleBasic : Int?,
+    val hashtag_americanCasual : Int?,
+    val hashtag_businessCasual : Int?,
+    val hashtag_casual : Int?,
+    val hashtag_retro : Int?,
+    val hashtag_classic : Int?,
+    val hashtag_elegant : Int?,
+    val hashtag_girlish : Int?,
+    val hashtag_tomboy : Int?,
+    val hashtag_vintage : Int?,
+    val hashtag_sports : Int?,
+    val post_id: Long?,
+)
+
+data class UserPreferenceUpdateRequest(
+    val userEmail: String?,
+    val userColor: String?,
+    val userStyles: Array<String>?,
+    val colorNum: Long?, // 색에 매길 점수
+    val styleNum: Array<Long>?  // 스타일에 매길 점수
+)
+
+
 
 object BitmapStorage { //액티비티간 이미지 전송하려고 만듬
     var Bitmap: Bitmap? = null
@@ -77,15 +115,34 @@ object BitmapStorage { //액티비티간 이미지 전송하려고 만듬
 
 
 
+
 object ClothesRepository { // CreateOutfitActivity에서 쓰려고 만듬
-    var allClothesUrls: MutableList<String> = mutableListOf()
+    var allClothesUrls: MutableList<String> = mutableListOf()  // url
+    var mappedUrls : MutableMap<String, Int> = mutableMapOf() // 필요없음
+    var clothesData : MutableList<Clothes> = mutableListOf()  // 내가 찍어서 올린 옷들의 리스트
+    var matchedClothes: MutableList<Clothes> = mutableListOf() // 내가 코디만들때 쓴 것들의 리스트
 
     fun addClothesUrl(url: String) {
         allClothesUrls.add(url)
     }
-
+    fun addClothesUrlWithCategory(url: String, category: Int) {
+        mappedUrls[url] = category
+    }
+    fun addClothesData(clothes: List<Clothes>) {
+        clothes.forEach { newCloth -> // 중복검사
+            if (!clothesData.any { existingCloth -> existingCloth.cl_id == newCloth.cl_id }) {
+                clothesData.add(newCloth)
+            }
+        }
+    }
+    fun addMatchedClothes(clothes:List<Clothes>){
+        matchedClothes.addAll(clothes)
+    }
     fun clearClothesUrls() {
         allClothesUrls.clear()
+        mappedUrls.clear()
+        clothesData.clear()
+        matchedClothes.clear()
     }
     fun printAllUrls() {
         allClothesUrls.forEach { url ->
@@ -96,11 +153,26 @@ object ClothesRepository { // CreateOutfitActivity에서 쓰려고 만듬
     fun returnUrls(): MutableList<String> {
         return allClothesUrls
     }
+    fun returnClothes():MutableList<Clothes>{
+        return matchedClothes
+    }
 }
 
 
 data class CSSColor(val name: String, val r: Int, val g: Int, val b: Int)
 
+data class MyColor(val name: String, val r: Int, val g: Int, val b: Int)
+
+val MyColors = listOf(
+    MyColor("red",255,0,0)
+    , MyColor("blue",0,0,255)
+    , MyColor("brown",165,42,42)
+    , MyColor("gray",128,128,128)
+    , MyColor("green",0,128,0)
+    , MyColor("orange",255,165,0)
+    , MyColor("purple",128,0,128)
+    , MyColor("yellow",255,255,0)
+)
 
 val cssColors = listOf(
     CSSColor("aliceblue",240,248,255),

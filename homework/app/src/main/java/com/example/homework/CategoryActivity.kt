@@ -2,6 +2,7 @@ package com.example.homework
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -39,27 +40,32 @@ class CategoryActivity : AppCompatActivity() {
         val originalHeight = originalBitmap.height
         val newWidth = (originalWidth * 0.6).toInt()
         val newHeight = (originalHeight * 0.6).toInt()
-        val bitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true)
+        val bitmap2 = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true)
+        val bitmap = removeSemiTransparentPixels(bitmap2)
 
         okButton = findViewById(R.id.okButton)
         colorTextView = findViewById(R.id.colorTextView)
         imageView = findViewById(R.id.imageCheck)
-        imageView.setImageBitmap(originalBitmap)
+        imageView.setImageBitmap(bitmap)
         spinnerSubMenu = findViewById(R.id.spinnerSubMenu)
 
         okButton.setOnClickListener { // 저장 버튼
             cl_category = cl_category!!*100 + category
+            Log.d("카테고리값",cl_category.toString())
             submitClothes(bitmap!!, cl_category!!)
         }
 
 
         GlobalScope.launch(Dispatchers.IO) { // 백그라운드 스레드에서 실행
+            val (color, personalColorType) = decidePersonalColorFromImage(bitmap!!)
+            //val closestColor = findClosestColor(Integer.toHexString(color))
             GlobalScope.launch(Dispatchers.Main) { // 메인 스레드에서 코루틴 시작
-                val (color, personalColorType) = decidePersonalColorFromImage(bitmap!!)
 
-                //logUniqueClosestCSSColorsForImage(bitmap, cssColors)
+
                 // UI 업데이트
                 colorTextView.setTextColor(color)
+                Log.d("현재 color",Integer.toHexString(color))
+                //Log.d("color의 가까운 색","${closestColor.name}")
                 colorTextView.text = personalColorType
                 cl_personal_color = personalColorType
             }
@@ -84,6 +90,7 @@ class CategoryActivity : AppCompatActivity() {
                     1 -> 10
                     2 -> 20
                     3 -> 30
+                    4 -> 40
                     5 -> 50
                     else -> 0
                 }
@@ -164,4 +171,39 @@ class CategoryActivity : AppCompatActivity() {
         uploadClothes(bitmap,cl_category,useremail, cl_personal_color ,url)
         finish()
     }
+
+    /*private fun findClosestColor(hexColor: String): MyColor {
+        // 매개변수로 받은 hexColor에서 Alpha 값을 제외하고, RGB 값만 추출
+        val r = Integer.parseInt(hexColor.substring(2, 4), 16)
+        val g = Integer.parseInt(hexColor.substring(4, 6), 16)
+        val b = Integer.parseInt(hexColor.substring(6, 8), 16)
+        Log.d("r,g,b","$r, $g, $b")
+        return MyColors.minByOrNull {
+            val distance = Math.sqrt(((it.r - r) * (it.r - r) + (it.g - g) * (it.g - g) + (it.b - b) * (it.b - b)).toDouble())
+            distance
+        } ?: MyColors.first() // 기본값으로 첫 번째 색상을 반환, 이 부분은 상황에 따라 다르게 처리 가능
+    }*/
+
+    private fun removeSemiTransparentPixels(originalBitmap: Bitmap): Bitmap {
+        // 동일한 크기의 Bitmap을 생성하여 결과를 저장
+        val resultBitmap = Bitmap.createBitmap(originalBitmap.width, originalBitmap.height, Bitmap.Config.ARGB_8888)
+
+        // 모든 픽셀을 순회
+        for (x in 0 until originalBitmap.width) {
+            for (y in 0 until originalBitmap.height) {
+                val pixel = originalBitmap.getPixel(x, y)
+                val alpha = Color.alpha(pixel)
+
+                // 불투명도가 50% 미만인 경우, 픽셀을 완전 투명하게 설정
+                if (alpha < 128) {
+                    resultBitmap.setPixel(x, y, Color.TRANSPARENT)
+                } else {
+                    resultBitmap.setPixel(x, y, pixel)
+                }
+            }
+        }
+
+        return resultBitmap
+    }
+
 }

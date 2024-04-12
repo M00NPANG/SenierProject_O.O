@@ -8,8 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.sqrt
 
-
-
 fun getPersonalColorType(rgb: Int): String {
     val hsv = FloatArray(3)
     Color.colorToHSV(rgb, hsv)
@@ -17,7 +15,7 @@ fun getPersonalColorType(rgb: Int): String {
     val saturation = hsv[1]  // 채도
     val value = hsv[2]  // 명도
 
-
+    /*
     // 무채색 판별 임계값
     val thresholdValue = 0.2f // 명도 임계값 (0.0 ~ 1.0)
 
@@ -26,24 +24,36 @@ fun getPersonalColorType(rgb: Int): String {
 
     // 무채색인 경우 "무채색" 반환
     if (isMonochrome) {
+        Log.d("무채색","무채색")
+        return "Monochrome"
+    }*/
+    val saturationThreshold = 0.035f // 채도 임계값 (0.0 ~ 1.0) 이 값을 늘리면 더 많은 색이 무채색이 됨
+    val valueThreshold = 0.15f // 명도 임계값 (0.0 ~ 1.0)
+
+    // 채도 또는 명도 값이 임계값보다 작으면 무채색으로 간주
+    val isMonochrome = saturation <= saturationThreshold || value <= valueThreshold
+
+    // 무채색인 경우 "무채색" 반환
+    if (isMonochrome) {
+        Log.d("무채색","무채색")
         return "Monochrome"
     }
-
+    //0313190221
     //퍼스널 컬러 유형 결정
     return when {
-        hue >= 0 && hue < 30 -> "Warm Autumn"
-        hue >= 30 && hue < 90 -> "Warm Spring"
-        hue >= 90 && hue < 210 -> "Cool Summer"
-        hue >= 210 && hue < 330 -> "Cool Winter"
-        hue >= 330 && hue <= 360 -> "Warm Autumn"
+        hue >= 0 && hue < 30 -> "autumn"
+        hue >= 30 && hue < 90 -> "spring"
+        hue >= 90 && hue < 210 -> "summer"
+        hue >= 210 && hue < 330 -> "winter"
+        hue >= 330 && hue <= 360 -> "autumn"
         else -> "ERROR"
     }
 }
 
 suspend fun decidePersonalColorFromImage(bitmap: Bitmap): Pair<Int, String> {
     return withContext(Dispatchers.IO) { // 백그라운드 스레드에서 실행
-        val palette = Palette.from(bitmap).resizeBitmapArea(10).generate()
-
+        //val palette = Palette.from(bitmap).resizeBitmapArea(10).generate()  <- 너무 단순화시키니까 갈색 인식을 못함
+        val palette = Palette.from(bitmap).generate()                 // <- 그래서 단순화를 줄임
         val colorUsedForPersonalColorType = palette.getDominantColor(0)
         val personalColorType = getPersonalColorType(colorUsedForPersonalColorType)
         Pair(colorUsedForPersonalColorType, personalColorType) // 색상과 퍼스널 컬러 유형을 반환

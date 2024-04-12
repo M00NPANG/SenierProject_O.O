@@ -1,10 +1,14 @@
 package com.example.homework
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 val ipAddr = "http://192.168.123.103:8080" // http://192.168.123.103:8080
 
@@ -36,9 +40,19 @@ class MainActivity : AppCompatActivity() {
             intent = Intent(this@MainActivity,LoginActivity::class.java)
             startActivity(intent)
         }
+        /*
         testBtn.setOnClickListener {
-            startActivity(Intent(this@MainActivity,OmniusActivity::class.java))
-        }
+            val bitmap = BitmapFactory.decodeResource(resources, R.drawable.test_cody)
+            lifecycleScope.launch(Dispatchers.IO) {
+                val endPoint = "/testUpload"
+                val url = ipAddr + endPoint
+                val uploadResult = uploadBitmap(bitmap,url)
+                launch(Dispatchers.Main) {
+                    // 결과를 UI에 표시하거나 처리
+                    Log.d("결과",uploadResult.toString())
+                }
+            }
+        }*/
 
     }
 }

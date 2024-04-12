@@ -1,18 +1,28 @@
 package com.example.homework
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.location.LocationManagerCompat.getCurrentLocation
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -46,6 +56,9 @@ object ApiObject {
 
 
 class LobbyActivity : AppCompatActivity() {
+    lateinit var recyclerView: RecyclerView
+    var wheather: String = ""
+    var temperature : Int = 0
     var TO_GRID = 0
     var TO_GPS = 1
     lateinit var tvRainRatio : TextView     // 강수 확률
@@ -54,25 +67,31 @@ class LobbyActivity : AppCompatActivity() {
     lateinit var tvSky: TextView            // 하늘 상태
     lateinit var tvTemp: TextView           // 온도
     lateinit var skyImg : ImageView // 하늘 이미지
-    var base_date = "20240317"  // 발표 일자
+    var base_date = "11111111"  // 발표 일자
     var base_time = "aaaa"      // 발표 시각
     var time : String = ""
+    private lateinit var postAdapter: PostAdapter
+    private val posts = mutableListOf<Post>()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lobby)
+
+        //초기화 부분
+        recyclerView = findViewById(R.id.recommendedView)
         tvSky = findViewById(R.id.tvSky)
         tvTemp = findViewById(R.id.tvTemp)
-        tvRainRatio = findViewById(R.id.tvSky)
-        tvRainType = findViewById(R.id.tvSky)
-        tvHumidity = findViewById(R.id.tvSky)
         skyImg = findViewById(R.id.skyImg)
-
+        recyclerView.layoutManager = LinearLayoutManager(this@LobbyActivity)
+        postAdapter = PostAdapter(posts, lifecycleScope)
+        recyclerView.adapter = postAdapter
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         getCurrentLocation() // 현재 위치를 구하는 것 뿐 아니라 그 위치로 기상청 api에 날씨정보를 요청함
         val closet : ImageView = findViewById(R.id.closet)
+
+        // 하단 메뉴바이고, 나중에 간략화하기
         closet.setOnClickListener{
             intent = Intent(this@LobbyActivity,ClosetActivity::class.java)
             startActivity(intent)
@@ -83,11 +102,10 @@ class LobbyActivity : AppCompatActivity() {
             finish()
             startActivity(intent)
         }
-        val test : ImageView = findViewById(R.id.user)
-        test.setOnClickListener {
-            startActivity(Intent(this@LobbyActivity,ProfilesetupActivity::class.java))
-        }
 
+
+        // 서버로부터 코디를 받고 띄움
+        loadRecommendedPosts(SharedPreferencesUtils.loadEmail(this).toString())
     }
     private fun getCurrentLocation() { // 현재 위도경도를 구하고 그걸 격자로 바꾸고 그걸로 api 통신
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -163,6 +181,7 @@ class LobbyActivity : AppCompatActivity() {
                             // 날씨 정보 보이기
                             setWeather(rainRatio, rainType, humidity, sky, temp)
                             Log.d("location",base_date)
+
                             // 토스트 띄우기
                             Toast.makeText(applicationContext, items[0].fcstDate + ", " + items[0].fcstTime + "의 날씨 정보입니다.", Toast.LENGTH_SHORT).show()
                         } else {
@@ -182,6 +201,7 @@ class LobbyActivity : AppCompatActivity() {
                 Log.d("api fail", t.message.toString())
             }
         })
+        updateClothesIcons("clean",11)  // 나중에 지워버리기.
     }
     // 뷰에 날씨 정보 보여주기
     fun setWeather(rainRatio : String, rainType : String, humidity : String, sky : String, temp : String) {
@@ -200,9 +220,22 @@ class LobbyActivity : AppCompatActivity() {
             else -> "오류"
         }
 
+        when(rainType){
+            "1" -> wheather = "rain"
+            "2" -> wheather = "rain"
+            "3" -> wheather = "snow"
+            "4" -> wheather = "rain"
+            "5" -> wheather = "rain"
+            "6" -> wheather = "rain"
+            "7" -> wheather = "snow"
+            else -> "오류"
+        }
+
         tvSky.text = result
         // 온도
         tvTemp.text = temp + "°"
+        temperature = temp.toInt()
+        updateClothesIcons(wheather, temperature)
     }
 
 
@@ -221,44 +254,19 @@ class LobbyActivity : AppCompatActivity() {
             else -> result = "2300"             // 21~23   "1700"
         }
         return result
-        /*
-        var result = ""
-        when(time){
-            "00"-> result = "0030"
-            "01"-> result = "0130"
-            "02"-> result = "0230"
-            "03"-> result = "0330"
-            "04"-> result = "0430"
-            "05"-> result = "0530"
-            "06"-> result = "0630"
-            "07"-> result = "0730"
-            "08"-> result = "0830"
-            "09"-> result = "0930"
-            "10"-> result = "1030"
-            "11"-> result = "1130"
-            "12"-> result = "1230"
-            "13"-> result = "1330"
-            "14"-> result = "1430"
-            "15"-> result = "1530"
-            "16"-> result = "1630"
-            "17"-> result = "1730"
-            "18"-> result = "1830"
-            "19"-> result = "1930"
-            "20"-> result = "2030"
-            "21"-> result = "2130"
-            "22"-> result = "2230"
-            "23"-> result = "2330"
-        }
-        return result
-        */
 
     }
 
     fun setSky(sky : String){ // 하늘상태임
         Log.d("time",time)
+        when(sky){
+            "1" -> wheather = "clean"
+            "3" -> wheather = "little_cloudy"
+            "4" -> wheather = "cloudy"
+        }
         if(time.toInt() < 5  || time.toInt() > 17){
             when(sky) {
-                "1" -> skyImg.setImageResource(R.drawable.moon) // 맑음(달)
+                "1" -> skyImg.setImageResource(R.drawable.moon)  // 맑음(달)
                 "3" -> skyImg.setImageResource(R.drawable.little_cloud_moon) // 약간 흐림(달)
                 "4" -> skyImg.setImageResource(R.drawable.cloud) // 흐림
                 else -> "오류"
@@ -284,9 +292,7 @@ class LobbyActivity : AppCompatActivity() {
         val XO = 43.0 // 기준점 X좌표(GRID)
         val YO = 136.0 // 기1준점 Y좌표(GRID)
 
-        //
-        // LCC DFS 좌표변환 ( code : "TO_GRID"(위경도->좌표, lat_X:위도,  lng_Y:경도), "TO_GPS"(좌표->위경도,  lat_X:x, lng_Y:y) )
-        //
+
         val DEGRAD = Math.PI / 180.0
         val RADDEG = 180.0 / Math.PI
         val re = RE / GRID
@@ -348,5 +354,76 @@ class LobbyActivity : AppCompatActivity() {
         var x = 0.0
         var y = 0.0
     }
+
+    private fun loadRecommendedPosts(email: String) { // 로비에 띄울 포스트들을 구해옴
+        CoroutineScope(Dispatchers.Main).launch {
+            // receiveRecommendPosts 함수 호출을 통해 직접 Post 객체의 리스트를 받음
+            val recommendedPosts = receiveRecommendPosts(email)
+            // posts 리스트를 받아온 데이터로 업데이트
+            // 여기서 posts는 PostAdapter에 전달될 데이터 리스트입니다.
+            posts.clear()
+            posts.addAll(recommendedPosts)
+            postAdapter.notifyDataSetChanged() // 어댑터에 데이터 변경을 알려 UI를 업데이트합니다.
+        }
+    }
+
+    private fun updateClothesIcons(weather: String, temperature: Int) {
+        val container = findViewById<LinearLayout>(R.id.clothesIconContainer)
+        container.removeAllViews() // 기존 아이콘 제거
+        Log.d("날씨와 기온", "날씨 : $weather , 기온 : $temperature")
+        val clothesIcons = getClothesIcons(weather, temperature)
+
+        clothesIcons.forEach { icon ->
+            val imageView = ImageView(this).apply {
+                // LinearLayout 내에 ImageView를 추가할 때는 LinearLayout.LayoutParams를 사용
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    // 마진 설정
+                    val dpSize = 10
+                    val scale = resources.displayMetrics.density // 화면의 density
+                    val marginInPixels = (dpSize * scale + 0.5f).toInt() // dp를 픽셀 단위로 변환
+                    // 수평 LinearLayout이므로, 양쪽 마진 설정
+                    setMargins(marginInPixels, marginInPixels, marginInPixels, marginInPixels)
+                }
+                setImageResource(icon)
+
+                // 매핑된 식별자 ID를 태그로 설정
+                tag = iconMap[icon]
+
+                setOnClickListener {
+                    // 태그를 사용하여 식별자 ID를 가져옴
+                    val cl_id = it.tag as? Int ?: 0 // 태그가 없는 경우 0을 기본값으로 사용
+                    // cl_id를 사용한 동작, 예를 들어 토스트 메시지 표시
+                    Toast.makeText(this@LobbyActivity, "Clicked Icon ID: $cl_id", Toast.LENGTH_SHORT).show()
+
+                    // Intent를 생성하여 ClothesDetailActivity를 시작하고, cl_id를 전달
+                    val intent = Intent(this@LobbyActivity, ClothesDatailActivity::class.java).apply {
+                        putExtra("CL_ID", cl_id) // "CL_ID"는 key로, cl_id는 전달될 값입니다.
+                    }
+                    startActivity(intent)
+                }
+            }
+            container.addView(imageView)
+        }
+    }
+
+    private fun getClothesIcons(weather: String, temperature: Int): List<Int> {
+        // 날씨와 온도에 따라 적절한 옷 아이콘 리소스 ID 리스트 반환
+        // 예시로 간단히 처리; 실제 사용시 더 상세한 로직 필요
+        return when {
+            temperature > 10 -> listOf(R.drawable.shirt_icon, R.drawable.hat_icon, R.drawable.pants_icon)
+            else -> listOf(R.drawable.roading)
+        }
+    }
+
 }
 
+
+val iconMap = mapOf(
+    R.drawable.shirt_icon to 1001,
+    R.drawable.pants_icon to 2002,
+    R.drawable.hat_icon to 6001
+    // 여기에 더 많은 아이콘과 식별자 매핑 추가
+)

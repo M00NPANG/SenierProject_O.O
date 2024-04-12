@@ -44,25 +44,28 @@ class CreatePostActivity : AppCompatActivity() {
         backButton.setOnClickListener { onBackPressed() }
         completeButton.setOnClickListener {
             //submitPost()
-            val styleInstance = style(
-                sty_id = null, // 스타일 ID는 여기서 null로 설정하거나 적절히 생성/할당
-                sty_street = if (hashtagsSet.contains("#스트릿")) 1 else 0,
-                sty_modern = if (hashtagsSet.contains("#모던")) 1 else 0,
-                sty_minimal = if (hashtagsSet.contains("#미니멀")) 1 else 0,
-                sty_feminine = if (hashtagsSet.contains("#페미닌")) 1 else 0,
-                sty_simpleBasic = if (hashtagsSet.contains("#심플 베이직")) 1 else 0,
-                sty_americanCasual = if (hashtagsSet.contains("#아메카지")) 1 else 0,
-                sty_businessCasual = if (hashtagsSet.contains("#비즈니스 캐주얼")) 1 else 0,
-                sty_casual = if (hashtagsSet.contains("#캐주얼")) 1 else 0,
-                sty_retro = if (hashtagsSet.contains("#레트로")) 1 else 0,
-                sty_classic = if (hashtagsSet.contains("#클래식")) 1 else 0,
-                sty_elegant = if (hashtagsSet.contains("#엘레강스")) 1 else 0,
-                sty_girlish = if (hashtagsSet.contains("#걸리쉬")) 1 else 0,
-                sty_tomboy = if (hashtagsSet.contains("#톰보이")) 1 else 0,
-                sty_vintage = if (hashtagsSet.contains("#빈티지")) 1 else 0,
-                user_id = null
+            val hashtagInstance = hashtag(
+                hashtag_id = null, // 스타일 ID는 여기서 설정할 필요가 없음
+                hashtag_street = if (hashtagsSet.contains("#스트릿")) 1 else 0,
+                hashtag_modern = if (hashtagsSet.contains("#모던")) 1 else 0,
+                hashtag_minimal = if (hashtagsSet.contains("#미니멀")) 1 else 0,
+                hashtag_feminine = if (hashtagsSet.contains("#페미닌")) 1 else 0,
+                hashtag_simpleBasic = if (hashtagsSet.contains("#심플 베이직")) 1 else 0,
+                hashtag_americanCasual = if (hashtagsSet.contains("#아메카지")) 1 else 0,
+                hashtag_businessCasual = if (hashtagsSet.contains("#비즈니스 캐주얼")) 1 else 0,
+                hashtag_casual = if (hashtagsSet.contains("#캐주얼")) 1 else 0,
+                hashtag_retro = if (hashtagsSet.contains("#레트로")) 1 else 0,
+                hashtag_classic = if (hashtagsSet.contains("#클래식")) 1 else 0,
+                hashtag_elegant = if (hashtagsSet.contains("#엘레강스")) 1 else 0,
+                hashtag_girlish = if (hashtagsSet.contains("#걸리쉬")) 1 else 0,
+                hashtag_tomboy = if (hashtagsSet.contains("#톰보이")) 1 else 0,
+                hashtag_vintage = if (hashtagsSet.contains("#빈티지")) 1 else 0,
+                hashtag_sports = if(hashtagsSet.contains("#스포츠")) 1 else 0,
+                post_id = null,
             )
-            Log.d("StyleInstance", styleInstance.toString())
+            val main_percol = checkMainPercol()
+            Log.d("메인 퍼스널컬러",main_percol)
+            submitPost(hashtagInstance, main_percol)
         }
 
         val imagePath = intent.getStringExtra("imagePath")
@@ -78,7 +81,7 @@ class CreatePostActivity : AppCompatActivity() {
         val autoText: AutoCompleteTextView = findViewById(R.id.hashtagEdit)
         autoText.setAdapter(adapter)
 
-        // 사용자가 항목을 선택할 때 실행할 동작을 설정합니다.
+        // autotextedit 쓰는 코드임
         autoText.setOnItemClickListener { parent, view, position, id ->
             val selectedTag = parent.getItemAtPosition(position).toString()
 
@@ -89,18 +92,17 @@ class CreatePostActivity : AppCompatActivity() {
 
     }
 
-    private fun submitPost() {
+    private fun submitPost(hashtag : hashtag, main_percol : String) {
         val endPoint = "/uploadCodi"
         val url = ipAddr + endPoint
-        val hasttag = hashtagEdit.text.toString()
         val comment = commentEdit.text.toString()
         val title = codiNameEdit.text.toString()
         val bitmap = BitmapFactory.decodeFile(codiPath)
         val useremail = SharedPreferencesUtils.loadEmail(this).toString()
 
-        uploadCodiSet(bitmap,title,hasttag,comment,useremail,url)
+        uploadCodiSet(bitmap,title,hashtag,comment,useremail,main_percol,url)
         //finish()
-        val intent = Intent(this, LobbyActivity::class.java).apply {
+        val intent = Intent(this, ClosetActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
@@ -133,6 +135,39 @@ class CreatePostActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkMainPercol(): String{
+        val matchedList = ClothesRepository.returnClothes()
+
+        // 상의
+        val clothesStartingWith1 = matchedList.filter { it.cl_category.toString().startsWith("1") }
+
+        // 하의
+        val clothesStartingWith2 = matchedList.filter { it.cl_category.toString().startsWith("2") }
+
+        // 한벌옷
+        val clothesStartingWith3 = matchedList.filter { it.cl_category.toString().startsWith("3") }
+
+        // 아우터
+        val clothesStartingWith4 = matchedList.filter { it.cl_category.toString().startsWith("4") }
+
+        // 신발
+        val clothesStartingWith5 = matchedList.filter { it.cl_category.toString().startsWith("5") }
+
+        // 패션잡화
+        val clothesStartingWith6 = matchedList.filter { it.cl_category.toString().startsWith("6") }
+
+        val selectedClothes = when {
+            clothesStartingWith1.isNotEmpty() -> clothesStartingWith1.first()
+            clothesStartingWith3.isNotEmpty() -> clothesStartingWith3.first()
+            clothesStartingWith4.isNotEmpty() -> clothesStartingWith4.first()
+            clothesStartingWith2.isNotEmpty() -> clothesStartingWith2.first()
+            clothesStartingWith5.isNotEmpty() -> clothesStartingWith5.first()
+            clothesStartingWith6.isNotEmpty() -> clothesStartingWith6.first()
+            else -> null // 아무것도 찾지 못한 경우 null 반환
+        }
+
+        return selectedClothes!!.cl_personal_color.toString()
+    }
 }
 
 
