@@ -1,66 +1,101 @@
 package teamProject_Server.Domain;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
-import java.io.IOException;
-import java.util.List;
-import java.util.Arrays;
+import jdk.jfr.Enabled;
+import lombok.Getter;
 
 @Entity
 @Table(name = "post")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_id;
-    private String hashtag;
-    private String content;
-    private String title;
-    private String imagePath;
-    private String userName;
-    private String userEmail;
+    private Long post_id;       // 추천 게시물 id
+    private String hashtag;     // 이거 삭제할지 확인 필요
+    private String userEmail;   // 유저 분류를 위한 id 대체
 
-    public Post(){}
-    public Post(String hashtag, String content, String title, String imagePath, String userEmail,String userName) {
+    private Long top_id;            // 상의 id
+    private Long bottom_id;         // 하의 id
+    private Long shoes_id;          // 신발 id
+    private Long accessories_id;    // 악세서리 id
+    private Long bag_id;            // 가방 id
+
+    // 생성자
+    public Post() {}
+
+    public Post(String hashtag, String userEmail, Long top_id, Long bottom_id, Long shoes_id, Long accessories_id, Long bag_id) {
         this.hashtag = hashtag;
-        this.content = content;
-        this.title = title;
-        this.imagePath = imagePath;
         this.userEmail = userEmail;
-        this.userName = userName;
+        this.top_id = top_id;
+        this.bottom_id = bottom_id;
+        this.shoes_id = shoes_id;
+        this.accessories_id = accessories_id;
+        this.bag_id = bag_id;
     }
 
+    // getter and setter
 
-    // 해시태그를 JSON으로 설정
-    // JSON 형태의 해시태그 문자열을 설정하는 메서드
-    public void setHashtags(List<String> hashtags) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        this.hashtag = mapper.writeValueAsString(hashtags);
+    public Long getPost_id() {
+        return post_id;
     }
 
-    // JSON 형태의 해시태그 문자열을 List<String>으로 변환하여 반환하는 메서드
-    public List<String> getHashtags() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String[] tagsArray = mapper.readValue(this.hashtag , String[].class);
-        return Arrays.asList(tagsArray);
+    public void setPost_id(Long post_id) {
+        this.post_id = post_id;
     }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public String getHashtag() {
+        return hashtag;
+    }
 
-    public String getImagePath() { return imagePath; }
-    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+    public void setHashtag(String hashtag) {
+        this.hashtag = hashtag;
+    }
 
-    public String getUserEmail() { return userEmail; }
-    public void setUserEmail(String useremail) { this.userEmail = useremail; }
+    public String getUserEmail() {
+        return userEmail;
+    }
 
-    public String getUserName() { return userName; }
-    public void setUserName(String username) { this.userName = username; }
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
 
+    public Long getTop_id() {
+        return top_id;
+    }
 
+    public void setTop_id(Long top_id) {
+        this.top_id = top_id;
+    }
 
+    public Long getBottom_id() {
+        return bottom_id;
+    }
 
+    public void setBottom_id(Long bottom_id) {
+        this.bottom_id = bottom_id;
+    }
 
+    public Long getShoes_id() {
+        return shoes_id;
+    }
 
+    public void setShoes_id(Long shoes_id) {
+        this.shoes_id = shoes_id;
+    }
+
+    public Long getAccessories_id() {
+        return accessories_id;
+    }
+
+    public void setAccessories_id(Long accessories_id) {
+        this.accessories_id = accessories_id;
+    }
+
+    public Long getBag_id() {
+        return bag_id;
+    }
+
+    public void setBag_id(Long bag_id) {
+        this.bag_id = bag_id;
+    }
 }
 
