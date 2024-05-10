@@ -1,17 +1,18 @@
 package com.example.homework
 
-import android.util.Log
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
-class PostAdapter(private val posts: List<Post>, private val scope: CoroutineScope) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(private val scope: CoroutineScope) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+    private val posts: List<List<Clothes>> = List(10) { ClothesRepository.getRandomClothesByCategory() }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_post, parent, false)
@@ -20,69 +21,68 @@ class PostAdapter(private val posts: List<Post>, private val scope: CoroutineSco
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
-        // 여기서 post 객체의 각 필드를 holder의 뷰와 연결
         holder.bind(post, scope)
+
+        // 안전한 접근을 위해 null 검사 및 예외 처리 추가
+        val recyclerView = (holder.itemView.parent as? RecyclerView)
+        recyclerView?.let {
+            // 각 아이템의 크기를 동적으로 설정
+            val parentWidth = it.width / 2 // 2열 그리드이므로 폭을 2로 나눔
+            val layoutParams = holder.itemView.layoutParams
+            layoutParams.width = parentWidth
+            layoutParams.height = RecyclerView.LayoutParams.WRAP_CONTENT // 높이는 내용에 맞춤
+            holder.itemView.layoutParams = layoutParams
+        }
     }
 
     override fun getItemCount(): Int = posts.size
 
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val userName: TextView = itemView.findViewById(R.id.userName)
-        private val uploadedImageView: ImageView = itemView.findViewById(R.id.uploadedImageView)
-        private val codyName: TextView = itemView.findViewById(R.id.codyName)
-        private val tags: TextView = itemView.findViewById(R.id.tags)
-        private val heartImageView: ImageView = itemView.findViewById(R.id.heart)
+        private val shirtImageView: ImageView = itemView.findViewById(R.id.shirt_image_view)
+        private val pantsImageView: ImageView = itemView.findViewById(R.id.pants_image_view)
+        private val onepieceImageView: ImageView = itemView.findViewById(R.id.onepiece_image_view)
+        private val shoesImageView: ImageView = itemView.findViewById(R.id.shoes_image_view)
+        private val etcImageView: ImageView = itemView.findViewById(R.id.etc_image_view)
+        private val hatImageView: ImageView = itemView.findViewById(R.id.hat_image_view)
 
-        fun bind(post: Post, scope: CoroutineScope) { // 여기에서 작업하면 됨
-            val percol = post.post_percol
-            val color = post.post_color
-            userName.text = post.userName
-            codyName.text = post.title
+        fun bind(post: List<Clothes>, scope: CoroutineScope) {
+            val idsList = mutableListOf<Int?>()
 
-            tags.text = post.hashtag
-            Glide.with(itemView.context)
-                .load(post.imagePath)
-                .into(uploadedImageView)
-
-
-            heartImageView.setOnClickListener {
-                post.isLiked = !post.isLiked!!
-                updateHeartIcon(post.isLiked!!, post, scope)
-            }
-
-        }
-
-        private fun updateHeartIcon(isLiked: Boolean, post: Post, scope: CoroutineScope) {
-            if (!isLiked) {
-                heartImageView.setImageResource(R.drawable.heart)
-            } else {
-                heartImageView.setImageResource(R.drawable.selected_heart)
-                val styleList = parseHashtagsToStyles(post.hashtag.toString()) // 리스트를 배열로 변환
-                val styleNumList = Array(styleList.size) { 1L }
-
-                Log.d("해시태그들", styleList.contentToString())
-                Log.d("리스트수","리스트수:${styleNumList.size}, 리스트값:${styleNumList.contentToString()}")
-
-                val email = SharedPreferencesUtils.loadEmail(itemView.context)
-                Log.d("email",email!!)
-                val updateRequest  = UserPreferenceUpdateRequest(email, null, styleList, 1, styleNumList)
-                scope.launch {
-                    try {
-                        val result = sendUserPreferenceUpdate(updateRequest)
-                        Log.d("업데이트 결과", result.toString())
-                    } catch (e: Exception) {
-                        Log.e("업데이트 실패", "오류: ${e.message}")
-                    }
+            post.forEach { clothes ->
+                when (clothes.cl_category) {
+                    in 1000..1999 , in 4000 .. 4999-> {loadImage(clothes.cl_photo_path, shirtImageView)}
+                    in 2000..2999 -> loadImage(clothes.cl_photo_path, pantsImageView)
+                    in 5000..5999 -> loadImage(clothes.cl_photo_path, shoesImageView)
+                    in 6002..6005 -> loadImage(clothes.cl_photo_path, etcImageView)
+                    6001 -> loadImage(clothes.cl_photo_path, hatImageView)
                 }
+                idsList.add(clothes.cl_id)
+                }
+
+            itemView.setOnClickListener {
+                val context = itemView.context
+                val intent = Intent(context, CodyRecomen::class.java).apply {
+                    // null이 아닌 ID만 추출하여 IntArray로 변환
+                    val idsArray = idsList.filterNotNull().toIntArray()
+                    putExtra("clothesIds", idsArray)
+                }
+                context.startActivity(intent)
             }
         }
 
-        private fun parseHashtagsToStyles(hashtags: String): Array<String> {
-            return hashtags.split(" ")
-                .map { it.removePrefix("#") }
-                //.map { "\"$it\"" } // 각 항목을 따옴표로 감싸기
-                .toTypedArray()
+        private fun loadImage(url: String?, imageView: ImageView) {
+            url?.let {
+                Glide.with(itemView.context)
+                    .load(it)
+                    .apply(RequestOptions().centerCrop()) // centerCrop 옵션으로 변경
+                    .into(imageView) // ImageView 직접 로드
+            }
         }
     }
 }
+
+
+
+
+
 

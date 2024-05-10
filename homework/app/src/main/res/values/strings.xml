@@ -2,56 +2,47 @@
     <string name="app_name">homework</string>
     <string name="search_hint">검색</string>
     <string-array name="menu_items">
-        <item>패션 잡화</item>
+        <item>가방</item>
         <item>상의</item>
         <item>하의</item>
-        <item>하의(원피스/투피스/점프슈트)</item>
-        <item>아우터</item>
+        <item>한벌옷(원피스)</item>
         <item>신발</item>
+        <item>악세서리</item>
+        <item>모자</item>
     </string-array>
     <string-array name="sub_menu1">
-        <item>티셔츠</item>
-        <item>니트</item>
-        <item>맨투맨</item>
-        <item>셔츠/블라우스</item>
-        <item>민소매/슬리브리스</item>
+        <item>긴팔</item>
+        <item>반팔/민소매</item>
         <item>기타 상의</item>
     </string-array>
     <string-array name="sub_menu2">
-        <item>스커트</item>
-        <item>청바지</item>
-        <item>슬랙스</item>
-        <item>와이드팬츠</item>
-        <item>조거팬츠</item>
-        <item>숏팬츠</item>
+        <item>스커트/반바지</item>
+        <item>긴바지</item>
         <item>기타 하의</item>
     </string-array>
     <string-array name="sub_menu3">
         <item>원피스</item>
-        <item>투피스</item>
-        <item>점프슈트</item>
     </string-array>
     <string-array name="sub_menu4">
-        <item>코트</item>
-        <item>재킷</item>
-        <item>패딩</item>
-        <item>후리스</item>
-        <item>카디건</item>
-        <item>기타 아우터</item>
-    </string-array>
-    <string-array name="sub_menu5">
-        <item>운동화</item>
-        <item>스니커즈</item>
-        <item>힐</item>
-        <item>플랫/슬리퍼</item>
+        <item>운동화/캔버스</item>
+        <item>샌들</item>
+        <item>구두</item>
         <item>부츠</item>
         <item>기타 신발</item>
     </string-array>
+    <string-array name="sub_menu5">
+        <item>악세서리</item>
+    </string-array>
     <string-array name="sub_menu6">
-        <item>모자</item>
-        <item>머플러/스카프</item>
-        <item>가방</item>
-        <item>벨트</item>
-        <item>기타 잡화</item>
+        <item>백팩</item>
+        <item>핸드백</item>
+        <item>기타 가방</item>
+    </string-array>
+    <string-array name="sub_menu7">
+        <item>캡모자</item>
+        <item>비니</item>
+        <item>버킷</item>
+        <item>베레모</item>
+        <item>기타 모자</item>
     </string-array>
 </resources>

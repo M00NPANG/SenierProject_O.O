@@ -13,4 +13,6 @@
     <color name="selected_tab_color">#FFC107</color>
     <color name="wrong">#FF2B2B</color>
     <color name="right">#89FF00</color>
+    <color name="half_white">#80FFFFFF</color>
+    <color name="transparent">#00000000</color>
 </resources>

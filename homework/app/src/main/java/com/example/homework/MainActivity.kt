@@ -2,15 +2,13 @@ package com.example.homework
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.R;
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-val ipAddr = "http://192.168.123.103:8080" // http://192.168.123.103:8080
+val ipAddr = "http://192.168.123.102:8080" //http://13.124.133.118:8080
 
 class MainActivity : AppCompatActivity() {
     lateinit var loginBtn : Button
@@ -18,9 +16,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var testBtn : Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(com.example.homework.R.layout.activity_main)
 
-
+        /*
         // 자동 로그인
         val loggedInEmail = SharedPreferencesUtils.loadEmail(this)
         // 로그인한 이메일이 있다면(즉, null이 아니라면) 사용자가 이미 로그인했다고 침
@@ -31,28 +29,23 @@ class MainActivity : AppCompatActivity() {
             finish()
         } else {
 
-        }
+        }*/
 
-        testBtn = findViewById(R.id.btnTest)
-        loginBtn = findViewById(R.id.btnLogin)
+        testBtn = findViewById(com.example.homework.R.id.btnTest)
+        test2Btn = findViewById(com.example.homework.R.id.btnTest2)
+        loginBtn = findViewById(com.example.homework.R.id.btnLogin)
 
         loginBtn.setOnClickListener {
             intent = Intent(this@MainActivity,LoginActivity::class.java)
             startActivity(intent)
         }
-        /*
         testBtn.setOnClickListener {
-            val bitmap = BitmapFactory.decodeResource(resources, R.drawable.test_cody)
-            lifecycleScope.launch(Dispatchers.IO) {
-                val endPoint = "/testUpload"
-                val url = ipAddr + endPoint
-                val uploadResult = uploadBitmap(bitmap,url)
-                launch(Dispatchers.Main) {
-                    // 결과를 UI에 표시하거나 처리
-                    Log.d("결과",uploadResult.toString())
-                }
-            }
-        }*/
+            startActivity(Intent(this@MainActivity,CoditestActivity::class.java))
+        }
+        test2Btn.setOnClickListener {
+            startActivity(Intent(this@MainActivity,CodyRecomen::class.java))
+        }
+
 
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/half_white</item>
 
     </style>
     <style name="box_Button" parent="Widget.MaterialComponents.Button">
@@ -11,7 +12,6 @@
     <style name="Theme.AppCompat.Dialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <!-- 여기에 다른 스타일 속성 추가 가능 -->
     </style>
 
 </resources>

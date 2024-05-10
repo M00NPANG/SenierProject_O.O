@@ -1,8 +1,11 @@
 package com.example.homework
 
 import android.graphics.Bitmap
-import android.graphics.Color
+import android.os.Parcelable
 import android.util.Log
+import kotlinx.parcelize.Parcelize
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 data class User(
     var user_id : Long? = null, // 시퀀스넘버
@@ -15,9 +18,9 @@ data class User(
     var user_img : String? = null,
 )
 
-
+@Parcelize
 data class Post(      // 추천받은 게시물
-    val post_id: Int?,
+    val post_id: Long?,
     val hashtag: String?,
     val content: String?,
     val title: String?,
@@ -27,10 +30,10 @@ data class Post(      // 추천받은 게시물
     val post_color : String?,
     val post_percol : String?,
     var isLiked: Boolean? = false
-)
+) : Parcelable
 
 data class CodyGridItem(  // 본인이만든 게시물
-    val post_id: Int? = null,
+    val post_id: Long? = null,
     val imagePath: String? = null,
     val title: String,
     val hashtag: String? = null,
@@ -41,15 +44,27 @@ data class CodyGridItem(  // 본인이만든 게시물
     val percol : String? = null
 )
 
+@Entity(tableName = "clothes")
 data class Clothes(
-    val cl_id: Int?,
-    val user_id : User?,
+    @PrimaryKey(autoGenerate = true) val cl_id: Int?,
+    val user_id : Int?,
     val cl_category: Int?,
     val cl_brand : String?,
     val cl_name : String?,
     val cl_price : String?,
     val cl_photo_path: String?,
-    val cl_personal_color : String?
+    val cl_personal_color : String?,
+    val cl_url : String? = null
+)
+
+data class selectedimage(
+    val si_id : Long?,
+    val height : Int?,
+    val width : Int?,
+    val imageUrl: String?,
+    val post_id : Long?,
+    val x : Float?,
+    val y : Float?
 )
 
 data class image(
@@ -114,11 +129,9 @@ object BitmapStorage { //액티비티간 이미지 전송하려고 만듬
 }
 
 
-
-
-object ClothesRepository { // CreateOutfitActivity에서 쓰려고 만듬
+object ClothesRepository {
     var allClothesUrls: MutableList<String> = mutableListOf()  // url
-    var mappedUrls : MutableMap<String, Int> = mutableMapOf() // 필요없음
+    var mappedUrls : MutableMap<String, Int> = mutableMapOf() // 필요없음. 지우면 연관된 다른거 문제생길까봐 냅둠
     var clothesData : MutableList<Clothes> = mutableListOf()  // 내가 찍어서 올린 옷들의 리스트
     var matchedClothes: MutableList<Clothes> = mutableListOf() // 내가 코디만들때 쓴 것들의 리스트
 
@@ -129,7 +142,7 @@ object ClothesRepository { // CreateOutfitActivity에서 쓰려고 만듬
         mappedUrls[url] = category
     }
     fun addClothesData(clothes: List<Clothes>) {
-        clothes.forEach { newCloth -> // 중복검사
+        clothes.forEach { newCloth -> // 중복검사하며 옷 데이터를 추가
             if (!clothesData.any { existingCloth -> existingCloth.cl_id == newCloth.cl_id }) {
                 clothesData.add(newCloth)
             }
@@ -146,7 +159,12 @@ object ClothesRepository { // CreateOutfitActivity에서 쓰려고 만듬
     }
     fun printAllUrls() {
         allClothesUrls.forEach { url ->
-           Log.d("현재 저장된 url들",url)
+            Log.d("현재 저장된 url들",url)
+        }
+    }
+    fun printAllClothes() {
+        clothesData.forEach { clothes ->
+            Log.d("옷 상세정보", "ID: ${clothes.cl_id}, Name: ${clothes.cl_name}, Category: ${clothes.cl_category}")
         }
     }
 
@@ -155,6 +173,49 @@ object ClothesRepository { // CreateOutfitActivity에서 쓰려고 만듬
     }
     fun returnClothes():MutableList<Clothes>{
         return matchedClothes
+    }
+    fun compareWithUrlCategory(imageUrl: String): Int? {
+        clothesData.forEach { clothes ->
+            if (clothes.cl_photo_path == imageUrl) {
+                return clothes.cl_category
+            }
+        }
+        return null // Return null if no matching photo path is found
+    }
+    fun getRandomClothes(range: IntRange): Clothes? {
+        return clothesData.filter { it.cl_category in range }
+            .shuffled()
+            .firstOrNull()
+    }
+
+    fun getRandomClothesByCategory(): List<Clothes> {
+        // 상의와 아우터를 동일한 카테고리로 간주하고 하나만 선택
+        val topOrOuter = listOf(1000..1999, 4000..4999).flatMap { range ->
+            clothesData.filter { it.cl_category in range }
+        }.shuffled().firstOrNull()
+
+        // 나머지 카테고리들 정의
+        val otherCategories = listOf(
+            2000..2999, // 하의
+            3000..3999, // 한벌옷
+            5000..5999, // 신발
+            6001..6001, // 모자
+            6002..6005  // 기타 패션 잡화
+        )
+
+        // 각 카테고리에서 랜덤하게 하나씩 선택
+        val selectedClothes = otherCategories.mapNotNull { category ->
+            clothesData.filter { it.cl_category in category }.shuffled().firstOrNull()
+        }.toMutableList()
+
+        // 상의/아우터가 선택되었다면 추가
+        topOrOuter?.let { selectedClothes.add(it) }
+
+        return selectedClothes
+    }
+
+    fun getClothesById(id: Int): Clothes? {
+        return clothesData.find { it.cl_id == id }
     }
 }
 

@@ -57,6 +57,7 @@ object ApiObject {
 
 class LobbyActivity : AppCompatActivity() {
     lateinit var recyclerView: RecyclerView
+    lateinit var storage : ImageView
     var wheather: String = ""
     var temperature : Int = 0
     var TO_GRID = 0
@@ -80,18 +81,19 @@ class LobbyActivity : AppCompatActivity() {
         setContentView(R.layout.activity_lobby)
 
         //초기화 부분
+        storage = findViewById(R.id.storage)
         recyclerView = findViewById(R.id.recommendedView)
         tvSky = findViewById(R.id.tvSky)
         tvTemp = findViewById(R.id.tvTemp)
         skyImg = findViewById(R.id.skyImg)
-        recyclerView.layoutManager = LinearLayoutManager(this@LobbyActivity)
-        postAdapter = PostAdapter(posts, lifecycleScope)
+        recyclerView.layoutManager = GridLayoutManager(this@LobbyActivity, 2)
+        postAdapter = PostAdapter(lifecycleScope)
         recyclerView.adapter = postAdapter
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         getCurrentLocation() // 현재 위치를 구하는 것 뿐 아니라 그 위치로 기상청 api에 날씨정보를 요청함
-        val closet : ImageView = findViewById(R.id.closet)
 
         // 하단 메뉴바이고, 나중에 간략화하기
+        val closet : ImageView = findViewById(R.id.closet)
         closet.setOnClickListener{
             intent = Intent(this@LobbyActivity,ClosetActivity::class.java)
             startActivity(intent)
@@ -102,10 +104,14 @@ class LobbyActivity : AppCompatActivity() {
             finish()
             startActivity(intent)
         }
+        storage.setOnClickListener {
+            startActivity(Intent(this,StorageActivity::class.java))
+
+        }
 
 
         // 서버로부터 코디를 받고 띄움
-        loadRecommendedPosts(SharedPreferencesUtils.loadEmail(this).toString())
+        //loadRecommendedPosts(SharedPreferencesUtils.loadEmail(this).toString())
     }
     private fun getCurrentLocation() { // 현재 위도경도를 구하고 그걸 격자로 바꾸고 그걸로 api 통신
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

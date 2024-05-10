@@ -38,10 +38,13 @@ class CategoryActivity : AppCompatActivity() {
         val originalBitmap = BitmapStorage.Bitmap
         val originalWidth = originalBitmap!!.width
         val originalHeight = originalBitmap.height
-        val newWidth = (originalWidth * 0.6).toInt()
-        val newHeight = (originalHeight * 0.6).toInt()
+        val newWidth = (originalWidth * 0.65).toInt()
+        val newHeight = (originalHeight * 0.65).toInt()
+        Log.d("현재 가로 /세로","$originalWidth , $originalHeight")
         val bitmap2 = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true)
-        val bitmap = removeSemiTransparentPixels(bitmap2)
+
+        val processedBitmap = removeSemiTransparentPixels(bitmap2)
+        val bitmap = scaleBitmapToOriginalSize(processedBitmap, originalBitmap.width, originalBitmap.height) // 원래 크기로 확대
 
         okButton = findViewById(R.id.okButton)
         colorTextView = findViewById(R.id.colorTextView)
@@ -92,26 +95,29 @@ class CategoryActivity : AppCompatActivity() {
                     3 -> 30
                     4 -> 40
                     5 -> 50
+                    6 -> 70
                     else -> 0
                 }
                 maxItems = when(position){ // 선택한 메뉴에 따른 최대 서브메뉴 수
-                    0->5
-                    1->6
-                    2->7
-                    3->3
-                    4->6
-                    5->6
+                    0->3  // 가방
+                    1->3  // 상의
+                    2->3  // 하의
+                    3->1  // 원피스
+                    4->5  // 신발
+                    5->1  // 악세서리
+                    6->5  // 모자
                     else -> 0
                 }
 
                 // 서브 메뉴 리소스 배열 ID 설정
                 val subMenuArrayId = when (position) {
-                    0 -> R.array.sub_menu6 // 패션 잡화
+                    0 -> R.array.sub_menu6 // 가방
                     1 -> R.array.sub_menu1 // 상의
                     2 -> R.array.sub_menu2 // 하의
-                    3 -> R.array.sub_menu3 // 하의(기타)
-                    4 -> R.array.sub_menu4 // 아우터
-                    5 -> R.array.sub_menu5 // 신발
+                    3 -> R.array.sub_menu3 // 한벌옷
+                    4 -> R.array.sub_menu4 // 신발
+                    5 -> R.array.sub_menu5 // 악세서리
+                    6 -> R.array.sub_menu7 // 모자
                     else -> 0 // 오류
                 }
 
@@ -172,23 +178,12 @@ class CategoryActivity : AppCompatActivity() {
         finish()
     }
 
-    /*private fun findClosestColor(hexColor: String): MyColor {
-        // 매개변수로 받은 hexColor에서 Alpha 값을 제외하고, RGB 값만 추출
-        val r = Integer.parseInt(hexColor.substring(2, 4), 16)
-        val g = Integer.parseInt(hexColor.substring(4, 6), 16)
-        val b = Integer.parseInt(hexColor.substring(6, 8), 16)
-        Log.d("r,g,b","$r, $g, $b")
-        return MyColors.minByOrNull {
-            val distance = Math.sqrt(((it.r - r) * (it.r - r) + (it.g - g) * (it.g - g) + (it.b - b) * (it.b - b)).toDouble())
-            distance
-        } ?: MyColors.first() // 기본값으로 첫 번째 색상을 반환, 이 부분은 상황에 따라 다르게 처리 가능
-    }*/
-
+    //불투명도 날려버리기
     private fun removeSemiTransparentPixels(originalBitmap: Bitmap): Bitmap {
-        // 동일한 크기의 Bitmap을 생성하여 결과를 저장
+        // 결과를 저장할 동일한 크기의 Bitmap 생성
         val resultBitmap = Bitmap.createBitmap(originalBitmap.width, originalBitmap.height, Bitmap.Config.ARGB_8888)
 
-        // 모든 픽셀을 순회
+        // 모든 픽셀을 순회하면서 처리
         for (x in 0 until originalBitmap.width) {
             for (y in 0 until originalBitmap.height) {
                 val pixel = originalBitmap.getPixel(x, y)
@@ -198,12 +193,19 @@ class CategoryActivity : AppCompatActivity() {
                 if (alpha < 128) {
                     resultBitmap.setPixel(x, y, Color.TRANSPARENT)
                 } else {
-                    resultBitmap.setPixel(x, y, pixel)
+                    // 불투명도가 50% 이상인 경우, 픽셀을 완전 불투명하게 설정
+                    resultBitmap.setPixel(x, y, Color.argb(255, Color.red(pixel), Color.green(pixel), Color.blue(pixel)))
                 }
             }
         }
 
         return resultBitmap
+    }
+
+
+    // 이 함수를 사용하여 이미지의 불투명도를 조정한 후, 원래 크기로 확대합니다.
+    private fun scaleBitmapToOriginalSize(processedBitmap: Bitmap, originalWidth: Int, originalHeight: Int): Bitmap {
+        return Bitmap.createScaledBitmap(processedBitmap, originalWidth, originalHeight, true)
     }
 
 }

@@ -188,3 +188,32 @@ suspend fun receiveRecommendedClothes(email: String, cl_category : Int): List<Cl
 
     return@withContext clothesList
 }
+
+suspend fun receiveSelectedimage(post_id : Long): List<selectedimage> = withContext(Dispatchers.IO) {
+    val selectedImageList = mutableListOf<selectedimage>()
+    try {
+        // URL에 email과 cl_id를 포함하여 서버로 전송
+        val url = "$ipAddr/receiveSelectedimage?post_id=$post_id"
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        val client = OkHttpClient()
+        val response = client.newCall(request).execute()
+
+        if (response.isSuccessful) {
+            response.body?.string()?.let { responseBody ->
+                val gson = Gson()
+                val listType: Type = object : TypeToken<List<selectedimage>>() {}.type
+                val fetchedSelectedImageList: List<selectedimage> = gson.fromJson(responseBody, listType)
+                selectedImageList.addAll(fetchedSelectedImageList)
+            }
+        }
+        Log.d("전달받은결과", selectedImageList.toString())
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+
+    return@withContext selectedImageList
+}

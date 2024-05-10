@@ -66,7 +66,7 @@ fun uploadCodiSet(bitmap: Bitmap, title: String, hashtag: hashtag, comment: Stri
     val byteArray = stream.toByteArray()
     val gson = Gson()
     val styleJson = gson.toJson(hashtag)
-
+    val selectedImages = gson.toJson(choicesImageList)
     // 멀티파트 바디 구성
     val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
         .addFormDataPart("image", "codi_image.jpg",
@@ -76,6 +76,7 @@ fun uploadCodiSet(bitmap: Bitmap, title: String, hashtag: hashtag, comment: Stri
         .addFormDataPart("comment", comment)
         .addFormDataPart("useremail", useremail)
         .addFormDataPart("main_percol", main_percol)
+        .addFormDataPart("selectedImages", selectedImages)
         .build()
 
     // 요청 생성 (post)

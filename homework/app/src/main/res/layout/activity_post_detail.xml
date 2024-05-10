@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- 상단 툴바 영역 -->
+    <LinearLayout
+        android:id="@+id/topToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/gradient_top">
+
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/test_user"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"/>
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용자"
+            android:fontFamily="@font/main_font"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"/>
+
+    </LinearLayout>
+
+    <!-- 상단 영역: 누끼 옷 배치 -->
+    <FrameLayout
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </FrameLayout>
+
+    <!-- 구분선 -->
+
+
+    <!-- 검색창 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:background="@drawable/gradient_bottom">
+        <TextView
+            android:id="@+id/codyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="코디이름"
+            android:fontFamily="@font/main_font"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"/>
+
+        <TextView
+            android:id="@+id/tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="#태그들"
+            android:fontFamily="@font/main_font"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/heart"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/heart"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/comment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/main_font"
+        android:textStyle="bold"/>
+
+
+
+
+</LinearLayout>

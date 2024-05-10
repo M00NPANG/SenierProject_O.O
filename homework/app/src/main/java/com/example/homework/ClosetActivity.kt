@@ -58,7 +58,6 @@ class ClosetActivity : AppCompatActivity() {
     private lateinit var homeButton : ImageView
     private lateinit var storageButton : ImageView
     private lateinit var closetButton : ImageView
-    private lateinit var bellButton : ImageView
     private lateinit var userButton : ImageView
     private lateinit var currentPhotoUri: Uri
     private val REQUEST_IMAGE_CAPTURE = 1
@@ -106,7 +105,6 @@ class ClosetActivity : AppCompatActivity() {
         homeButton = findViewById(R.id.home)
         closetButton = findViewById(R.id.closet)
         storageButton = findViewById(R.id.storage)
-        bellButton = findViewById(R.id.bell)
         userButton = findViewById(R.id.user)
         gridLayoutCody = findViewById(R.id.gridLayoutCody)
 
@@ -134,16 +132,12 @@ class ClosetActivity : AppCompatActivity() {
             // 저장소 버튼 클릭 시의 동작
         }
 
-        bellButton.setOnClickListener {
-            // 알림 버튼 클릭 시의 동작
-        }
-
         userButton.setOnClickListener {
             // 사용자 버튼 클릭 시의 동작
         }
     }
 
-
+    /* 코디세트 제작기능을 없앨것이므로 주석처리하여 제외
     private fun addCodyItemsToGridLayout(codyItems: List<CodyGridItem>) { // 본인이 만든 코디세트를 띄움
         codyItems.forEach { item ->
             val codyView = LayoutInflater.from(this).inflate(R.layout.item_post, gridLayoutCody, false)
@@ -173,13 +167,30 @@ class ClosetActivity : AppCompatActivity() {
                 10f,
                 resources.displayMetrics
             ).toInt()
-
             layoutParams.rightMargin = pixels
             layoutParams.bottomMargin = pixels
 
+            imageView.setOnClickListener {
+                val intent = Intent(this@ClosetActivity, PostDetailActivity::class.java)
+                val post = Post(
+                    post_id = item.post_id,
+                    imagePath = item.imagePath,
+                    hashtag = item.hashtag,
+                    content = item.content,
+                    title = item.content,
+                    userEmail = item.useremail,
+                    userName = item.username,
+                    post_color = null,
+                    post_percol = null,
+                    isLiked = false  // 기본값으로 false 설정
+                )
+                intent.putExtra("post",post)
+                startActivity(intent)
+            }
+
             gridLayoutCody.addView(codyView, layoutParams)
         }
-    }
+    }*/
 
     suspend fun checkCategory(clothesList: List<Clothes>): List<ClothCategory> {
         ClothesRepository.clearClothesUrls()
@@ -303,7 +314,7 @@ class ClosetActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val clothesList = receiveClothes(email) // 서버로부터 데이터 받아오기
                 val categories = checkCategory(clothesList) // 데이터 분류
-
+                //ClothesRepository.addClothesData(clothesList)
                 withContext(Dispatchers.Main) {
                     // 분류된 데이터로 RecyclerView 업데이트
                     clothesAdapter = ClothesAdapter(categories)
@@ -319,11 +330,12 @@ class ClosetActivity : AppCompatActivity() {
 
             gridLayoutCody.removeAllViews() // 기존에 있는 뷰를 제거
             CoroutineScope(Dispatchers.Main).launch {
-                val codyItems = receivePosts(email) // 서버로부터 데이터를 받아옴
-                addCodyItemsToGridLayout(codyItems) // UI 업데이트
+                //코디제작기능을 없앴으므로 주석처리하여 제외함. 추후 post 저장기능 생성 후 다시 만들기
+                //val codyItems = receivePosts(email) // 서버로부터 데이터를 받아옴
+                //addCodyItemsToGridLayout(codyItems) /
                 recyclerView.visibility = View.GONE
                 gridLayoutCody.visibility = View.VISIBLE
-                Log.d("받은결과", codyItems.toString())
+                //Log.d("받은결과", codyItems.toString())
             }
 
         }

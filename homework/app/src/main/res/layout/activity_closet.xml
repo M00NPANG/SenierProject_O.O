@@ -145,15 +145,6 @@
             android:src="@drawable/closet" />
 
         <ImageView
-            android:id="@+id/bell"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:padding="16dp"
-            android:src="@drawable/bell" />
-
-        <ImageView
             android:id="@+id/user"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

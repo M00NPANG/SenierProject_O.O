@@ -1,99 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginBottom="10dp">
+    android:background="@drawable/black_border"
+    android:layout_marginLeft="3dp"
+    android:layout_marginTop="3dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@drawable/gradient_top">
-
+    <!-- 가운데 상단 사각형 -->
+    <FrameLayout
+        android:id="@+id/shirt_box"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
         <ImageView
-            android:id="@+id/userImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/test_user"
-            android:layout_marginTop="7dp"/>
-
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="사용자"
-            android:fontFamily="@font/main_font"
-            android:textStyle="bold"
-            android:layout_marginTop="18dp"
-            android:layout_marginLeft="5dp"/>
-
-        <TextView
-            android:id="@+id/subscribe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:fontFamily="@font/main_font"
-            android:layout_marginTop="18dp"
-            android:layout_marginLeft="260dp"/>
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/uploadedImageView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/test_cody" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@drawable/gradient_bottom">
-
-        <TextView
-            android:id="@+id/codyName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="코디이름"
-            android:fontFamily="@font/main_font"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="25dp"/>
-
-        <TextView
-            android:id="@+id/tags"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="#태그들"
-            android:fontFamily="@font/main_font"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="25dp"/>
-
-        <View
-            android:layout_width="0dp"
+            android:id="@+id/shirt_image_view"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
 
+    <!-- 가운데 중간 사각형 -->
+    <FrameLayout
+        android:id="@+id/pants_box"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        app:layout_constraintTop_toBottomOf="@id/shirt_box"
+        app:layout_constraintStart_toStartOf="@id/shirt_box"
+        app:layout_constraintEnd_toEndOf="@id/shirt_box">
         <ImageView
-            android:id="@+id/heart"
-            android:layout_width="21dp"
-            android:layout_height="21dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/heart"/>
-        <!--android:src="@drawable/heart"-->
-        <!--
-        <TextView
-            android:id="@+id/heart_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:fontFamily="@font/main_font"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="25dp"/>   -->
+            android:id="@+id/pants_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
 
+    <!-- 한벌옷 사각형 -->
+    <FrameLayout
+        android:id="@+id/onepiece_box"
+        android:layout_width="80dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageView
+            android:id="@+id/onepiece_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
 
-    </LinearLayout>
+    <!-- 가운데 하단 사각형 -->
+    <FrameLayout
+        android:id="@+id/shoes_box"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintTop_toBottomOf="@id/pants_box"
+        app:layout_constraintStart_toStartOf="@id/pants_box"
+        app:layout_constraintEnd_toEndOf="@id/pants_box"
+        android:background="@drawable/black_border">
+        <ImageView
+            android:id="@+id/shoes_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
 
-</LinearLayout>
+    <!-- 좌측 사각형 -->
+    <FrameLayout
+        android:id="@+id/etc_box"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintTop_toTopOf="@id/shoes_box"
+        app:layout_constraintBottom_toBottomOf="@id/shoes_box"
+        app:layout_constraintEnd_toStartOf="@id/shoes_box"
+        android:layout_marginEnd="3dp"
+        android:background="@drawable/black_border">
+        <ImageView
+            android:id="@+id/etc_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
+
+    <!-- 우측 사각형 -->
+    <FrameLayout
+        android:id="@+id/hat_box"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintTop_toTopOf="@id/shoes_box"
+        app:layout_constraintBottom_toBottomOf="@id/shoes_box"
+        app:layout_constraintStart_toEndOf="@id/shoes_box"
+        android:layout_marginStart="3dp"
+        android:background="@drawable/black_border">
+        <ImageView
+            android:id="@+id/hat_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
