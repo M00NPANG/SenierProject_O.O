@@ -10,9 +10,8 @@ public class Clothes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cl_id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id") // User 테이블의 기본키를 참조하는 외래키로 지정
-    private User user_id;
+    @Column(name = "user_id")
+    private Long userId;
 
     private Long cl_category;
     private String cl_brand;
@@ -22,12 +21,11 @@ public class Clothes {
     private String cl_personal_color;
 
     // 생성자
-
     public Clothes() {}
 
-    public Clothes(Long cl_id, User user_id, Long cl_category, String cl_brand, String cl_name, Long cl_price, String cl_photo_path, String cl_personal_color) {
+    public Clothes(Long cl_id, Long userId, Long cl_category, String cl_brand, String cl_name, Long cl_price, String cl_photo_path, String cl_personal_color) {
         this.cl_id = cl_id;
-        this.user_id = user_id;
+        this.userId = userId;
         this.cl_category = cl_category;
         this.cl_brand = cl_brand;
         this.cl_name = cl_name;
@@ -46,12 +44,12 @@ public class Clothes {
         this.cl_id = cl_id;
     }
 
-    public User getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(User user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long user_id) {
+        this.userId = user_id;
     }
 
     public Long getCl_category() {

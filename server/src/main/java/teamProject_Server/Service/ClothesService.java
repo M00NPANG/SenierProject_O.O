@@ -13,7 +13,8 @@ import java.util.List;
 public class ClothesService {
     private final ClothesRepository clothesRepository;
     private final UserRepository userRepository;
-
+    @Autowired
+    private UserService userService; // UserService 주입
     @Autowired
     public ClothesService(ClothesRepository clothesRepository, UserRepository userRepository) {
         this.clothesRepository = clothesRepository;
@@ -24,24 +25,11 @@ public class ClothesService {
         clothesRepository.save(clothes);
     }
 
-    // 특정 사용자의 모든 옷 목록 조회
-    public List<Clothes> findAllClothesByUserEmail(String userEmail) {
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("해당 이메일의 사용자를 찾을 수 없습니다: " + userEmail));
-        return clothesRepository.findByUser(user);
+    // 이메일로 해당 유저의 옷아이템 전송
+    public List<Clothes> getClothesByEmail(String email) {
+        Long userId = userService.getUserIdByEmail(email); // 이메일로 user_id를 가져옴
+        return clothesRepository.findByUserId(userId); // 해당 user_id를 가진 모든 Clothes를 반환
     }
 
-    // 백의 자리 카테고리 확인하여 일치하는 옷 목록 조회
-    public List<Clothes> findByUserAndCategoryHundred(String userEmail, Long category) {
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("해당 이메일의 사용자를 찾을 수 없습니다: " + userEmail));
-        return clothesRepository.findByUserAndCategoryHundred(user, category);
-    }
 
-    // 특정 사용자의 특정 카테고리 옷 목록 조회
-    public List<Clothes> findClothesByUserEmailAndCategory(String userEmail, Long category) {
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("해당 이메일의 사용자를 찾을 수 없습니다: " + userEmail));
-        return clothesRepository.findByUserAndClCategory(user, category);
-    }
 }

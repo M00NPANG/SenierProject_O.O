@@ -4,9 +4,7 @@ CREATE DATABASE outfitoracle;
 
 USE outfitoracle;
 
-
-
--- USER TABLE STRUCTURE good--
+-- USER TABLE STRUCTURE --
 CREATE TABLE user (
   user_id INT NOT NULL AUTO_INCREMENT,
   password VARCHAR(255) NOT NULL,

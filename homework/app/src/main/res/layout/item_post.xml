@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="@drawable/gradient_top">
+
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/test_user"
+            android:layout_marginTop="7dp"/>
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용자"
+            android:fontFamily="@font/main_font"
+            android:textStyle="bold"
+            android:layout_marginTop="18dp"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:id="@+id/subscribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="구독"
+            android:fontFamily="@font/main_font"
+            android:layout_marginTop="18dp"
+            android:layout_marginLeft="260dp"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/uploadedImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/test_cody" />
+>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="@drawable/gradient_bottom">
+
+        <TextView
+            android:id="@+id/codyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="코디이름"
+            android:fontFamily="@font/main_font"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"/>
+
+        <TextView
+            android:id="@+id/tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="#태그들"
+            android:fontFamily="@font/main_font"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/heart"
+            android:layout_marginLeft="240dp"
+            android:layout_marginTop="25dp"/>
+
+        <TextView
+            android:id="@+id/heart_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xx"
+            android:fontFamily="@font/main_font"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -17,20 +17,20 @@ public class User {
     private String user_color;
     private String user_style;
 
-
+    private String user_img;
     // 생성자
 
     public User() {
     }
 
-    public User(String email, String password, String name, String user_percol, String user_color, String user_style) {
+    public User(String email, String password, String name, String user_percol, String user_color, String user_style, String user_img) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.user_percol = user_percol;
         this.user_color = user_color;
         this.user_style = user_style;
-
+        this.user_img = user_img;
     }
 
     // Getter 및 Setter
@@ -90,4 +90,9 @@ public class User {
     public void setUser_style(String user_style) {
         this.user_style = user_style;
     }
+
+    public String getUser_img() {
+        return user_img;
+    }
+    public void setUser_img(String user_img) {this.user_img = user_img;}
 }
