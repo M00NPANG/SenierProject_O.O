@@ -46,14 +46,14 @@ data class CodyGridItem(  // 본인이만든 게시물
 
 @Entity(tableName = "clothes")
 data class Clothes(
-    @PrimaryKey(autoGenerate = true) val cl_id: Int?,
-    val user_id : Int?,
-    val cl_category: Int?,
-    val cl_brand : String?,
-    val cl_name : String?,
-    val cl_price : String?,
-    val cl_photo_path: String?,
-    val cl_personal_color : String?,
+    @PrimaryKey(autoGenerate = true) val cl_id: Int? = null,
+    val user_id : Int?= null,
+    val cl_category: Int?= null,
+    val cl_brand : String?= null,
+    val cl_name : String?= null,
+    val cl_price : String?= null,
+    val cl_photo_path: String?= null,
+    val cl_personal_color : String?= null,
     val cl_url : String? = null
 )
 
@@ -126,6 +126,32 @@ data class UserPreferenceUpdateRequest(
 
 object BitmapStorage { //액티비티간 이미지 전송하려고 만듬
     var Bitmap: Bitmap? = null
+}
+
+data class OutfitDTO(
+    val topImageUrl:String?,
+    val bottomImageUrl : String?,
+    val dressImageUrl : String?
+)
+
+data class postReceive(
+    val post_id : Long?,
+    val userEmail : String?,
+    val top_url: String?,
+    val bottom_url: String?,
+    val shoes_url: String?,
+    val accessories_url: String?,
+    val bag_url: String?
+)
+
+object tempStorage{
+    private var temperature : Long = 0
+    fun setTemp(temper : Long){
+        temperature = temper
+    }
+    fun getTemp() : Long{
+        return temperature
+    }
 }
 
 

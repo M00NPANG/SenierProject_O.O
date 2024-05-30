@@ -8,7 +8,7 @@
         android:id="@+id/clothImage"
         android:layout_width="150dp"
         android:layout_height="150dp" />
-    <View
+    <!--<View
         android:layout_width="match_parent"
         android:layout_height="2dp"/>
     <ImageView
@@ -16,5 +16,5 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="center"
-        android:src="@drawable/download"/>
+        android:src="@drawable/download"/>-->
 </LinearLayout>

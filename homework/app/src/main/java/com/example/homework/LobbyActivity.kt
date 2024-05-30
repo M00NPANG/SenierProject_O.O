@@ -6,12 +6,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityCompat
 import androidx.core.location.LocationManagerCompat.getCurrentLocation
 import androidx.lifecycle.lifecycleScope
@@ -54,7 +57,6 @@ object ApiObject {
     }
 }
 
-
 class LobbyActivity : AppCompatActivity() {
     lateinit var recyclerView: RecyclerView
     lateinit var storage : ImageView
@@ -73,21 +75,28 @@ class LobbyActivity : AppCompatActivity() {
     var time : String = ""
     private lateinit var postAdapter: PostAdapter
     private val posts = mutableListOf<Post>()
-
+    private lateinit var mixBtn : Button
+    private lateinit var closetBtn : Button
+    private lateinit var interestBtn : Button
+    private lateinit var shopBtn : Button
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
+    private lateinit var tempCheckBox : CheckBox
+    private var tempStatus : Int = 0
+    private var temper : Int = 10
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lobby)
-
         //초기화 부분
+        mixBtn = findViewById(R.id.mixBtn)
+        closetBtn = findViewById(R.id.closetBtn)
+        shopBtn = findViewById(R.id.shopBtn)
         storage = findViewById(R.id.storage)
         recyclerView = findViewById(R.id.recommendedView)
         tvSky = findViewById(R.id.tvSky)
         tvTemp = findViewById(R.id.tvTemp)
         skyImg = findViewById(R.id.skyImg)
         recyclerView.layoutManager = GridLayoutManager(this@LobbyActivity, 2)
-        postAdapter = PostAdapter(lifecycleScope)
+        postAdapter = PostAdapter(this@LobbyActivity,lifecycleScope,0,2)
         recyclerView.adapter = postAdapter
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         getCurrentLocation() // 현재 위치를 구하는 것 뿐 아니라 그 위치로 기상청 api에 날씨정보를 요청함
@@ -106,9 +115,37 @@ class LobbyActivity : AppCompatActivity() {
         }
         storage.setOnClickListener {
             startActivity(Intent(this,StorageActivity::class.java))
+        }
+        val user: ImageView = findViewById(R.id.user)
+        user.setOnClickListener {
+            startActivity(Intent(this,UserActivity::class.java))
+        }
+        shopBtn.setOnClickListener{
+            tempStatus = if(tempCheckBox.isChecked) 1 else 0
+            postAdapter = PostAdapter(this@LobbyActivity,lifecycleScope,tempStatus,3)
+            recyclerView.adapter = postAdapter
 
         }
+        mixBtn.setOnClickListener {
+            tempStatus = if (tempCheckBox.isChecked) 1 else 0
+            postAdapter = PostAdapter(this@LobbyActivity,lifecycleScope,tempStatus,2)
+            recyclerView.adapter = postAdapter
 
+        }
+        closetBtn.setOnClickListener {
+            tempStatus = if (tempCheckBox.isChecked) 1 else 0
+            postAdapter = PostAdapter(this@LobbyActivity,lifecycleScope,tempStatus,1)
+            recyclerView.adapter = postAdapter
+
+        }
+        tempCheckBox =findViewById(R.id.tempCheckBox)
+        tempCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            tempStatus = if (isChecked) 1 else 0
+            postAdapter = PostAdapter(this@LobbyActivity, lifecycleScope, tempStatus, 2)
+            recyclerView.adapter = postAdapter
+
+
+        }
 
         // 서버로부터 코디를 받고 띄움
         //loadRecommendedPosts(SharedPreferencesUtils.loadEmail(this).toString())
@@ -190,6 +227,7 @@ class LobbyActivity : AppCompatActivity() {
 
                             // 토스트 띄우기
                             Toast.makeText(applicationContext, items[0].fcstDate + ", " + items[0].fcstTime + "의 날씨 정보입니다.", Toast.LENGTH_SHORT).show()
+
                         } else {
                             // items가 null이거나 크기가 10보다 작을 때의 처리
                         }
@@ -241,6 +279,7 @@ class LobbyActivity : AppCompatActivity() {
         // 온도
         tvTemp.text = temp + "°"
         temperature = temp.toInt()
+        tempStorage.setTemp(temperature.toLong())
         updateClothesIcons(wheather, temperature)
     }
 
@@ -366,10 +405,9 @@ class LobbyActivity : AppCompatActivity() {
             // receiveRecommendPosts 함수 호출을 통해 직접 Post 객체의 리스트를 받음
             val recommendedPosts = receiveRecommendPosts(email)
             // posts 리스트를 받아온 데이터로 업데이트
-            // 여기서 posts는 PostAdapter에 전달될 데이터 리스트입니다.
             posts.clear()
             posts.addAll(recommendedPosts)
-            postAdapter.notifyDataSetChanged() // 어댑터에 데이터 변경을 알려 UI를 업데이트합니다.
+            postAdapter.notifyDataSetChanged()
         }
     }
 
@@ -401,12 +439,11 @@ class LobbyActivity : AppCompatActivity() {
                 setOnClickListener {
                     // 태그를 사용하여 식별자 ID를 가져옴
                     val cl_id = it.tag as? Int ?: 0 // 태그가 없는 경우 0을 기본값으로 사용
-                    // cl_id를 사용한 동작, 예를 들어 토스트 메시지 표시
                     Toast.makeText(this@LobbyActivity, "Clicked Icon ID: $cl_id", Toast.LENGTH_SHORT).show()
 
                     // Intent를 생성하여 ClothesDetailActivity를 시작하고, cl_id를 전달
                     val intent = Intent(this@LobbyActivity, ClothesDatailActivity::class.java).apply {
-                        putExtra("CL_ID", cl_id) // "CL_ID"는 key로, cl_id는 전달될 값입니다.
+                        putExtra("CL_ID", cl_id) // "CL_ID"는 key로, cl_id는 전달될 값
                     }
                     startActivity(intent)
                 }
@@ -430,6 +467,6 @@ class LobbyActivity : AppCompatActivity() {
 val iconMap = mapOf(
     R.drawable.shirt_icon to 1001,
     R.drawable.pants_icon to 2002,
-    R.drawable.hat_icon to 6001
+    R.drawable.hat_icon to 7001,
     // 여기에 더 많은 아이콘과 식별자 매핑 추가
 )

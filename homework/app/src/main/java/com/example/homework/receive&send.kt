@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.FormBody
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -216,4 +217,63 @@ suspend fun receiveSelectedimage(post_id : Long): List<selectedimage> = withCont
     }
 
     return@withContext selectedImageList
+}
+
+// 유저의 퍼스널컬러 다시확인하는 용도
+suspend fun checkUserPersonalColor(email: String): String = withContext(Dispatchers.IO) {
+    var percol: String = ""
+    try {
+        val url = "$ipAddr/api/checkPercol"
+        val requestBody = FormBody.Builder()
+            .add("email", email)
+            .build()
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+        val client = OkHttpClient()
+        val response = client.newCall(request).execute()
+
+        if (response.isSuccessful) {
+            response.body?.string()?.let { responseBody ->
+                percol = responseBody
+            }
+        } else {
+            percol = "퍼스널컬러 받아오는데 실패했습니다"
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return@withContext percol
+}
+
+
+// 유저의 얼굴사진 띄움
+suspend fun getFaceUrl(email: String): String = withContext(Dispatchers.IO) {
+    var faceUrl: String = ""
+    try {
+        val url = "$ipAddr/api/getUserFaceUrl"
+        val requestBody = FormBody.Builder()
+            .add("email", email)
+            .build()
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+        val client = OkHttpClient()
+        val response = client.newCall(request).execute()
+
+        if (response.isSuccessful) {
+            response.body?.string()?.let { responseBody ->
+                faceUrl = responseBody
+            }
+        } else {
+            faceUrl = "받아오는데 실패함"
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return@withContext faceUrl
 }

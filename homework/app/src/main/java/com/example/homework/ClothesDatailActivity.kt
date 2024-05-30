@@ -43,7 +43,6 @@ class ClothesDatailActivity : AppCompatActivity() {
             gridView.adapter = adapter
         }
 
-
     }
 }
 
@@ -72,13 +71,13 @@ class CustomAdapter(private val context: Context, private val items: List<Clothe
             Toast.makeText(context, "Cloth Image Clicked!", Toast.LENGTH_SHORT).show()
         }
 
-        // 다운로드 아이콘 ImageView
+        /*// 다운로드 아이콘 ImageView
         val downloadImageView = itemView.findViewById<ImageView>(R.id.download_img) // xml 파일에 정의된 다운로드 아이콘 ImageView의 id를 사용하세요
         // 다운로드 아이콘 클릭 리스너 설정
         downloadImageView.setOnClickListener {
             // 여기에 클릭 시 수행할 다운로드 관련 작업 작성
             Toast.makeText(context, "Download Icon Clicked!", Toast.LENGTH_SHORT).show()
-        }
+        }*/
         return itemView
     }
 }

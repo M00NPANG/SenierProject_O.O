@@ -126,11 +126,35 @@
                     android:textSize="30dp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/tvWeatherLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="80dp"
+                    android:text="날씨"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20dp"
+                    android:textStyle="bold"/>
+
+                <CheckBox
+                    android:id="@+id/tempCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_below="@id/tvWeatherLabel"
+                    android:layout_marginTop="5dp"
+                    android:buttonTint="@color/white"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"/>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constrainedWidth="true"
-                    android:layout_marginTop="145dp"
+                    android:layout_marginTop="155dp"
                     android:background="#B3FFFFFF">
                     <LinearLayout
                         android:id="@+id/clothesIconContainer"
@@ -142,6 +166,7 @@
                 </RelativeLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/shopBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/lobby_button"
@@ -150,20 +175,10 @@
                     android:fontFamily="@font/main_font"
                     android:textColor="#6F6F6F"
                     android:layout_marginTop="225dp"
-                    android:layout_marginLeft="5dp"/>
+                    android:layout_marginLeft="10dp"/>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/lobby_button"
-                    android:text="관심"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/main_font"
-                    android:textColor="#6F6F6F"
-                    android:layout_marginTop="225dp"
-                    android:layout_marginLeft="110dp"/>
-
-                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/closetBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/lobby_button"
@@ -172,9 +187,10 @@
                     android:fontFamily="@font/main_font"
                     android:textColor="#6F6F6F"
                     android:layout_marginTop="225dp"
-                    android:layout_marginLeft="215dp"/>
+                    android:layout_marginLeft="160dp"/>
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/mixBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/lobby_button"
@@ -183,7 +199,8 @@
                     android:fontFamily="@font/main_font"
                     android:textColor="#6F6F6F"
                     android:layout_marginTop="225dp"
-                    android:layout_marginLeft="320dp"/>
+                    android:layout_marginLeft="305dp"/>
+
 
             </RelativeLayout>
 

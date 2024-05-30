@@ -25,8 +25,11 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 
+
 class StorageActivity : AppCompatActivity() {
     lateinit var gridView: GridView
+    lateinit var emptyCartTextView: TextView
+    lateinit var emptyCartIcon: ImageView
     lateinit var clothesList: MutableList<Clothes>
     lateinit var adapter: StorageAdapter
 
@@ -35,15 +38,24 @@ class StorageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_storage)
 
         gridView = findViewById(R.id.gridViewToStorage)
+        emptyCartTextView = findViewById(R.id.tvEmptyCart)
+        emptyCartIcon = findViewById(R.id.emptyCartIcon)
 
         // clothes 데이터베이스에서 모든 clothes 데이터 가져오기
         lifecycleScope.launch {
             clothesList = loadClothesData().toMutableList()
-            // 어댑터를 생성하고 GridView에 설정
-            adapter = StorageAdapter(this@StorageActivity, clothesList)
-            gridView.adapter = adapter
+            if (clothesList.isEmpty()) {
+                emptyCartTextView.visibility = View.VISIBLE
+                emptyCartIcon.visibility = View.VISIBLE
+                gridView.visibility = View.GONE
+            } else {
+                adapter = StorageAdapter(this@StorageActivity, clothesList)
+                gridView.adapter = adapter
+                emptyCartTextView.visibility = View.GONE
+                emptyCartIcon.visibility = View.GONE
+                gridView.visibility = View.VISIBLE
+            }
         }
-
     }
 
     // suspend 함수를 사용하여 clothes 데이터 로드
@@ -53,7 +65,7 @@ class StorageActivity : AppCompatActivity() {
         }
     }
 
-    //휴지통버튼을 눌렀을 떄
+    // 휴지통 버튼을 눌렀을 때
     fun deleteClothes(clothes: Clothes) {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
@@ -61,6 +73,10 @@ class StorageActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     clothesList.remove(clothes)
                     adapter.notifyDataSetChanged()
+                    if (clothesList.isEmpty()) {
+                        emptyCartTextView.visibility = View.VISIBLE
+                        gridView.visibility = View.GONE
+                    }
                     Toast.makeText(this@StorageActivity, "삭제 성공", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
@@ -71,8 +87,6 @@ class StorageActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }
 
 class StorageAdapter(context: Context, private val clothesList: List<Clothes>) :
@@ -102,7 +116,6 @@ class StorageAdapter(context: Context, private val clothesList: List<Clothes>) :
         private val deleteImageView: ImageView = view.findViewById(R.id.delete)
 
         fun bindData(context: Context, clothes: Clothes?) {
-            // Clothes 객체의 필드를 바탕으로 데이터 표시
             Glide.with(clothesImageView.context)
                 .load(clothes?.cl_photo_path)
                 .into(clothesImageView)
@@ -110,13 +123,10 @@ class StorageAdapter(context: Context, private val clothesList: List<Clothes>) :
             gotoLinkTextView.setOnClickListener {
                 val url = clothes?.cl_url
                 if (url.isNullOrEmpty()) {
-                    // URL이 비어있거나 null인 경우
                     Toast.makeText(context, "접근할 수 없습니다.", Toast.LENGTH_SHORT).show()
                 } else {
-                    // 유효한 URL이 있는 경우
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                     context.startActivity(intent)
-
                 }
             }
 
@@ -130,5 +140,4 @@ class StorageAdapter(context: Context, private val clothesList: List<Clothes>) :
         }
     }
 }
-
 

@@ -8,7 +8,7 @@ import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
-val ipAddr = "http://192.168.123.102:8080" //http://13.124.133.118:8080
+val ipAddr = "http://192.168.11.82:8080" //http://13.124.133.118:8080
 
 class MainActivity : AppCompatActivity() {
     lateinit var loginBtn : Button

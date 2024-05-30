@@ -9,8 +9,9 @@
     <!-- 유저 얼굴 사진 -->
     <FrameLayout
         android:id="@+id/user_face"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -18,18 +19,17 @@
     <!-- 가운데 상단 사각형 -->
     <FrameLayout
         android:id="@+id/shirt_box"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="150dp"
-        app:layout_constraintTop_toTopOf="@+id/user_face"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        app:layout_constraintTop_toBottomOf="@+id/user_face"
         app:layout_constraintStart_toStartOf="@+id/user_face"
         app:layout_constraintEnd_toEndOf="@+id/user_face" />
 
     <!-- 가운데 중간 사각형 -->
     <FrameLayout
         android:id="@+id/pants_box"
-        android:layout_width="150dp"
-        android:layout_height="210dp"
+        android:layout_width="200dp"
+        android:layout_height="230dp"
         app:layout_constraintTop_toBottomOf="@id/shirt_box"
         app:layout_constraintStart_toStartOf="@id/shirt_box"
         app:layout_constraintEnd_toEndOf="@id/shirt_box" />
@@ -37,8 +37,8 @@
     <!-- 한벌옷 사각형 -->
     <FrameLayout
         android:id="@+id/onepiece_box"
-        android:layout_width="150dp"
-        android:layout_height="360dp"
+        android:layout_width="180dp"
+        android:layout_height="410dp"
         android:layout_marginTop="150dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,96 +76,13 @@
         android:layout_marginStart="6dp"
         android:background="@drawable/black_border" />
 
-    <!-- 첫 번째 버튼 -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/shop_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Shop"
-        android:textSize="20dp"
-        android:textColor="@color/white"
-        android:background="@drawable/box_btn"
-        android:fontFamily="@font/main_font"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/mine_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintHorizontal_weight="1"/>
-
-    <!-- 두 번째 버튼 -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/mine_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Mine"
-        android:textSize="20dp"
-        android:textColor="@color/white"
-        android:background="@drawable/box_btn"
-        android:fontFamily="@font/main_font"
-        app:layout_constraintStart_toEndOf="@id/shop_btn"
-        app:layout_constraintEnd_toStartOf="@id/mix_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintHorizontal_weight="1"/>
-
-    <!-- 세 번째 버튼 -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/mix_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Mix"
-        android:textSize="20dp"
-        android:textColor="@color/white"
-        android:background="@drawable/box_btn"
-        android:fontFamily="@font/main_font"
-        app:layout_constraintStart_toEndOf="@id/mine_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintHorizontal_weight="1"/>
-
-    <TextView
-        android:id="@+id/shop_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="쇼핑몰에 있는 옷으로 매치됩니다!"
-        android:textSize="28dp"
-        android:fontFamily="@font/main_font"
-        app:layout_constraintStart_toStartOf="@id/mine_btn"
-        app:layout_constraintEnd_toEndOf="@id/mine_btn"
-        app:layout_constraintBottom_toTopOf="@id/mine_btn"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"/>
-
-    <TextView
-        android:id="@+id/mine_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="나의 옷장에 있는 옷들로 매치됩니다!"
-        android:textSize="28dp"
-        android:fontFamily="@font/main_font"
-        app:layout_constraintStart_toStartOf="@id/mine_btn"
-        app:layout_constraintEnd_toEndOf="@id/mine_btn"
-        app:layout_constraintBottom_toTopOf="@id/mine_btn"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"/>
-
-    <TextView
-        android:id="@+id/mix_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SHOP과 MINE의 옷으로 매치됩니다!"
-        android:textSize="28dp"
-        android:fontFamily="@font/main_font"
-        app:layout_constraintStart_toStartOf="@id/mine_btn"
-        app:layout_constraintEnd_toEndOf="@id/mine_btn"
-        app:layout_constraintBottom_toTopOf="@id/mine_btn"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"/>
+    <ImageView
+        android:id="@+id/addCodiset"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/download"
+        app:layout_constraintTop_toBottomOf="@id/hat_box"
+        app:layout_constraintStart_toEndOf="@id/shoes_box"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
