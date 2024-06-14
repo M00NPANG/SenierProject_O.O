@@ -87,6 +87,7 @@ class StorageActivity : AppCompatActivity() {
             }
         }
     }
+
 }
 
 class StorageAdapter(context: Context, private val clothesList: List<Clothes>) :
@@ -138,6 +139,8 @@ class StorageAdapter(context: Context, private val clothesList: List<Clothes>) :
                 }
             }
         }
+
     }
+
 }
 

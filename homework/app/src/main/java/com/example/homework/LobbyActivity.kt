@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.FrameLayout
@@ -26,6 +27,7 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -83,6 +85,7 @@ class LobbyActivity : AppCompatActivity() {
     private lateinit var tempCheckBox : CheckBox
     private var tempStatus : Int = 0
     private var temper : Int = 10
+    private lateinit var badgeTextView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lobby)
@@ -99,6 +102,8 @@ class LobbyActivity : AppCompatActivity() {
         postAdapter = PostAdapter(this@LobbyActivity,lifecycleScope,0,2)
         recyclerView.adapter = postAdapter
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        badgeTextView = findViewById(R.id.badgeTextView)
+        updateStorageBadge()
         getCurrentLocation() // 현재 위치를 구하는 것 뿐 아니라 그 위치로 기상청 api에 날씨정보를 요청함
 
         // 하단 메뉴바이고, 나중에 간략화하기
@@ -150,6 +155,22 @@ class LobbyActivity : AppCompatActivity() {
         // 서버로부터 코디를 받고 띄움
         //loadRecommendedPosts(SharedPreferencesUtils.loadEmail(this).toString())
     }
+    // storage에 있는 옷 숫자 띄움
+    private fun updateStorageBadge() {
+        lifecycleScope.launch {
+            val count = withContext(Dispatchers.IO) {
+                DatabaseClient.getDatabase(this@LobbyActivity).clothesDao().getClothesCount()
+            }
+
+            if (count > 0) {
+                badgeTextView.text = count.toString()
+                badgeTextView.visibility = View.VISIBLE
+            } else {
+                badgeTextView.visibility = View.GONE
+            }
+        }
+    }
+
     private fun getCurrentLocation() { // 현재 위도경도를 구하고 그걸 격자로 바꾸고 그걸로 api 통신
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1000)
@@ -461,6 +482,11 @@ class LobbyActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        updateStorageBadge()
+        super.onResume()
+    }
+
 }
 
 
@@ -470,3 +496,4 @@ val iconMap = mapOf(
     R.drawable.hat_icon to 7001,
     // 여기에 더 많은 아이콘과 식별자 매핑 추가
 )
+

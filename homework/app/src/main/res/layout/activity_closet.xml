@@ -125,14 +125,38 @@
             android:padding="16dp"
             android:src="@drawable/home" />
 
-        <ImageView
-            android:id="@+id/storage"
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:padding="16dp"
-            android:src="@drawable/storage" />
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/storage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/storage" />
+
+            <TextView
+                android:id="@+id/badgeTextView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/red_circle"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_gravity="end|top"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:text="0"/>
+        </FrameLayout>
 
         <ImageView
             android:id="@+id/closet"

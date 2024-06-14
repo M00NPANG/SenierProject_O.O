@@ -21,6 +21,9 @@ interface ClothesDao {
 
     @Query("DELETE FROM clothes WHERE cl_id = :clothesId")
     suspend fun deleteClothesById(clothesId: Int)
+
+    @Query("SELECT COUNT(*) FROM clothes")  // db에 저장된 아이템들의 전체 수
+    suspend fun getClothesCount(): Int
 }
 
 @Database(entities = [Clothes::class], version = 1, exportSchema = false)

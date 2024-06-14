@@ -70,6 +70,7 @@ class ClosetActivity : AppCompatActivity() {
     private val REQUEST_IMAGE_CAPTURE = 1
     private val CAMERA_PERMISSION_CODE = 101
     lateinit var bitmap : Bitmap
+    private lateinit var badgeTextView: TextView
 
     @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,7 +115,8 @@ class ClosetActivity : AppCompatActivity() {
         storageButton = findViewById(R.id.storage)
         userButton = findViewById(R.id.user)
         recyclerViewCody = findViewById(R.id.recyclerViewCody)
-
+        badgeTextView = findViewById(R.id.badgeTextView)
+        updateStorageBadge()
         clothButton.setOnClickListener {
             codyButtonSelect(1)
         }
@@ -136,6 +138,7 @@ class ClosetActivity : AppCompatActivity() {
         }
 
         storageButton.setOnClickListener {
+            startActivity(Intent(this,StorageActivity::class.java))
             // 저장소 버튼 클릭 시의 동작
         }
 
@@ -420,7 +423,20 @@ class ClosetActivity : AppCompatActivity() {
             bitmap
         }
     }
+    private fun updateStorageBadge() {
+        lifecycleScope.launch {
+            val count = withContext(Dispatchers.IO) {
+                DatabaseClient.getDatabase(this@ClosetActivity).clothesDao().getClothesCount()
+            }
 
+            if (count > 0) {
+                badgeTextView.text = count.toString()
+                badgeTextView.visibility = View.VISIBLE
+            } else {
+                badgeTextView.visibility = View.GONE
+            }
+        }
+    }
     private fun receivePosts(email: String): List<postReceive> {
         val url = "$ipAddr/api/storage/receivePost?userEmail=$email"
         val client = OkHttpClient()
@@ -437,6 +453,10 @@ class ClosetActivity : AppCompatActivity() {
             val postType = object : TypeToken<List<postReceive>>() {}.type
             return gson.fromJson(responseBody, postType)
         }
+    }
+    override fun onResume() {
+        updateStorageBadge()
+        super.onResume()
     }
 }
 
