@@ -28,8 +28,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
@@ -37,6 +39,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import java.io.IOException
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
@@ -161,33 +164,48 @@ class CodyRecomen : AppCompatActivity() {
     private suspend fun getClothInfo(imageUrl: String): Clothes? {
         Log.d("현재 이미지 url", imageUrl)
         var cloth: Clothes? = null
-        try {
-            val url = "$ipAddr/clickClothes?imageUrl=$imageUrl"
-            val request = Request.Builder().url(url).build()
+        val maxRetries = 3
+        var currentRetry = 0
 
-            // OkHttpClient에 타임아웃 설정
-            val client = OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .build()
+        while (currentRetry < maxRetries && cloth == null) {
+            try {
+                val url = "$ipAddr/clickClothes?imageUrl=$imageUrl"
+                val request = Request.Builder().url(url).build()
 
-            // 비동기 요청
-            val response = withContext(Dispatchers.IO) {
-                client.newCall(request).execute()
-            }
+                // OkHttpClient에 타임아웃 설정
+                val client = OkHttpClient.Builder()
+                    .connectTimeout(15, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .build()
 
-            if (response.isSuccessful) {
-                response.body?.string()?.let { responseBody ->
-                    cloth = Gson().fromJson(responseBody, Clothes::class.java)
+                // 비동기 요청
+                val response = withContext(Dispatchers.IO) {
+                    client.newCall(request).execute()
                 }
-            } else {
-                Log.e("NetworkError", "잠시 후 다시 시도해주세오: ${response.message}")
+
+                if (response.isSuccessful) {
+                    response.body?.string()?.let { responseBody ->
+                        cloth = Gson().fromJson(responseBody, Clothes::class.java)
+                    }
+                } else {
+                    Log.e("NetworkError", "서버 응답 실패: ${response.message}, 코드: ${response.code}")
+                }
+            } catch (e: IOException) {
+                Log.e("NetworkException", "네트워크 예외 발생: ${e.message}")
+            } catch (e: JsonSyntaxException) {
+                Log.e("NetworkException", "JSON 파싱 오류: ${e.message}")
+            } catch (e: Exception) {
+                Log.e("NetworkException", "기타 예외 발생: ${e.message}")
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            Log.e("NetworkException", "Error fetching clothes data: ${e.message}")
+
+            if (cloth == null) {
+                currentRetry++
+                delay(2000) // 2초 대기 후 재시도
+            }
         }
-        Log.d("현재 clothes객체 값", cloth?.toString() ?: "null")
+        Log.d("현재 clothes 객체 값", cloth?.toString() ?: "null")
         return cloth
     }
 
@@ -195,39 +213,36 @@ class CodyRecomen : AppCompatActivity() {
     // 옷 정보를 다이얼로그로 표시
     private fun showClothesDialog(cl_photo_path: String) {
         lifecycleScope.launch {
-            try {
-                val clothes = getClothInfo(cl_photo_path)
-                if (clothes != null) {
-                    withContext(Dispatchers.Main) {
-                        val dialogView = LayoutInflater.from(this@CodyRecomen)
-                            .inflate(R.layout.clothes_dialog, null)
-                        val dialogImageView = dialogView.findViewById<ImageView>(R.id.clothes_image)
-                        Glide.with(this@CodyRecomen).load(clothes.cl_photo_path)
-                            .into(dialogImageView)
+            val clothes = withContext(Dispatchers.IO) { getClothInfo(cl_photo_path) }
+            if (clothes != null) {
+                withContext(Dispatchers.Main) {
+                    val dialogView = LayoutInflater.from(this@CodyRecomen)
+                        .inflate(R.layout.clothes_dialog, null)
+                    val dialogImageView = dialogView.findViewById<ImageView>(R.id.clothes_image)
 
-                        val dialog = AlertDialog.Builder(this@CodyRecomen)
-                            .setView(dialogView)
-                            .show()
+                    Glide.with(this@CodyRecomen)
+                        .load(clothes.cl_photo_path)
+                        .into(dialogImageView)
 
-                        val addToCloset = dialogView.findViewById<TextView>(R.id.add_to_closet)
-                        addToCloset.text = "장바구니에 담기"
-                        addToCloset.setOnClickListener {
-                            saveClothesToCart(clothes)
-                            dialog.dismiss()
-                        }
+                    val dialog = AlertDialog.Builder(this@CodyRecomen)
+                        .setView(dialogView)
+                        .show()
+
+                    val addToCloset = dialogView.findViewById<TextView>(R.id.add_to_closet)
+                    addToCloset.text = "장바구니에 담기"
+                    addToCloset.setOnClickListener {
+                        saveClothesToCart(clothes)
+                        dialog.dismiss()
                     }
-                } else {
-                    Log.e("DialogError", "Failed to load clothes data.")
+                }
+            } else {
+                withContext(Dispatchers.Main) {
                     Toast.makeText(
                         this@CodyRecomen,
                         "Failed to load clothes data.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            } catch (e: Exception) {
-                Log.e("NetworkError", "Failed to fetch clothes: ${e.message}")
-                Toast.makeText(this@CodyRecomen, "Error fetching clothes data.", Toast.LENGTH_SHORT)
-                    .show()
             }
         }
     }
@@ -375,7 +390,7 @@ class CodyRecomen : AppCompatActivity() {
 
     private fun sendPostUpdateRequest() {
         val email = SharedPreferencesUtils.loadEmail(this)
-        val encodedEmail = URLEncoder.encode(email, "UTF-8")  // 이메일만 인코딩
+        val encodedEmail = URLEncoder.encode(email, "UTF-8")  // 이메일 인코딩
 
         val url = "$ipAddr/api/storage/savePost" +
                 "?email=$encodedEmail" +
