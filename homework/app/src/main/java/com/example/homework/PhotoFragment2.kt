@@ -18,10 +18,11 @@ import kotlinx.coroutines.withContext
 
 class PhotoFragment2 : Fragment() {
     companion object {
-        fun newInstance(isLastFragment: Boolean): PhotoFragment2 {
+        fun newInstance(isLastFragment: Boolean, status: String): PhotoFragment2 {
             val fragment = PhotoFragment2()
             val args = Bundle()
             args.putBoolean("isLastFragment", isLastFragment)
+            args.putString("status", status)
             fragment.arguments = args
             return fragment
         }
@@ -32,11 +33,17 @@ class PhotoFragment2 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_photo2, container, false)
+        val tvStatus = view.findViewById<TextView>(R.id.tvStatus)
         val textViewBottomRight = view.findViewById<TextView>(R.id.textViewBottomRight)
         val backgroundImageView = view.findViewById<FrameLayout>(R.id.backgroundImageView)
 
-        // 인자에서 마지막 프래그먼트 여부를 확인
+        // 인자에서 상태를 가져오고, 마지막 프래그먼트 여부를 확인
+        val status = arguments?.getString("status") ?: "WORST"
         val isLastFragment = arguments?.getBoolean("isLastFragment") ?: false
+
+        // 상태에 따라 tvStatus TextView 설정
+        tvStatus.text = status
+
         if (isLastFragment) {
             textViewBottomRight.text = "완료"
             textViewBottomRight.setOnClickListener {
@@ -45,9 +52,11 @@ class PhotoFragment2 : Fragment() {
         } else {
             textViewBottomRight.text = "옆으로 넘겨보세요!"
         }
+
         loadAndDisplayImage(backgroundImageView)
         return view
     }
+
     private fun loadAndDisplayImage(frameLayout: FrameLayout) {
         lifecycleScope.launch {
             val email = SharedPreferencesUtils.loadEmail(requireActivity())!!
@@ -84,4 +93,3 @@ class PhotoFragment2 : Fragment() {
         }
     }
 }
-

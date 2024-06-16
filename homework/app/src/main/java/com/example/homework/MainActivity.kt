@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.example.homework.R.layout.activity_main)
 
-        /*
+
         // 자동 로그인
         val loggedInEmail = SharedPreferencesUtils.loadEmail(this)
         // 로그인한 이메일이 있다면(즉, null이 아니라면) 사용자가 이미 로그인했다고 침
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             finish()
         } else {
 
-        }*/
+        }
 
         testBtn = findViewById(com.example.homework.R.id.btnTest)
         test2Btn = findViewById(com.example.homework.R.id.btnTest2)

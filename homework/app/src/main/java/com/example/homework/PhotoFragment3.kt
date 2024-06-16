@@ -19,10 +19,11 @@ import kotlinx.coroutines.withContext
 
 class PhotoFragment3 : Fragment() {
     companion object {
-        fun newInstance(isLastFragment: Boolean): PhotoFragment3 {
+        fun newInstance(isLastFragment: Boolean, status: String): PhotoFragment3 {
             val fragment = PhotoFragment3()
             val args = Bundle()
             args.putBoolean("isLastFragment", isLastFragment)
+            args.putString("status", status)
             fragment.arguments = args
             return fragment
         }
@@ -33,11 +34,17 @@ class PhotoFragment3 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_photo3, container, false)
+        val tvStatus = view.findViewById<TextView>(R.id.tvStatus)
         val textViewBottomRight = view.findViewById<TextView>(R.id.textViewBottomRight)
         val backgroundImageView = view.findViewById<FrameLayout>(R.id.backgroundImageView)
 
-        // 인자에서 마지막 프래그먼트 여부를 확인
+        // 인자에서 상태를 가져오고, 마지막 프래그먼트 여부를 확인
+        val status = arguments?.getString("status") ?: "WORST"
         val isLastFragment = arguments?.getBoolean("isLastFragment") ?: false
+
+        // 상태에 따라 tvStatus TextView 설정
+        tvStatus.text = status
+
         if (isLastFragment) {
             textViewBottomRight.text = "완료"
             textViewBottomRight.setOnClickListener {
@@ -46,14 +53,15 @@ class PhotoFragment3 : Fragment() {
         } else {
             textViewBottomRight.text = "옆으로 넘겨보세요!"
         }
+
         loadAndDisplayImage(backgroundImageView)
         return view
     }
+
     private fun loadAndDisplayImage(frameLayout: FrameLayout) {
         lifecycleScope.launch {
             val email = SharedPreferencesUtils.loadEmail(requireActivity())!!
             val imageUrl = getFaceUrl(email) // 서버에서 얼굴 이미지 URL을 받아오는 함수
-            val backgroundImageView = view?.findViewById<FrameLayout>(R.id.backgroundImageView)
 
             withContext(Dispatchers.Main) {
                 // dp 단위로 변환
@@ -80,9 +88,9 @@ class PhotoFragment3 : Fragment() {
                     .load(imageUrl)
                     .centerCrop() // 이미지가 프레임 레이아웃을 꽉 채우도록 조정
                     .into(imageView)
+
                 frameLayout.addView(imageView)
             }
         }
     }
-
 }

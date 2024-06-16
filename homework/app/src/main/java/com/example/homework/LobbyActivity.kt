@@ -91,6 +91,7 @@ class LobbyActivity : AppCompatActivity() {
         setContentView(R.layout.activity_lobby)
         //초기화 부분
         mixBtn = findViewById(R.id.mixBtn)
+        mixBtn.isSelected = true
         closetBtn = findViewById(R.id.closetBtn)
         shopBtn = findViewById(R.id.shopBtn)
         storage = findViewById(R.id.storage)
@@ -129,19 +130,25 @@ class LobbyActivity : AppCompatActivity() {
             tempStatus = if(tempCheckBox.isChecked) 1 else 0
             postAdapter = PostAdapter(this@LobbyActivity,lifecycleScope,tempStatus,3)
             recyclerView.adapter = postAdapter
-
+            shopBtn.isSelected = true
+            mixBtn.isSelected = false
+            closetBtn.isSelected = false
         }
         mixBtn.setOnClickListener {
             tempStatus = if (tempCheckBox.isChecked) 1 else 0
             postAdapter = PostAdapter(this@LobbyActivity,lifecycleScope,tempStatus,2)
             recyclerView.adapter = postAdapter
-
+            shopBtn.isSelected = false
+            mixBtn.isSelected = true
+            closetBtn.isSelected = false
         }
         closetBtn.setOnClickListener {
             tempStatus = if (tempCheckBox.isChecked) 1 else 0
             postAdapter = PostAdapter(this@LobbyActivity,lifecycleScope,tempStatus,1)
             recyclerView.adapter = postAdapter
-
+            shopBtn.isSelected = false
+            mixBtn.isSelected = false
+            closetBtn.isSelected = true
         }
         tempCheckBox =findViewById(R.id.tempCheckBox)
         tempCheckBox.setOnCheckedChangeListener { _, isChecked ->

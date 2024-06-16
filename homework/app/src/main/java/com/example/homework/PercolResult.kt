@@ -1,6 +1,5 @@
 package com.example.homework
 
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -33,49 +32,54 @@ class PercolResult : AppCompatActivity() {
 }
 
 class ViewPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-    private var fragments = mutableListOf(
-        PhotoFragment1.newInstance(false),
-        PhotoFragment2.newInstance(false),
-        PhotoFragment3.newInstance(false),
-        PhotoFragment4.newInstance(false)
+    var fragments = listOf(
+        PhotoFragment1.newInstance(false, "WORST"), // 초기 상태는 모두 WORST
+        PhotoFragment2.newInstance(false, "WORST"),
+        PhotoFragment3.newInstance(false, "WORST"),
+        PhotoFragment4.newInstance(true, "WORST")  // 마지막 프래그먼트
     )
 
     fun adjustFragmentOrder(percolResult: String) {
         Log.d("현재퍼컬", percolResult)
         fragments = when (percolResult) {
             "spring" -> mutableListOf(
-                PhotoFragment1.newInstance(false),
-                PhotoFragment2.newInstance(false),
-                PhotoFragment3.newInstance(false),
-                PhotoFragment4.newInstance(false)
+                PhotoFragment1.newInstance(false, "WORST"),
+                PhotoFragment2.newInstance(false, "WORST"),
+                PhotoFragment3.newInstance(false, "WORST"),
+                PhotoFragment4.newInstance(false, "WORST")
             )
             "summer" -> mutableListOf(
-                PhotoFragment2.newInstance(false),
-                PhotoFragment1.newInstance(false),
-                PhotoFragment3.newInstance(false),
-                PhotoFragment4.newInstance(false)
+                PhotoFragment2.newInstance(false, "WORST"),
+                PhotoFragment1.newInstance(false, "WORST"),
+                PhotoFragment3.newInstance(false, "WORST"),
+                PhotoFragment4.newInstance(false, "WORST")
             )
             "autumn" -> mutableListOf(
-                PhotoFragment3.newInstance(false),
-                PhotoFragment1.newInstance(false),
-                PhotoFragment2.newInstance(false),
-                PhotoFragment4.newInstance(false)
+                PhotoFragment3.newInstance(false, "WORST"),
+                PhotoFragment1.newInstance(false, "WORST"),
+                PhotoFragment2.newInstance(false, "WORST"),
+                PhotoFragment4.newInstance(false, "WORST")
             )
             "winter" -> mutableListOf(
-                PhotoFragment4.newInstance(false),
-                PhotoFragment1.newInstance(false),
-                PhotoFragment2.newInstance(false),
-                PhotoFragment3.newInstance(false)
+                PhotoFragment4.newInstance(false, "WORST"),
+                PhotoFragment1.newInstance(false, "WORST"),
+                PhotoFragment2.newInstance(false, "WORST"),
+                PhotoFragment3.newInstance(false, "WORST")
             )
             else -> fragments
         }
 
         fragments.forEachIndexed { index, fragment ->
-            fragment.arguments?.putBoolean("isLastFragment", index == fragments.size - 1)
+            if (fragment is PhotoFragment1) {
+                val status = if (index == 0) "BEST" else "WORST"
+                val isLast = index == fragments.size - 1
+                fragment.arguments?.putString("status", status)
+                fragment.arguments?.putBoolean("isLastFragment", isLast)
+            }
         }
+
         notifyDataSetChanged()
     }
-
 
     override fun createFragment(position: Int): Fragment = fragments[position]
 
