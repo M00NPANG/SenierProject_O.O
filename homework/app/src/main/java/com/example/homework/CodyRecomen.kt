@@ -291,7 +291,7 @@ class CodyRecomen : AppCompatActivity() {
     }
 
 
-    fun showClothesDialog(input: Int) {
+    private fun showClothesDialog(input: Int) {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.choice_clothes)
         val gridView: GridView = dialog.findViewById(R.id.gridView)
@@ -413,15 +413,15 @@ class CodyRecomen : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             this@CodyRecomen,
-                            "Post updated successfully.",
+                            "저장 성공",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 } else {
-                    Log.e("NetworkError", "Failed to update post: ${response.message}")
+                    Log.e("NetworkError", "저장 실패: ${response.message}")
                 }
             } catch (e: Exception) {
-                Log.e("NetworkException", "Error updating post: ${e.message}")
+                Log.e("NetworkException", "에러 발생: ${e.message}")
             }
         }
     }

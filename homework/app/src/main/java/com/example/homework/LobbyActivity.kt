@@ -156,7 +156,6 @@ class LobbyActivity : AppCompatActivity() {
             postAdapter = PostAdapter(this@LobbyActivity, lifecycleScope, tempStatus, 2)
             recyclerView.adapter = postAdapter
 
-
         }
 
         // 서버로부터 코디를 받고 띄움

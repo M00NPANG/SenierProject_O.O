@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="186dp"
+    android:layout_height="200dp"
+    android:background="@drawable/black_border"
+    android:layout_marginLeft="3dp"
+    android:layout_marginTop="3dp">
+
+    <!-- 가운데 상단 사각형 -->
+    <FrameLayout
+        android:id="@+id/shirt_box"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageView
+            android:id="@+id/shirt_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
+
+    <!-- 가운데 중간 사각형 -->
+    <FrameLayout
+        android:id="@+id/pants_box"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        app:layout_constraintTop_toBottomOf="@id/shirt_box"
+        app:layout_constraintStart_toStartOf="@id/shirt_box"
+        app:layout_constraintEnd_toEndOf="@id/shirt_box">
+        <ImageView
+            android:id="@+id/pants_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
+
+    <!-- 한벌옷 사각형 -->
+    <FrameLayout
+        android:id="@+id/onepiece_box"
+        android:layout_width="80dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageView
+            android:id="@+id/onepiece_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
+    <!-- 삭제 버튼 -->
+    <ImageView
+        android:id="@+id/delete"
+        android:src="@drawable/delete"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="8dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,7 +27,7 @@ class PostAdapter(private val context: Context, private val scope: CoroutineScop
     init {
         fetchOutfits()
     }
-
+    // 옷 정보를 받아오는 코드
     private fun fetchOutfits() {
         val temp: Long = tempStorage.getTemp()
         val email = SharedPreferencesUtils.loadEmail(context)
@@ -70,7 +70,7 @@ class PostAdapter(private val context: Context, private val scope: CoroutineScop
         }
     }
 
-
+    //서버로부터 받고 해석함
     private suspend fun fetchOutfitsFromServer(url: String): List<OutfitDTO> = withContext(Dispatchers.IO) {
         val request = Request.Builder().url(url).build()
         val response = client.newCall(request).execute()

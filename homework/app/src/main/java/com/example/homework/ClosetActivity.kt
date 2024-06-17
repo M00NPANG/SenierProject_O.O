@@ -1,20 +1,16 @@
 package com.example.homework
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.graphics.Matrix
 import androidx.exifinterface.media.ExifInterface
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +18,10 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.ByteArrayOutputStream
@@ -144,6 +143,7 @@ class ClosetActivity : AppCompatActivity() {
 
         userButton.setOnClickListener {
             // 사용자 버튼 클릭 시의 동작
+
         }
 
     }
@@ -384,7 +384,7 @@ class ClosetActivity : AppCompatActivity() {
                 }
                 withContext(Dispatchers.Main) {
                     // RecyclerView를 위한 새로운 Adapter 설정
-                    val codyAdapter = CodyAdapter(this@ClosetActivity, codyItems)
+                    val codyAdapter = CodyAdapter(this@ClosetActivity, codyItems, this@ClosetActivity)
                     recyclerView.adapter = codyAdapter
                 }
             }
@@ -437,6 +437,7 @@ class ClosetActivity : AppCompatActivity() {
             }
         }
     }
+    // 저장한 코디세트를 받아옴
     private fun receivePosts(email: String): List<postReceive> {
         val url = "$ipAddr/api/storage/receivePost?userEmail=$email"
         val client = OkHttpClient()
@@ -459,30 +460,99 @@ class ClosetActivity : AppCompatActivity() {
         super.onResume()
     }
 }
-
-class CodyAdapter(private val context: Context, private val codyItems: List<postReceive>) :
-    RecyclerView.Adapter<CodyAdapter.CodyViewHolder>() {
+// 뷰에 저장한 세트 보이기용
+class CodyAdapter(
+    private val context: Context,
+    private val codyItems: List<postReceive>, // MutableList로 변경
+    private val lifecycleOwner: LifecycleOwner
+) : RecyclerView.Adapter<CodyAdapter.CodyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CodyViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.item_post2, parent, false)
         return CodyViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CodyViewHolder, position: Int) {
-        holder.bind(codyItems[position])
+        holder.bind(codyItems[position], lifecycleOwner)
     }
 
     override fun getItemCount() = codyItems.size
 
-    class CodyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: postReceive) {
+    inner class CodyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: postReceive, lifecycleOwner: LifecycleOwner) {
             val shirtImageView: ImageView = itemView.findViewById(R.id.shirt_image_view)
             val pantsImageView: ImageView = itemView.findViewById(R.id.pants_image_view)
+            val deleteButton: ImageView = itemView.findViewById(R.id.delete)
+
             // 이미지 뷰 바인딩
             Glide.with(itemView.context).load(item.top_url).into(shirtImageView)
             Glide.with(itemView.context).load(item.bottom_url).into(pantsImageView)
+
+            // 아이템 클릭 리스너 설정
+            itemView.setOnClickListener {
+                val context = itemView.context
+                val intent = Intent(context, CodyRecomen2::class.java).apply {
+                    putExtra("topImageUrl", item.top_url)
+                    putExtra("bottomImageUrl", item.bottom_url)
+                    // 추후 한벌옷 추가
+                    putExtra("shoesImageUrl", item.shoes_url)
+                    putExtra("accessoriesImageUrl", item.accessories_url)
+                    putExtra("bagImageUrl", item.bag_url)
+                }
+                context.startActivity(intent)
+            }
+
+            // delete 버튼 클릭 리스너 설정
+            deleteButton.setOnClickListener {
+                lifecycleOwner.lifecycleScope.launch {
+                    val success = deletePost(item.post_id!!)
+                    if (success) {
+                        // 삭제가 성공하면 리스트에서 아이템 제거 후 RecyclerView 갱신
+                        (codyItems as MutableList).remove(item)
+                        notifyDataSetChanged()
+                        Toast.makeText(itemView.context, "삭제 완료", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(itemView.context, "삭제 실패", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
+}
+
+// 코디세트를 지우기 위해 해당 post_id를 보냄
+suspend fun deletePost(post_id: Long) : Boolean = withContext(Dispatchers.IO)  {
+    var res : Boolean = false
+    try {
+        // URL에 post_id를 포함하여 서버로 전송
+        val url = "$ipAddr/api/storage/deletePost?post_id=$post_id"
+        val request = Request.Builder()
+            .url(url)
+            .delete()  // DELETE 요청 사용
+            .build()
+
+        val client = OkHttpClient()
+        val response = client.newCall(request).execute()
+
+        if (response.isSuccessful) {
+            // 서버 응답이 성공적일 때
+            response.body?.string()?.let { responseBody ->
+                Log.d("서버 응답", "응답 본문: $responseBody")
+                res=true
+            }
+        } else {
+            // 서버 응답 실패 시
+            Log.e("deletePost", "서버 응답 실패: ${response.code}")
+            res=false
+        }
+
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Log.e("deletePost", "네트워크 요청 실패", e)
+        res=false
+    }
+    return@withContext res
 }
 
 
